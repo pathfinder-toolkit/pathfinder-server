@@ -56,6 +56,12 @@ app.get("/", (request, response) => {
   response.json({ info: "Pathfinder API" });
 });
 
+app.get("/private", checkJwt, function (req, res) {
+  res.json({
+    message: "Private endpoint test.",
+  });
+});
+
 app.get("/building/:buildingId", (request, response) => {
   response.json({ info: "Get building id" });
 });
