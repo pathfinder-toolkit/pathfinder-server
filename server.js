@@ -1,6 +1,12 @@
 const express = require("express");
 const app = express();
-const bodyParser = require("body-parser");
+const cors = require("cors");
+app.use(cors());
+
+const allowedOrigins = [
+  "http://localhost:3000",
+  "http://pathfinder-toolkit.herokuapp.com",
+];
 
 const jwt = require("express-jwt");
 const jwtAuthz = require("express-jwt-authz");
@@ -8,6 +14,15 @@ const jwksRsa = require("jwks-rsa");
 
 const db = require("./queries");
 const port = process.env.PORT || 3300;
+
+const bodyParser = require("body-parser");
+
+app.use(bodyParser.json());
+app.use(
+  bodyParser.urlencoded({
+    extended: true,
+  })
+);
 
 const checkJwt = jwt({
   secret: jwksRsa.expressJwtSecret({
@@ -22,21 +37,24 @@ const checkJwt = jwt({
   algorithms: ["RS256"],
 });
 
-app.use(function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", "http://localhost:3000");
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept"
-  );
-  next();
-});
-
-app.use(bodyParser.json());
 app.use(
-  bodyParser.urlencoded({
-    extended: true,
+  cors({
+    origin: function (origin, callback) {
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.indexOf(origin) === -1) {
+        var msg =
+          "The CORS policy for this site does not " +
+          "allow access from the specified Origin.";
+        return callback(new Error(msg), false);
+      }
+      return callback(null, true);
+    },
   })
 );
+
+app.get("/", (request, response) => {
+  response.json({ info: "Pathfinder API" });
+});
 
 app.get("/building/:buildingId", (request, response) => {
   response.json({ info: "Get building id" });
