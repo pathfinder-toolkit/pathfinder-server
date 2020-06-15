@@ -10,7 +10,7 @@ const pool = new Pool({
 })
 
 
-const getUsers = (request, response) => {
+const getBuildings = (request, response) => {
     pool.query('SELECT * FROM public.buildings;', (error, results) => {
       if (error) {
         throw error
@@ -20,5 +20,5 @@ const getUsers = (request, response) => {
   }
 
   module.exports = {
-    getUsers,
+    getBuildings,
   }
