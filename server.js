@@ -1,6 +1,9 @@
+const dotenv = require("dotenv");
+dotenv.config();
 const express = require("express");
 const bodyParser = require("body-parser");
 const app = express();
+const db = require("./queries");
 const port = 3300;
 
 app.use(bodyParser.json());
@@ -11,9 +14,11 @@ app.use(
 );
 
 app.get("/", (request, response) => {
-  response.json({ info: "test" });
+  response.json({ info: "Node.js, Express, and Postgres API" });
 });
 
+app.get("/users", db.getUsers);
+
 app.listen(port, () => {
-    console.log(`App running on port ${port}.`)
-  })
+  console.log(`App running on port ${port}.`);
+});
