@@ -14,12 +14,21 @@ const checkJwt = jwt({
     cache: true,
     rateLimit: true,
     jwksRequestsPerMinute: 5,
-    jwksUri: `https://dev-cwz8v54y.eu.auth0.com/.well-known/jwks.json`
+    jwksUri: `https://dev-cwz8v54y.eu.auth0.com/.well-known/jwks.json`,
   }),
 
-  audience: 'https://api-pathfinder.herokuapp.com/',
+  audience: "https://api-pathfinder.herokuapp.com/",
   issuer: `https://dev-cwz8v54y.eu.auth0.com/`,
-  algorithms: ['RS256']
+  algorithms: ["RS256"],
+});
+
+app.use(function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", "http://localhost:3000");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
+  next();
 });
 
 app.use(bodyParser.json());
@@ -28,10 +37,6 @@ app.use(
     extended: true,
   })
 );
-
-app.get("/authorized", function (req, res) {
-  res.send("Secured Resource");
-});
 
 app.get("/building/:buildingId", (request, response) => {
   response.json({ info: "Get building id" });
