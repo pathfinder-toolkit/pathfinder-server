@@ -13,7 +13,7 @@ app.use(
 );
 
 app.get("/", (request, response) => {
-  response.json({ info: "Node.js, Express, and Postgres API" });
+  response.json({ info: "Pathfinder API" });
 });
 
 app.get("/buildings", db.getBuildings);
