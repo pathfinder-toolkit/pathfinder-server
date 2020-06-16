@@ -4,7 +4,7 @@ const cors = require("cors");
 app.use(cors());
 
 const allowedOrigins = [
-  "https://localhost:3000",
+  "http://localhost:3000",
   "https://pathfinder-toolkit.herokuapp.com",
 ];
 
