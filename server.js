@@ -5,7 +5,7 @@ app.use(cors());
 
 const allowedOrigins = [
   "http://localhost:3000",
-  "http://pathfinder-toolkit.herokuapp.com",
+  "https://pathfinder-toolkit.herokuapp.com",
 ];
 
 const jwt = require("express-jwt");
