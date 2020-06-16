@@ -254,6 +254,45 @@ app.get("/buildings/me", (request, response) => {
   );
 });
 
+app.get("/suggestions/:subject/:value", (request, response) => {
+  response.json(
+    [
+      {
+        "suggestionText": "Mock suggestion 1",
+        "priority": 100
+      },
+      {
+        "suggestionText": "Mock suggestion 2",
+        "priority": 5
+      },
+    ]
+  );
+});
+
+app.get("/comments/:subject", (request, response) => {
+  response.json(
+    [
+      {
+        "commentText": "Mock positive comment",
+        "date": "2020-05-26 19:13:03",
+        "author": "John Doe",
+        "sentiment": "positive"
+      },
+      {
+        "commentText": "Mock negative comment with anonymous author",
+        "date": "2020-05-28 15:00:01",
+        "sentiment": "negative"
+      },
+      {
+        "commentText": "Mock neutral comment",
+        "date": "2020-05-31 15:12:43",
+        "author": "Jane Doe",
+        "sentiment": "negative"
+      }
+    ]
+  );
+});
+
 app.get("/buildings", db.getBuildings);
 
 app.listen(port, () => {
