@@ -65,144 +65,140 @@ app.get("/private", checkJwt, function (req, res) {
 app.get("/building/:buildingId", (request, response) => {
   response.json(
     {
-      "code": 200,
-      "message": "Successful query",
       "slug": "talonnimi",
-      "data": {
-        "details": {
-          "name": {
-            "propertyName": "Name",
-            "value": "Talon nimi"
-          },
-          "area": {
-            "propertyName": "Area",
-            "value": "Northern Finland"
-          },
-          "year": {
-            "propertyName": "Construction year",
-            "value": 1900
-          },
-          "floorArea": {
-            "propertyName": "Floor area(in square meters)",
-            "value": 62
-          },
-          "heatedFloorArea": {
-            "propertyName": "Heated floor area(in square meters)",
-            "value": 50
-          },
-          "floorsAmount": {
-            "propertyName": "Amount of floors",
-            "value": 2
-          },
-          "description": {
-            "propertyName": "Description of building",
-            "value": "Quisque vulputate enim ligula, sed lobortis metus commodo efficitur. Suspendisse ante lectus, sagittis eu diam a, convallis aliquam eros. Vivamus consequat sagittis nunc in euismod. Vivamus laoreet erat elit. Praesent erat diam, dapibus a purus ac, scelerisque consequat tortor. Aliquam nunc metus, ultricies et lacus a, rutrum feugiat ligula. Proin a enim tortor."
-          },
-          "image": {
-            "propertyName": "Image",
-            "value": "/static/media/frontpage_house.294aaf25.jpg"
-          }
+      "details": {
+        "name": {
+          "propertyName": "Name",
+          "value": "Talon nimi"
         },
-        "heating": {
-          "heatingSystem": {
-            "propertyName": "Heating System",
-            "value": "Oil",
-            "suggestions": [
-              {
-                "suggestionText": "Nulla urna lorem, porttitor vehicula risus vitae, ultrices commodo nisl. Nullam viverra mollis tortor at vestibulum.",
-                "priority": 95
-              }
-            ],
-            "comments": [
-              {
-                "commentText": "Donec dapibus facilisis nisl vel posuere. Morbi bibendum magna ac lacus vestibulum, eu egestas lacus viverra.",
-                "date": "2020-06-15 12:14:34",
-                "author": "John Doe",
-                "sentiment": "positive"
-              }
-            ]
-          },
-          "heatingSource": {
-            "propertyName": "Heating Source",
-            "value": "Source 1"
-          },
-          "annualCost": {
-            "propertyName": "Annual cost",
-            "value": 300
-          }
+        "area": {
+          "propertyName": "Area",
+          "value": "Northern Finland"
         },
-        "electricity": {
-          "annualUse": {
-            "propertyName": "Annual use",
-            "value": 500
-          },
-          "annualCost": {
-            "propertyName": "Annual cost",
-            "value": 250
-          }
+        "year": {
+          "propertyName": "Construction year",
+          "value": 1900
         },
-        "structure": {
-          "wallMaterial": {
-            "propertyName": "Wall material",
-            "value": "Wood",
-            "suggestions": [
-              {
-                "suggestionText": "Sed sapien turpis, rutrum et semper in, eleifend nec elit. Etiam lobortis, ante quis varius vehicula, magna urna ultricies justo, non interdum est lectus a est.",
-                "priority": 30
-              }
-            ],
-            "comments": [
-              {
-                "commentText": "Quisque et convallis diam, eget interdum sapien. Vivamus felis nulla, condimentum a volutpat vel, luctus id odio. ",
-                "date": "2020-06-15 15:44:23",
-                "sentiment": "negative"
-              }
-            ]
-          },
-          "wallThickness": {
-            "propertyName": "Wall Thickness",
-            "value": 16
-          },
-          "windowAmount": {
-            "propertyName": "Amount of windows",
-            "value": 12
-          },
-          "doorMaterial": {
-            "propertyName": "Door material",
-            "value": "Wood"
-          },
-          "doorAmount": {
-            "propertyName": "Amount of doors",
-            "value": 4
-          },
-          "roofMaterial": {
-            "propertyName": "Roof material",
-            "value": "Roof material 1"
-          },
-          "roofInsulation": {
-            "propertyName": "Roof insulation",
-            "value": true
-          }
+        "floorArea": {
+          "propertyName": "Floor area(in square meters)",
+          "value": 62
         },
-        "ventilation": {
-          "ventilationSystem": {
-            "propertyName": "Ventilation system",
-            "value": "Ventilation system 1",
-            "suggestions": [
-              {
-                "suggestionText": "Vivamus laoreet erat elit. Praesent erat diam, dapibus a purus ac, scelerisque consequat tortor. Aliquam nunc metus, ultricies et lacus a, rutrum feugiat ligula.",
-                "priority": 1
-              }
-            ],
-            "comments": [
-              {
-                "commentText": "Proin a enim tortor. Cras vestibulum bibendum libero, a pulvinar turpis eleifend fringilla. Suspendisse et nunc hendrerit, lacinia enim eu, tincidunt dolor.",
-                "date": "2020-06-16 11:44:23",
-                "author": "Jane Doe",
-                "sentiment": "neutral"
-              }
-            ]
-          }
+        "heatedFloorArea": {
+          "propertyName": "Heated floor area(in square meters)",
+          "value": 50
+        },
+        "floorsAmount": {
+          "propertyName": "Amount of floors",
+          "value": 2
+        },
+        "description": {
+          "propertyName": "Description of building",
+          "value": "Quisque vulputate enim ligula, sed lobortis metus commodo efficitur. Suspendisse ante lectus, sagittis eu diam a, convallis aliquam eros. Vivamus consequat sagittis nunc in euismod. Vivamus laoreet erat elit. Praesent erat diam, dapibus a purus ac, scelerisque consequat tortor. Aliquam nunc metus, ultricies et lacus a, rutrum feugiat ligula. Proin a enim tortor."
+        },
+        "image": {
+          "propertyName": "Image",
+          "value": "/static/media/frontpage_house.294aaf25.jpg"
+        }
+      },
+      "heating": {
+        "heatingSystem": {
+          "propertyName": "Heating System",
+          "value": "Oil",
+          "suggestions": [
+            {
+              "suggestionText": "Nulla urna lorem, porttitor vehicula risus vitae, ultrices commodo nisl. Nullam viverra mollis tortor at vestibulum.",
+              "priority": 95
+            }
+          ],
+          "comments": [
+            {
+              "commentText": "Donec dapibus facilisis nisl vel posuere. Morbi bibendum magna ac lacus vestibulum, eu egestas lacus viverra.",
+              "date": "2020-06-15 12:14:34",
+              "author": "John Doe",
+              "sentiment": "positive"
+            }
+          ]
+        },
+        "heatingSource": {
+          "propertyName": "Heating Source",
+          "value": "Source 1"
+        },
+        "annualCost": {
+          "propertyName": "Annual cost",
+          "value": 300
+        }
+      },
+      "electricity": {
+        "annualUse": {
+          "propertyName": "Annual use",
+          "value": 500
+        },
+        "annualCost": {
+          "propertyName": "Annual cost",
+          "value": 250
+        }
+      },
+      "structure": {
+        "wallMaterial": {
+          "propertyName": "Wall material",
+          "value": "Wood",
+          "suggestions": [
+            {
+              "suggestionText": "Sed sapien turpis, rutrum et semper in, eleifend nec elit. Etiam lobortis, ante quis varius vehicula, magna urna ultricies justo, non interdum est lectus a est.",
+              "priority": 30
+            }
+          ],
+          "comments": [
+            {
+              "commentText": "Quisque et convallis diam, eget interdum sapien. Vivamus felis nulla, condimentum a volutpat vel, luctus id odio. ",
+              "date": "2020-06-15 15:44:23",
+              "sentiment": "negative"
+            }
+          ]
+        },
+        "wallThickness": {
+          "propertyName": "Wall Thickness",
+          "value": 16
+        },
+        "windowAmount": {
+          "propertyName": "Amount of windows",
+          "value": 12
+        },
+        "doorMaterial": {
+          "propertyName": "Door material",
+          "value": "Wood"
+        },
+        "doorAmount": {
+          "propertyName": "Amount of doors",
+          "value": 4
+        },
+        "roofMaterial": {
+          "propertyName": "Roof material",
+          "value": "Roof material 1"
+        },
+        "roofInsulation": {
+          "propertyName": "Roof insulation",
+          "value": true
+        }
+      },
+      "ventilation": {
+        "ventilationSystem": {
+          "propertyName": "Ventilation system",
+          "value": "Ventilation system 1",
+          "suggestions": [
+            {
+              "suggestionText": "Vivamus laoreet erat elit. Praesent erat diam, dapibus a purus ac, scelerisque consequat tortor. Aliquam nunc metus, ultricies et lacus a, rutrum feugiat ligula.",
+              "priority": 1
+            }
+          ],
+          "comments": [
+            {
+              "commentText": "Proin a enim tortor. Cras vestibulum bibendum libero, a pulvinar turpis eleifend fringilla. Suspendisse et nunc hendrerit, lacinia enim eu, tincidunt dolor.",
+              "date": "2020-06-16 11:44:23",
+              "author": "Jane Doe",
+              "sentiment": "neutral"
+            }
+          ]
         }
       }
     }
@@ -254,7 +250,7 @@ app.get("/buildings/me", (request, response) => {
         "creationDate": "2020-05-31 15:12:43",
         "slug": "tianjinctffinancecenter"
       }
-      
+
     ]
   );
 });
@@ -295,6 +291,33 @@ app.get("/comments/:subject", (request, response) => {
         "sentiment": "negative"
       }
     ]
+  );
+});
+
+app.get("/editor/areas", (request, response) => {
+  response.json(
+    [
+      "Southern Finland",
+      "Northern Finland",
+      "Southern Sweden",
+      "Northern Sweden",
+      "Scotland",
+      "Northern Ireland",
+      "Ireland",
+      "Faroe Islands",
+    ]
+  );
+});
+
+app.get("/editor/options/:area", (request, response) => {
+  response.json(
+    {
+      "materials": ["Wood", "Stone", "Concrete"],
+      "roofTypes": ["Roof 1", "Roof 2", "Roof 3"],
+      "ventilationTypes": ["Gravity based", "Machine based", "Mixed type"],
+      "heatingTypes": ["Heating 1", "Heating 2", "Heating 3"],
+      "buildingTypes": ["Building 1", "Building 2", "Building 3"]
+    }
   );
 });
 
