@@ -9,8 +9,8 @@ connectionString = {
 const Pool = require("pg").Pool;
 const pool = new Pool(connectionString);
 
-const getBuildings = (request, response) => {
-  pool.query("SELECT * FROM public.buildings;", (error, results) => {
+const getAreas = (request, response) => {
+  pool.query('SELECT * FROM public."Areas";', (error, results) => {
     if (error) {
       throw error;
     }
@@ -19,5 +19,5 @@ const getBuildings = (request, response) => {
 };
 
 module.exports = {
-  getBuildings,
+  getAreas
 };

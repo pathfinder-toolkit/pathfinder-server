@@ -294,21 +294,6 @@ app.get("/comments/:subject", (request, response) => {
   );
 });
 
-app.get("/editor/areas", (request, response) => {
-  response.json(
-    [
-      "Southern Finland",
-      "Northern Finland",
-      "Southern Sweden",
-      "Northern Sweden",
-      "Scotland",
-      "Northern Ireland",
-      "Ireland",
-      "Faroe Islands",
-    ]
-  );
-});
-
 app.get("/editor/options/:area", (request, response) => {
   response.json(
     {
@@ -321,7 +306,7 @@ app.get("/editor/options/:area", (request, response) => {
   );
 });
 
-app.get("/buildings", db.getBuildings);
+app.get("/editor/areas", db.getAreas);
 
 app.listen(port, () => {
   console.log(`App running on port ${port}.`);
