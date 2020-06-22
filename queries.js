@@ -11,7 +11,7 @@ const pool = new Pool(connectionString);
 
 const getAreas = (request, response) => {
   pool.connect().then(client => {
-  client.query('SELECT * FROM public."Areas";').then(res => {
+  client.query('SELECT "areaName" FROM public."Areas";').then(res => {
     client.release()
     let areas = [];
     res.rows.forEach((row) => {
