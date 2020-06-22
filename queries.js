@@ -10,12 +10,20 @@ const Pool = require("pg").Pool;
 const pool = new Pool(connectionString);
 
 const getAreas = (request, response) => {
-  pool.query('SELECT * FROM public."Areas";', (error, results) => {
-    if (error) {
-      throw error;
-    }
-    response.status(200).json(results.rows);
-  });
+  pool.connect().then(client => {
+  client.query('SELECT * FROM public."Areas";').then(res => {
+    client.release()
+    let areas = [];
+    res.rows.forEach((row) => {
+      areas.push(row.areaName)
+    })
+    response.status(200).json(areas)
+  })
+  .catch(e => {
+    client.release()
+    console.error('query error', e.message, e.stack)
+  })
+})
 };
 
 module.exports = {
