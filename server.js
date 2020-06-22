@@ -308,6 +308,8 @@ app.get("/editor/options/:area", (request, response) => {
 
 app.get("/editor/areas", db.getAreas);
 
+//app.get("/editor/optionstest/:area")
+
 app.listen(port, () => {
   console.log(`App running on port ${port}.`);
 });
