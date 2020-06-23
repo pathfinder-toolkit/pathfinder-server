@@ -9,12 +9,15 @@
     "express-jwt": "^5.3.3",
     "express-jwt-authz": "^2.4.0",
     "jwks-rsa": "^1.8.0",
-    "pg": "^8.2.1"
+    "pg": "^8.2.1",
+    "pg-hstore": "^2.3.3",
+    "save": "^2.4.0",
+    "sequelize": "^5.21.13"
   },
   "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start": "node src/index.js"
   },
   "keywords": [],
   "author": "",

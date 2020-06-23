@@ -12,7 +12,7 @@ const jwt = require("express-jwt");
 const jwtAuthz = require("express-jwt-authz");
 const jwksRsa = require("jwks-rsa");
 
-const db = require("./queries");
+const db = require("./src/queries/queries");
 const port = process.env.PORT || 3300;
 
 const bodyParser = require("body-parser");
@@ -307,6 +307,8 @@ app.get("/editor/options/:area", (request, response) => {
 });
 
 app.get("/editor/areas", db.getAreas);
+
+app.get("/editor/optionstest/:area", db.getOptions)
 
 app.listen(port, () => {
   console.log(`App running on port ${port}.`);
