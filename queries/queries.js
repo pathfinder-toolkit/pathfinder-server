@@ -9,33 +9,8 @@ connectionString = {
 const Pool = require("pg").Pool;
 const pool = new Pool(connectionString);
 
-const { Sequelize, DataTypes } = require('sequelize');
-const  sequelize = new Sequelize(process.env.DATABASE_NAME, process.env.DATABASE_USER, process.env.DATABASE_PASSWORD, {
-   host: process.env.DATABASE_HOST,
-   port: 5432,
-   logging: console.log,
-   maxConcurrentQueries: 100,
-   dialect: 'postgres',
-   dialectOptions: {
-       ssl: { rejectUnauthorized: false },
-   },
-   pool: { maxConnections: 5, maxIdleTime: 30},
-   language: 'en'
-})
-
-const Area = sequelize.define('Area', {
-  idArea: {
-    type: DataTypes.INTEGER,
-    primaryKey: true,
-    autoIncrement: true
-  },
-  areaName: {
-    type: DataTypes.STRING,
-    allowNull: false
-  }
-}, {
-  tableName: 'Areas'
-});
+const sequelize = require("../utils/sequelize");
+const Area = require("../models/Area");
 
 
 
@@ -52,7 +27,6 @@ const getAreas = async (request, response) => {
     try {
       await sequelize.authenticate();
       console.log('Connection has been established successfully.');
-      await Area.sync({ alter: true });
       console.log(Area === sequelize.models.Area); // true
     } catch (error) {
       console.error('Unable to connect to the database:', error);

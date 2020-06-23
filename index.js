@@ -12,7 +12,7 @@ const jwt = require("express-jwt");
 const jwtAuthz = require("express-jwt-authz");
 const jwksRsa = require("jwks-rsa");
 
-const db = require("./queries");
+const db = require("./queries/queries");
 const port = process.env.PORT || 3300;
 
 const bodyParser = require("body-parser");
