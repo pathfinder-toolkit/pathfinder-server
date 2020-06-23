@@ -1,7 +1,6 @@
 const {  DataTypes } = require('sequelize');
 const sequelize = require('../utils/sequelize')
 
-
 const Area = sequelize.define('Area', {
     idArea: {
         type: DataTypes.INTEGER,

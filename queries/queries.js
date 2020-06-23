@@ -1,14 +1,6 @@
 const dotenv = require("dotenv");
 dotenv.config();
 
-connectionString = {
-  connectionString: process.env.DATABASE_URL,
-  ssl: { rejectUnauthorized: false },
-};
-
-const Pool = require("pg").Pool;
-const pool = new Pool(connectionString);
-
 const sequelize = require("../utils/sequelize");
 const Area = require("../models/Area");
 
@@ -16,28 +8,20 @@ const Area = require("../models/Area");
 
 
 const getAreas = async (request, response) => {
-  const client = await pool.connect();
   try {
-    const result = await client.query('SELECT "areaName" FROM public."Areas";');
-    let areas = [];
-    result.rows.forEach((row) => {
-      areas.push(row.areaName)
+    const areaObjects = await Area.findAll({
+      attributes:  ['areaName']
     });
 
-    try {
-      await sequelize.authenticate();
-      console.log('Connection has been established successfully.');
-      console.log(Area === sequelize.models.Area); // true
-    } catch (error) {
-      console.error('Unable to connect to the database:', error);
-    }
+    let areas = [];
+    areaObjects.forEach((areaObject) => {
+      areas.push(areaObject.dataValues.areaName)
+    });
 
     response.status(200).json(areas);
-  } catch(e) {
-    console.error(e.message, e.stack)
-  } finally {
-    client.release()
-  }
+  } catch (error) {
+    console.error('Unable to connect to the database:', error);
+  } 
 };
 
 const getOptions = async (request, response) => {
