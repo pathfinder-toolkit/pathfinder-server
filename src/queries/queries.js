@@ -1,17 +1,13 @@
-const dotenv = require("dotenv");
-dotenv.config();
-
-const sequelize = require("../utils/sequelize");
-const Area = require("../models/Area");
-
-
-
+const db = require('../models');
 
 const getAreas = async (request, response) => {
   try {
-    const areaObjects = await Area.findAll({
+    db.sequelize.sync();
+    console.log(entities);
+    const areaObjects = await db.Area.findAll({
       attributes:  ['areaName']
     });
+    console.log(areaObjects);
 
     let areas = [];
     areaObjects.forEach((areaObject) => {
@@ -21,11 +17,11 @@ const getAreas = async (request, response) => {
     response.status(200).json(areas);
   } catch (error) {
     console.error('Unable to connect to the database:', error);
-  } 
+  }
 };
 
 const getOptions = async (request, response) => {
-  const client = await pool.connect();
+  /*const client = await pool.connect();
   try {
     const area = request.params.area;
     let query = 'SELECT public."Areas"."idArea" FROM public."Areas" WHERE public."Areas"."areaName"=\'' + area + '\';'
@@ -44,7 +40,7 @@ const getOptions = async (request, response) => {
     console.error(e.message, e.stack)
   } finally {
     client.release()
-  }
+  }*/
 };
 
 module.exports = {

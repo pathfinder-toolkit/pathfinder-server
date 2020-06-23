@@ -1,3 +1,8 @@
+const { Sequelize } = require("sequelize")
+
+const dotenv = require("dotenv");
+dotenv.config();
+
 const { Sequelize } = require('sequelize');
 const sequelize = new Sequelize(process.env.DATABASE_NAME, process.env.DATABASE_USER, process.env.DATABASE_PASSWORD, {
    host: process.env.DATABASE_HOST,
@@ -12,4 +17,14 @@ const sequelize = new Sequelize(process.env.DATABASE_NAME, process.env.DATABASE_
    language: 'en'
 })
 
-module.exports = sequelize;
+const db = {};
+db.Sequelize = Sequelize;
+db.sequelize = sequelize;
+
+db.Area = require("./Area.model.js")(sequelize, Sequelize);
+db.Material = require("./Material.model.js")(sequelize, Sequelize);
+
+db.Area.hasMany(db.Material, { foreignKey: 'idArea' });
+db.Material.belongsTo(db.Area, { foreignKey: 'idArea' });
+
+module.exports = db;
