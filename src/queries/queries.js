@@ -3,7 +3,6 @@ const db = require('../models');
 const getAreas = async (request, response) => {
   try {
     db.sequelize.sync();
-    console.log(entities);
     const areaObjects = await db.Area.findAll({
       attributes:  ['areaName']
     });

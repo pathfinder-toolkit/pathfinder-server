@@ -20,8 +20,8 @@ const db = {};
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
-db.Area = require("./Area.model.js")(sequelize, Sequelize);
-db.Material = require("./Material.model.js")(sequelize, Sequelize);
+db.Area = require("./AreaModel.js")(sequelize, Sequelize);
+db.Material = require("./MaterialModel.js")(sequelize, Sequelize);
 
 db.Area.hasMany(db.Material, { foreignKey: 'idArea' });
 db.Material.belongsTo(db.Area, { foreignKey: 'idArea' });
