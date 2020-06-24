@@ -23,7 +23,7 @@ commentRouter.get("/comments/:subject", (request, response) => {
           "commentSecondarySubject": "Secondary subject",
           "date": "2020-05-31 15:12:43",
           "author": "Jane Doe",
-          "sentiment": "negative"
+          "sentiment": "neutral"
         }
       ]
     );
