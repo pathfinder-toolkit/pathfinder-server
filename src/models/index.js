@@ -23,11 +23,20 @@ db.sequelize = sequelize;
 db.Area = require("./AreaModel.js")(sequelize, Sequelize);
 db.Material = require("./MaterialModel.js")(sequelize, Sequelize);
 db.RoofType = require("./RoofTypeModel.js")(sequelize, Sequelize);
+db.VentilationType = require("./VentilationTypeModel.js")(sequelize, Sequelize);
+db.HeatingType = require("./HeatingTypeModel.js")(sequelize, Sequelize);
+db.BuildingType = require("./BuildingTypeModel.js")(sequelize,Sequelize);
 
 db.Area.hasMany(db.Material, { foreignKey: 'idArea', as: 'materials' });
 db.Material.belongsTo(db.Area, { foreignKey: 'idArea' });
 db.Area.hasMany(db.RoofType, { foreignKey: 'idArea' , as: 'roofTypes'});
 db.RoofType.belongsTo(db.Area, { foreignKey: 'idArea' });
+db.Area.hasMany(db.VentilationType, { foreignKey: 'idArea' , as: 'ventilationTypes'});
+db.VentilationType.belongsTo(db.Area, { foreignKey: 'idArea' });
+db.Area.hasMany(db.HeatingType, { foreignKey: 'idArea' , as: 'heatingTypes'});
+db.HeatingType.belongsTo(db.Area, { foreignKey: 'idArea' });
+db.Area.hasMany(db.BuildingType, { foreignKey: 'idArea' , as: 'buildingTypes'});
+db.BuildingType.belongsTo(db.Area, { foreignKey: 'idArea' });
 
 db.sequelize.sync();
 
