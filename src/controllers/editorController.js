@@ -6,13 +6,8 @@ const Area = db.Area;
 
 const getAreas = async (request, response) => {
     try {
-        const areaObjects = await Area.findAll({
+        const areas = await Area.findAll({
             attributes:  ['areaName']
-        });
-
-        let areas = [];
-        areaObjects.forEach((areaObject) => {
-            areas.push(areaObject.toJSON().areaName)
         });
 
         response.status(200).json(areas);
