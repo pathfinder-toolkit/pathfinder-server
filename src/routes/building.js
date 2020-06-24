@@ -102,6 +102,8 @@ buildingRouter.get("/building/:buildingId", (request, response) => {
             "comments": [
               {
                 "commentText": "Donec dapibus facilisis nisl vel posuere. Morbi bibendum magna ac lacus vestibulum, eu egestas lacus viverra.",
+                "commentSubject": "Heating System",
+                "commentSecondarySubject": "Oil",
                 "date": "2020-06-15 12:14:34",
                 "author": "John Doe",
                 "sentiment": "positive"
@@ -140,6 +142,7 @@ buildingRouter.get("/building/:buildingId", (request, response) => {
             "comments": [
               {
                 "commentText": "Quisque et convallis diam, eget interdum sapien. Vivamus felis nulla, condimentum a volutpat vel, luctus id odio. ",
+                "commentSubject": "Wall Material",
                 "date": "2020-06-15 15:44:23",
                 "sentiment": "negative"
               }
@@ -183,6 +186,7 @@ buildingRouter.get("/building/:buildingId", (request, response) => {
             "comments": [
               {
                 "commentText": "Proin a enim tortor. Cras vestibulum bibendum libero, a pulvinar turpis eleifend fringilla. Suspendisse et nunc hendrerit, lacinia enim eu, tincidunt dolor.",
+                "commentSubject": "Ventilation system",
                 "date": "2020-06-16 11:44:23",
                 "author": "Jane Doe",
                 "sentiment": "neutral"
