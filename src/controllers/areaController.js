@@ -5,7 +5,6 @@ const Area = db.Area;
 
 const getAreas = async (request, response) => {
     try {
-      sequelize.sync();
       const areaObjects = await Area.findAll({
         attributes:  ['areaName']
       });
@@ -19,7 +18,7 @@ const getAreas = async (request, response) => {
     } catch (error) {
       console.error('Unable to connect to the database:', error);
     }
-  };
+};
 
 module.exports = {
     getAreas
