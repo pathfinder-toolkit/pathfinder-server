@@ -22,9 +22,12 @@ db.sequelize = sequelize;
 
 db.Area = require("./AreaModel.js")(sequelize, Sequelize);
 db.Material = require("./MaterialModel.js")(sequelize, Sequelize);
+db.RoofType = require("./RoofTypeModel.js")(sequelize, Sequelize);
 
-db.Area.hasMany(db.Material, { foreignKey: 'idArea' });
+db.Area.hasMany(db.Material, { foreignKey: 'idArea', as: 'materials' });
 db.Material.belongsTo(db.Area, { foreignKey: 'idArea' });
+db.Area.hasMany(db.RoofType, { foreignKey: 'idArea' , as: 'roofTypes'});
+db.RoofType.belongsTo(db.Area, { foreignKey: 'idArea' });
 
 db.sequelize.sync();
 

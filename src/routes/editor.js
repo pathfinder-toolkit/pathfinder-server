@@ -2,8 +2,9 @@ const express = require("express");
 const editorRouter = express.Router();
 
 const {
-    getAreas
-} = require('../controllers/areaController');
+    getAreas,
+    getOptionsForArea
+} = require('../controllers/editorController');
 
 editorRouter.get("/editor/areas", getAreas);
 
@@ -18,5 +19,7 @@ editorRouter.get("/editor/options/:area", (request, response) => {
       }
     );
 });
+
+editorRouter.get('/test/:area', getOptionsForArea)
 
 module.exports = editorRouter;

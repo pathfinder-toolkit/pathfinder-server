@@ -14,7 +14,7 @@ const jwt = require("express-jwt");
 const jwtAuthz = require("express-jwt-authz");
 const jwksRsa = require("jwks-rsa");
 
-const area = require("./controllers/areaController");
+const area = require("./controllers/editorController");
 const port = process.env.PORT || 3300;
 
 const bodyParser = require("body-parser");
