@@ -20,14 +20,14 @@ const db = {};
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
-db.Area = require("./AreaModel.js")(sequelize, Sequelize);
-db.Material = require("./MaterialModel.js")(sequelize, Sequelize);
-db.RoofType = require("./RoofTypeModel.js")(sequelize, Sequelize);
-db.VentilationType = require("./VentilationTypeModel.js")(sequelize, Sequelize);
-db.HeatingType = require("./HeatingTypeModel.js")(sequelize, Sequelize);
-db.BuildingType = require("./BuildingTypeModel.js")(sequelize,Sequelize);
-db.Building = require("./BuildingModel.js")(sequelize, Sequelize);
-db.Category = require("./CategoryModel.js")(sequelize, Sequelize);
+db.Area = require("./editor/AreaModel.js")(sequelize, Sequelize);
+db.Material = require("./editor/MaterialModel.js")(sequelize, Sequelize);
+db.RoofType = require("./editor/RoofTypeModel.js")(sequelize, Sequelize);
+db.VentilationType = require("./editor/VentilationTypeModel.js")(sequelize, Sequelize);
+db.HeatingType = require("./editor/HeatingTypeModel.js")(sequelize, Sequelize);
+db.BuildingType = require("./editor/BuildingTypeModel.js")(sequelize,Sequelize);
+db.Building = require("./building/BuildingModel.js")(sequelize, Sequelize);
+db.Category = require("./building/CategoryModel.js")(sequelize, Sequelize);
 
 db.Area.hasMany(db.Material, { foreignKey: 'idArea', as: 'materials' });
 db.Material.belongsTo(db.Area, { foreignKey: 'idArea' });
