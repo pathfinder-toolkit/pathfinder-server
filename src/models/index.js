@@ -27,6 +27,7 @@ db.VentilationType = require("./VentilationTypeModel.js")(sequelize, Sequelize);
 db.HeatingType = require("./HeatingTypeModel.js")(sequelize, Sequelize);
 db.BuildingType = require("./BuildingTypeModel.js")(sequelize,Sequelize);
 db.Building = require("./BuildingModel.js")(sequelize, Sequelize);
+db.Category = require("./CategoryModel.js")(sequelize, Sequelize);
 
 db.Area.hasMany(db.Material, { foreignKey: 'idArea', as: 'materials' });
 db.Material.belongsTo(db.Area, { foreignKey: 'idArea' });
@@ -38,6 +39,9 @@ db.Area.hasMany(db.HeatingType, { foreignKey: 'idArea' , as: 'heatingTypes'});
 db.HeatingType.belongsTo(db.Area, { foreignKey: 'idArea' });
 db.Area.hasMany(db.BuildingType, { foreignKey: 'idArea' , as: 'buildingTypes'});
 db.BuildingType.belongsTo(db.Area, { foreignKey: 'idArea' });
+
+db.Building.hasMany(db.Category, { foreignKey: 'idBuilding', as: 'categories'});
+db.Category.belongsTo(db.BuildingType, { foreignKey: 'idBuilding'});
 
 (async () => {
     await db.sequelize.sync();
