@@ -30,6 +30,7 @@ db.Building = require("./building/BuildingModel.js")(sequelize, Sequelize);
 db.Category = require("./building/CategoryModel.js")(sequelize, Sequelize);
 db.Component = require("./building/ComponentModel.js")(sequelize, Sequelize);
 db.ComponentValue = require("./building/ComponentValueModel.js")(sequelize, Sequelize);
+db.Subject = require("./building/SubjectModel.js")(sequelize, Sequelize);
 
 db.Area.hasMany(db.Material, { foreignKey: 'idArea', as: 'materials' });
 db.Material.belongsTo(db.Area, { foreignKey: 'idArea' });
@@ -44,10 +45,13 @@ db.BuildingType.belongsTo(db.Area, { foreignKey: 'idArea' });
 
 db.Building.hasMany(db.Category, { foreignKey: 'idBuilding', as: 'categories'});
 db.Category.belongsTo(db.BuildingType, { foreignKey: 'idBuilding'});
-db.Category.belongsToMany(db.Component, { through: 'CategoryComponents' });
-db.Component.belongsToMany(db.Category, { through: 'CategoryComponents' });
+db.Category.belongsToMany(db.Component, { through: 'CategoryComponents', });
+db.Component.belongsToMany(db.Category, { through: 'CategoryComponents', as: 'components'});
 db.Component.hasOne(db.ComponentValue, { foreignKey: 'idComponent', as: 'value'});
 db.ComponentValue.belongsTo(db.Component, { foreignKey: 'idComponent'});
+db.Subject.hasMany(db.Component, {foreignKey: 'idSubject', as: 'component'});
+db.Component.belongsTo(db.Subject, {foreignKey: 'idSubject'});
+
 
 (async () => {
     await db.sequelize.sync();
