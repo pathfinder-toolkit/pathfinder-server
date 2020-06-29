@@ -10,8 +10,6 @@ const allowedOrigins = [
   "https://pathfinder-toolkit.herokuapp.com",
 ];
 
-
-const area = require("./controllers/editorController");
 const port = process.env.PORT || 3300;
 
 const bodyParser = require("body-parser");
@@ -22,8 +20,6 @@ app.use(
     extended: true,
   })
 );
-
-
 
 app.use(
   cors({
@@ -43,12 +39,6 @@ app.use(
 app.get("/", (request, response) => {
   response.json({ info: "Pathfinder API" });
 });
-
-/*app.get("/private", checkJwt, function (req, res) {
-  res.json({
-    message: "Private endpoint test.",
-  });
-});*/
 
 app.use('', apiRouter);
 
