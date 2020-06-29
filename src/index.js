@@ -10,9 +10,6 @@ const allowedOrigins = [
   "https://pathfinder-toolkit.herokuapp.com",
 ];
 
-const jwt = require("express-jwt");
-const jwtAuthz = require("express-jwt-authz");
-const jwksRsa = require("jwks-rsa");
 
 const area = require("./controllers/editorController");
 const port = process.env.PORT || 3300;
@@ -26,18 +23,7 @@ app.use(
   })
 );
 
-const checkJwt = jwt({
-  secret: jwksRsa.expressJwtSecret({
-    cache: true,
-    rateLimit: true,
-    jwksRequestsPerMinute: 5,
-    jwksUri: `https://dev-cwz8v54y.eu.auth0.com/.well-known/jwks.json`,
-  }),
 
-  audience: "https://api-pathfinder.herokuapp.com/",
-  issuer: `https://dev-cwz8v54y.eu.auth0.com/`,
-  algorithms: ["RS256"],
-});
 
 app.use(
   cors({
@@ -58,11 +44,11 @@ app.get("/", (request, response) => {
   response.json({ info: "Pathfinder API" });
 });
 
-app.get("/private", checkJwt, function (req, res) {
+/*app.get("/private", checkJwt, function (req, res) {
   res.json({
     message: "Private endpoint test.",
   });
-});
+});*/
 
 app.use('', apiRouter);
 
