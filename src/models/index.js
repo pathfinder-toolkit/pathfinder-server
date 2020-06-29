@@ -26,6 +26,7 @@ db.RoofType = require("./RoofTypeModel.js")(sequelize, Sequelize);
 db.VentilationType = require("./VentilationTypeModel.js")(sequelize, Sequelize);
 db.HeatingType = require("./HeatingTypeModel.js")(sequelize, Sequelize);
 db.BuildingType = require("./BuildingTypeModel.js")(sequelize,Sequelize);
+db.Building = require("./BuildingModel.js")(sequelize, Sequelize);
 
 db.Area.hasMany(db.Material, { foreignKey: 'idArea', as: 'materials' });
 db.Material.belongsTo(db.Area, { foreignKey: 'idArea' });
