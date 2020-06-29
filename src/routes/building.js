@@ -1,7 +1,11 @@
 const express = require("express");
 const buildingRouter = express.Router();
 
-buildingRouter.get("/buildings/me", (request, response) => {
+const {
+  checkJwt
+} = require('../utils/auth');
+
+buildingRouter.get("/buildings/me", checkJwt, (request, response) => {
     response.json(
       [
         {
@@ -75,7 +79,7 @@ buildingRouter.get("/building", (request, response) => {
           "value": "",
           "hasSuggestions": false
         },
-        "description": {
+        "buildingType": {
           "propertyName": "Building type",
           "value": "",
           "hasSuggestions": false
@@ -111,7 +115,7 @@ buildingRouter.get("/building", (request, response) => {
           "hasSuggestions": false
         },
         "annualHeatingConsumption": {
-          "propertyName": "Annual ceating consumption",
+          "propertyName": "Annual heating consumption",
           "value": "",
           "hasSuggestions": false
         },
@@ -274,7 +278,7 @@ buildingRouter.get("/building", (request, response) => {
   )
 });
 
-buildingRouter.get("/building/:buildingId", (request, response) => {
+buildingRouter.get("/building/:buildingId", checkJwt, (request, response) => {
     response.json(
       {
         "slug": "talonnimi",
