@@ -20,7 +20,8 @@ module.exports = (sequelize, DataTypes) => {
         },
         usageStartYear: {
             type: DataTypes.DATEONLY,
-            allowNull: false
+            allowNull: false,
+            defaultValue: DataTypes.NOW
         },
         componentValueType: {
             type: DataTypes.STRING,

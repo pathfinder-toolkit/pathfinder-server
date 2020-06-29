@@ -45,12 +45,12 @@ db.BuildingType.belongsTo(db.Area, { foreignKey: 'idArea' });
 
 db.Building.hasMany(db.Category, { foreignKey: 'idBuilding', as: 'categories'});
 db.Category.belongsTo(db.BuildingType, { foreignKey: 'idBuilding'});
-db.Category.belongsToMany(db.Component, { through: 'CategoryComponents', });
-db.Component.belongsToMany(db.Category, { through: 'CategoryComponents', as: 'components'});
+db.Category.belongsToMany(db.Component, { through: 'CategoryComponents', as: 'components'});
+db.Component.belongsToMany(db.Category, { through: 'CategoryComponents'});
 db.Component.hasOne(db.ComponentValue, { foreignKey: 'idComponent', as: 'value'});
 db.ComponentValue.belongsTo(db.Component, { foreignKey: 'idComponent'});
-db.Subject.hasMany(db.Component, {foreignKey: 'idSubject', as: 'component'});
-db.Component.belongsTo(db.Subject, {foreignKey: 'idSubject'});
+db.Subject.hasMany(db.Component, {foreignKey: 'idSubject'});
+db.Component.belongsTo(db.Subject, {foreignKey: 'idSubject', as: 'subject'});
 
 
 (async () => {

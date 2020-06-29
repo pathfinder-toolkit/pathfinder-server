@@ -5,6 +5,12 @@ const {
   checkJwt
 } = require('../utils/auth');
 
+const {
+  postBuildingTest
+} = require('../controllers/buildingController');
+
+buildingRouter.get("/building/test", postBuildingTest)
+
 buildingRouter.get("/buildings/me", checkJwt, (request, response) => {
     response.json(
       [
