@@ -75,7 +75,7 @@ buildingRouter.get("/building", (request, response) => {
           "value": "",
           "hasSuggestions": false
         },
-        "description": {
+        "buildingType": {
           "propertyName": "Building type",
           "value": "",
           "hasSuggestions": false
@@ -111,7 +111,7 @@ buildingRouter.get("/building", (request, response) => {
           "hasSuggestions": false
         },
         "annualHeatingConsumption": {
-          "propertyName": "Annual ceating consumption",
+          "propertyName": "Annual heating consumption",
           "value": "",
           "hasSuggestions": false
         },
