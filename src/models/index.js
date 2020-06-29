@@ -38,6 +38,10 @@ db.HeatingType.belongsTo(db.Area, { foreignKey: 'idArea' });
 db.Area.hasMany(db.BuildingType, { foreignKey: 'idArea' , as: 'buildingTypes'});
 db.BuildingType.belongsTo(db.Area, { foreignKey: 'idArea' });
 
-db.sequelize.sync();
+(async () => {
+    await db.sequelize.sync();
+})();
+
+
 
 module.exports = db;
