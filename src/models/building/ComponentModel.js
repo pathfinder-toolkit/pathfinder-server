@@ -6,14 +6,6 @@ module.exports = (sequelize, DataTypes) => {
             autoIncrement: true,
             unique: true
         },
-        componentName: {
-            type: DataTypes.STRING,
-            allowNull: false
-        },
-        hasSuggestions: {
-            type: DataTypes.BOOLEAN,
-            allowNull: false
-        },
         isCurrent: {
             type: DataTypes.BOOLEAN,
             allowNull: false
