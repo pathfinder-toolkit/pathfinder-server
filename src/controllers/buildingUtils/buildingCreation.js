@@ -1,12 +1,6 @@
-const { Building, Category, ComponentValue, Subject, Component } = require('../../models');
+const { Building, Category, ComponentValue, Subject, Component, ComponentMeta } = require('../../models');
 
 const makeNameComponent = async (name) => {
-    const subject = await Subject.findOne({
-        where: {
-            subjectText: "No subject"
-        }
-    })
-
 
 
     const component = await makeComponent(subject, 'Name', false, true, 'string', name);
@@ -33,19 +27,19 @@ const makeNameComponent = async (name) => {
 }
 
 const makeAreaComponent = async (area) => {
-    
+
 }
 
 const makeComponent = async (subject, componentName, hasSuggestions, isCurrent, valueType, valueString) => {
     const component = Component.build({
-        componentName: componentName,
-        hasSuggestions: hasSuggestions,
+        //componentName: componentName,
+        //hasSuggestions: hasSuggestions,
         isCurrent: isCurrent,
         componentValueType: valueType
     })
 
-    component.setSubject(subject, {save:false});
-    await component.save();
+    /*component.setSubject(subject, {save:false});
+    await component.save();*/
 
     let value;
 

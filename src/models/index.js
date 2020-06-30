@@ -30,7 +30,6 @@ db.Building = require("./building/BuildingModel.js")(sequelize, Sequelize);
 db.Category = require("./building/CategoryModel.js")(sequelize, Sequelize);
 db.Component = require("./building/ComponentModel.js")(sequelize, Sequelize);
 db.ComponentValue = require("./building/ComponentValueModel.js")(sequelize, Sequelize);
-db.Subject = require("./building/SubjectModel.js")(sequelize, Sequelize);
 db.ComponentMeta = require("./building/ComponentMetaModel.js")(sequelize, Sequelize);
 
 db.Area.hasMany(db.Material, { foreignKey: 'idArea', as: 'materials' });
@@ -50,14 +49,12 @@ db.Category.belongsToMany(db.Component, { through: 'CategoryComponents', as: 'co
 db.Component.belongsToMany(db.Category, { through: 'CategoryComponents'});
 db.Component.hasOne(db.ComponentValue, { foreignKey: {name: 'idComponent'}, as: 'value'});
 db.ComponentValue.belongsTo(db.Component, { foreignKey: 'idComponent'});
-db.Subject.hasMany(db.Component, {foreignKey: 'idSubject'});
-db.Component.belongsTo(db.Subject, {foreignKey: 'idSubject', as: 'subject'});
 db.ComponentMeta.hasMany(db.Component, {foreignKey: 'idMeta'});
 db.Component.belongsTo(db.ComponentMeta, {foreignKey: 'idMeta', as: 'meta'});
 
-/*(async () => {
+(async () => {
     await db.sequelize.sync();
-})();*/
+})();
 
 
 
