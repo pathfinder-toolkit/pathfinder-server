@@ -52,9 +52,9 @@ db.ComponentValue.belongsTo(db.Component, { foreignKey: 'idComponent'});
 db.ComponentMeta.hasMany(db.Component, {foreignKey: 'idMeta'});
 db.Component.belongsTo(db.ComponentMeta, {foreignKey: 'idMeta', as: 'meta'});
 
-(async () => {
+/*(async () => {
     await db.sequelize.sync();
-})();
+})();*/
 
 
 

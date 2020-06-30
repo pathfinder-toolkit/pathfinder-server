@@ -3,7 +3,7 @@ const { Building, Category, ComponentValue, Subject, Component, ComponentMeta } 
 const makeNameComponent = async (name) => {
 
 
-    const component = await makeComponent(subject, 'Name', false, true, 'string', name);
+    const component = await makeComponent('name', true, 'string', name);
 
     return component;
 
@@ -30,30 +30,39 @@ const makeAreaComponent = async (area) => {
 
 }
 
-const makeComponent = async (subject, componentName, hasSuggestions, isCurrent, valueType, valueString) => {
+const makeComponent = async (componentName, isCurrent, valueType, value) => {
+    const meta = await ComponentMeta.findOne({
+        where: {
+            componentName: componentName
+        }
+    });
+
+    console.log(meta);
+    
     const component = Component.build({
-        //componentName: componentName,
-        //hasSuggestions: hasSuggestions,
         isCurrent: isCurrent,
         componentValueType: valueType
     })
 
-    /*component.setSubject(subject, {save:false});
-    await component.save();*/
+    console.log(component);
+    
 
-    let value;
+    component.setMeta(meta, {save:false});
+    await component.save();
+
+    let valueObject;
 
     switch (valueType) {
         case 'string':
-            value = ComponentValue.build({
-                valueString: valueString
+            valueObject = ComponentValue.build({
+                valueString: value
             })
             break;
         default:
             break;
     }
-    value.setComponent(component, {save: false});
-    await value.save();
+    valueObject.setComponent(component, {save: false});
+    await valueObject.save();
 
     return component;
 }

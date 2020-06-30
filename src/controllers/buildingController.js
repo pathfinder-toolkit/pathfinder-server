@@ -1,5 +1,5 @@
 const db = require('../models');
-const { Building, Category, ComponentValue} = require('../models');
+const { Building, Category, ComponentValue, ComponentMeta} = require('../models');
 const { makeNameComponent } = require('./buildingUtils/buildingCreation');
 
 const sequelize = db.sequelize;
