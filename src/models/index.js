@@ -47,15 +47,14 @@ db.Building.hasMany(db.Category, { foreignKey: 'idBuilding', as: 'categories'});
 db.Category.belongsTo(db.BuildingType, { foreignKey: 'idBuilding'});
 db.Category.belongsToMany(db.Component, { through: 'CategoryComponents', as: 'components'});
 db.Component.belongsToMany(db.Category, { through: 'CategoryComponents'});
-db.Component.hasOne(db.ComponentValue, { foreignKey: 'idComponent', as: 'value'});
+db.Component.hasOne(db.ComponentValue, { foreignKey: {name: 'idComponent'}, as: 'value'});
 db.ComponentValue.belongsTo(db.Component, { foreignKey: 'idComponent'});
 db.Subject.hasMany(db.Component, {foreignKey: 'idSubject'});
 db.Component.belongsTo(db.Subject, {foreignKey: 'idSubject', as: 'subject'});
 
-
-(async () => {
+/*(async () => {
     await db.sequelize.sync();
-})();
+})();*/
 
 
 

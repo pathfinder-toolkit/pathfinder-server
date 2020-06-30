@@ -12,6 +12,8 @@ const {
 buildingRouter.get("/building/test", postBuildingTest)
 
 buildingRouter.get("/buildings/me", checkJwt, (request, response) => {
+
+  console.log(request.user.sub);
     response.json(
       [
         {

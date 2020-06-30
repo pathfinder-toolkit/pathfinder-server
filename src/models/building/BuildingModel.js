@@ -6,14 +6,14 @@ module.exports = (sequelize, DataTypes) => {
             autoIncrement: true,
             unique: true
         },
-        buildingAuthor: {
+        buildingAuthorSub: {
             type: DataTypes.STRING,
             allowNull: false
         },
         slug: {
             type: DataTypes.STRING,
             allowNull: false,
-            unique: true
+            //unique: true
         }
     },  {
         tableName: 'Buildings'
