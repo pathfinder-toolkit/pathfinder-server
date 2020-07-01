@@ -13,7 +13,7 @@ const getSampleBuilding = async (request, response) => {
 
     try {
         const buildingInDatabase = await Building.findOne({
-            attributes:  [['buildingAuthorSub','author'],'slug'],
+            attributes:  ['slug'],
             where: {
                 buildingAuthorSub: 'noauthor'
             },

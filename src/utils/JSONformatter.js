@@ -1,6 +1,5 @@
 const BuildingJSONtoResponse = (building) => {
     const responseObject = {};
-    responseObject.author = building.author;
     responseObject.slug = building.slug;
 
     building['categories'].map((category, index) => {
