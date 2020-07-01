@@ -1,9 +1,11 @@
 const { Building, Category, ComponentValue, Subject, Component, ComponentMeta } = require('../../models');
 
+const buildingModel = require('../../json/buildingModel.json');
+
 const makeNameComponent = async (name) => {
 
 
-    const component = await makeComponent('name', true, 'string', name);
+    const component = {};
 
     return component;
 
@@ -30,21 +32,23 @@ const makeAreaComponent = async (area) => {
 
 }
 
-const makeComponent = async (componentName, isCurrent, valueType, value) => {
+const makeComponent = async ( componentName, value, valueType, isCurrent ) => {
     const meta = await ComponentMeta.findOne({
         where: {
             componentName: componentName
         }
     });
 
-    console.log(meta);
+    const valueTypeTest = meta.componentValueType;
+    console.log(valueTypeTest);
+    //console.log(meta);
     
     const component = Component.build({
         isCurrent: isCurrent,
         componentValueType: valueType
     })
 
-    console.log(component);
+    //console.log(component);
     
 
     component.setMeta(meta, {save:false});
@@ -67,6 +71,34 @@ const makeComponent = async (componentName, isCurrent, valueType, value) => {
     return component;
 }
 
+const makeMetaComponents = async () => {
+    /*const meta = await ComponentMeta.create({
+        componentDescription: "Name",
+        componentName: "name",
+        componentValueType: "string",
+        hasSuggestions: true,
+        subject: "No subject"
+    });*/
+
+    console.log(buildingModel);
+    for (category in buildingModel) {
+        for (property in buildingModel[category]) {
+            let metaObject = {};
+            metaObject.componentName = property;
+            if (Array.isArray(buildingModel[category][property])) {
+                metaObject.componentDescription = buildingModel[category][property][0].propertyName;
+            } else {
+                metaObject.componentDescription = buildingModel[category][property].propertyName;
+            }
+
+                
+            console.log(metaObject);
+            console.log(buildingModel[category][property]);
+        }
+    }
+}
+
 module.exports = {
-    makeNameComponent
+    makeComponent,
+    makeMetaComponents
 }

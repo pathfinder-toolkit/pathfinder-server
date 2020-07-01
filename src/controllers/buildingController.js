@@ -1,19 +1,31 @@
 const db = require('../models');
 const { Building, Category, ComponentValue, ComponentMeta} = require('../models');
-const { makeNameComponent } = require('./buildingUtils/buildingCreation');
+const { makeComponent, makeMetaComponents } = require('./buildingUtils/buildingCreation');
 
 const sequelize = db.sequelize;
 const Component = db.Component;
 
 
 const postBuildingTest = async (request, response) => {
-    const nameComponent = await makeNameComponent("No name");
-
-    console.log(JSON.stringify(nameComponent, null, 4));
-
-    /*const subject = await Subject.create({
-        subjectText: "No subject"
+    /*const meta = await ComponentMeta.create({
+        componentDescription: "Name",
+        componentName: "name",
+        componentValueType: "string",
+        hasSuggestions: true,
+        subject: "No subject"
     });*/
+
+    makeMetaComponents();
+
+    
+
+    //console.log(JSON.stringify(meta, null, 4));
+
+    //const component = await makeComponent( 'name', 'No name', 'string', true );
+
+    //console.log(JSON.stringify(component, null, 4));
+
+
 
     /*const building = await Building.create({
         buildingAuthorSub: 'noauthor',

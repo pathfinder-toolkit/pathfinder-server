@@ -14,10 +14,6 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.DATEONLY,
             allowNull: false,
             defaultValue: DataTypes.NOW
-        },
-        componentValueType: {
-            type: DataTypes.STRING,
-            allowNull: false
         }
     },  {
         tableName: 'Components'

@@ -13,7 +13,11 @@ module.exports = (sequelize, DataTypes) => {
         componentName: {
             type: DataTypes.STRING,
             allowNull: false,
-            //unique: true
+            unique: true
+        },
+        componentValueType: {
+            type: DataTypes.STRING,
+            allowNull: false
         },
         hasSuggestions: {
             type: DataTypes.BOOLEAN,
