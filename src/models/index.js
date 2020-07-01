@@ -20,12 +20,17 @@ const db = {};
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
-db.Area = require("./AreaModel.js")(sequelize, Sequelize);
-db.Material = require("./MaterialModel.js")(sequelize, Sequelize);
-db.RoofType = require("./RoofTypeModel.js")(sequelize, Sequelize);
-db.VentilationType = require("./VentilationTypeModel.js")(sequelize, Sequelize);
-db.HeatingType = require("./HeatingTypeModel.js")(sequelize, Sequelize);
-db.BuildingType = require("./BuildingTypeModel.js")(sequelize,Sequelize);
+db.Area = require("./editor/AreaModel.js")(sequelize, Sequelize);
+db.Material = require("./editor/MaterialModel.js")(sequelize, Sequelize);
+db.RoofType = require("./editor/RoofTypeModel.js")(sequelize, Sequelize);
+db.VentilationType = require("./editor/VentilationTypeModel.js")(sequelize, Sequelize);
+db.HeatingType = require("./editor/HeatingTypeModel.js")(sequelize, Sequelize);
+db.BuildingType = require("./editor/BuildingTypeModel.js")(sequelize,Sequelize);
+db.Building = require("./building/BuildingModel.js")(sequelize, Sequelize);
+db.Category = require("./building/CategoryModel.js")(sequelize, Sequelize);
+db.Component = require("./building/ComponentModel.js")(sequelize, Sequelize);
+db.ComponentValue = require("./building/ComponentValueModel.js")(sequelize, Sequelize);
+db.ComponentMeta = require("./building/ComponentMetaModel.js")(sequelize, Sequelize);
 
 db.Area.hasMany(db.Material, { foreignKey: 'idArea', as: 'materials' });
 db.Material.belongsTo(db.Area, { foreignKey: 'idArea' });
@@ -38,9 +43,18 @@ db.HeatingType.belongsTo(db.Area, { foreignKey: 'idArea' });
 db.Area.hasMany(db.BuildingType, { foreignKey: 'idArea' , as: 'buildingTypes'});
 db.BuildingType.belongsTo(db.Area, { foreignKey: 'idArea' });
 
-(async () => {
+db.Building.hasMany(db.Category, { foreignKey: 'idBuilding', as: 'categories'});
+db.Category.belongsTo(db.BuildingType, { foreignKey: 'idBuilding'});
+db.Category.belongsToMany(db.Component, { through: 'CategoryComponents', as: 'components'});
+db.Component.belongsToMany(db.Category, { through: 'CategoryComponents'});
+db.Component.hasOne(db.ComponentValue, { foreignKey: {name: 'idComponent'}, as: 'value'});
+db.ComponentValue.belongsTo(db.Component, { foreignKey: 'idComponent'});
+db.ComponentMeta.hasMany(db.Component, {foreignKey: 'idMeta'});
+db.Component.belongsTo(db.ComponentMeta, {foreignKey: 'idMeta', as: 'meta'});
+
+/*(async () => {
     await db.sequelize.sync();
-})();
+})();*/
 
 
 
