@@ -16,7 +16,7 @@
         },
         "year": {
             "propertyName": "Construction year",
-            "value": "",
+            "value": 0,
             "valueType": "int",
             "subject": "No subject",
             "hasSuggestions": false
@@ -44,49 +44,49 @@
         },
         "floorsAmount": {
             "propertyName": "Number of floors",
-            "value": "",
+            "value": 0,
             "valueType": "int",
             "subject": "No subject",
             "hasSuggestions": false
         },
         "floorArea": {
             "propertyName": "Floor area",
-            "value": "",
+            "value": 0,
             "valueType": "double",
             "subject": "No subject",
             "hasSuggestions": false
         },
         "heatedFloorArea": {
             "propertyName": "Heated floor area",
-            "value": "",
+            "value": 0,
             "valueType": "double",
             "subject": "No subject",
             "hasSuggestions": false
         },
         "annualConsumption": {
             "propertyName": "Annual consumption",
-            "value": "",
+            "value": 0,
             "valueType": "double",
             "subject": "No subject",
             "hasSuggestions": false
         },
         "annualCost": {
             "propertyName": "Annual cost",
-            "value": "",
+            "value": 0,
             "valueType": "double",
             "subject": "No subject",
             "hasSuggestions": false
         },
         "annualHeatingConsumption": {
             "propertyName": "Annual heating consumption",
-            "value": "",
+            "value": 0,
             "valueType": "double",
             "subject": "No subject",
             "hasSuggestions": false
         },
         "annualHeatingCost": {
             "propertyName": "Annual heating cost",
-            "value": "",
+            "value": 0,
             "valueType": "double",
             "subject": "No subject",
             "hasSuggestions": false
@@ -102,7 +102,7 @@
         },
         "wallThickness": {
             "propertyName": "Wall thickness",
-            "value": "",
+            "value": 0,
             "valueType": "double",
             "subject": "Wall thickness",
             "hasSuggestions": true
@@ -116,7 +116,7 @@
         },
         "windowAmount": {
             "propertyName": "Number of windows",
-            "value": "",
+            "value": 0,
             "valueType": "int",
             "subject": "Number of windows",
             "hasSuggestions": true
@@ -130,7 +130,7 @@
         },
         "heatedWindowAmount": {
             "propertyName": "Number of windows in heated area",
-            "value": "",
+            "value": 0,
             "valueType": "int",
             "subject": "Number of heated windows",
             "hasSuggestions": true
@@ -158,14 +158,14 @@
         },
         "roofInsulation": {
             "propertyName": "Roof insulation",
-            "value": "",
+            "value": false,
             "valueType": "boolean",
             "subject": "Roof insulation",
             "hasSuggestions": true
         },
         "roofInsulationThickness": {
             "propertyName": "Roof insulation thickness",
-            "value": "",
+            "value": 0,
             "valueType": "double",
             "subject": "Roof insulation thickness",
             "hasSuggestions": true
@@ -196,14 +196,14 @@
     "electric": {
         "annualElectricityUse": {
             "propertyName": "Annual electricity use",
-            "value": "",
+            "value": 0,
             "valueType": "double",
             "subject": "Annual electricity use",
             "hasSuggestions": true
         },
         "annualElectricityCost": {
             "propertyName": "Annual electricity cost",
-            "value": "",
+            "value": 0,
             "valueType": "double",
             "subject": "Annual electricity cost",
             "hasSuggestions": true

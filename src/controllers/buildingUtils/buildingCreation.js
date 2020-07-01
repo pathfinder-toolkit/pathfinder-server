@@ -32,39 +32,59 @@ const makeAreaComponent = async (area) => {
 
 }
 
-const makeComponent = async ( componentName, value, valueType, isCurrent ) => {
+const makeComponent = async ( componentName, value, isCurrent ) => {
     const meta = await ComponentMeta.findOne({
         where: {
             componentName: componentName
         }
     });
-
-    const valueTypeTest = meta.componentValueType;
-    console.log(valueTypeTest);
-    //console.log(meta);
     
     const component = Component.build({
         isCurrent: isCurrent,
-        componentValueType: valueType
     })
-
-    //console.log(component);
-    
 
     component.setMeta(meta, {save:false});
     await component.save();
 
     let valueObject;
 
+    const valueType = meta.componentValueType;
+
     switch (valueType) {
         case 'string':
             valueObject = ComponentValue.build({
                 valueString: value
+            });
+            break;
+        case 'date':
+            valueObject = ComponentValue.build({
+                valueDate: value
+            });
+            break;
+        case 'int':
+            valueObject = ComponentValue.build({
+                valueInt: value
+            })
+            break;
+        case 'double':
+            valueObject = ComponentValue.build({
+                valueDouble: value
+            })
+            break;
+        case 'boolean':
+            valueObject = Component.build({
+                valueBoolean: value
+            })
+            break;
+        case 'text':
+            valueObject = Component.build({
+                valueText: value
             })
             break;
         default:
             break;
     }
+
     valueObject.setComponent(component, {save: false});
     await valueObject.save();
 
@@ -106,7 +126,12 @@ const makeMetaComponents = async () => {
     }
 }
 
+const postTestBuilding = async () => {
+    console.log(buildingModel);
+}
+
 module.exports = {
     makeComponent,
-    makeMetaComponents
+    makeMetaComponents,
+    postTestBuilding
 }
