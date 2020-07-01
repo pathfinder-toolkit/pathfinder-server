@@ -3,16 +3,13 @@ const app = express();
 const cors = require("cors");
 app.use(cors());
 
+const apiRouter = require('./routes');
+
 const allowedOrigins = [
   "http://localhost:3000",
   "https://pathfinder-toolkit.herokuapp.com",
 ];
 
-const jwt = require("express-jwt");
-const jwtAuthz = require("express-jwt-authz");
-const jwksRsa = require("jwks-rsa");
-
-const db = require("./queries");
 const port = process.env.PORT || 3300;
 
 const bodyParser = require("body-parser");
@@ -23,19 +20,6 @@ app.use(
     extended: true,
   })
 );
-
-const checkJwt = jwt({
-  secret: jwksRsa.expressJwtSecret({
-    cache: true,
-    rateLimit: true,
-    jwksRequestsPerMinute: 5,
-    jwksUri: `https://dev-cwz8v54y.eu.auth0.com/.well-known/jwks.json`,
-  }),
-
-  audience: "https://api-pathfinder.herokuapp.com/",
-  issuer: `https://dev-cwz8v54y.eu.auth0.com/`,
-  algorithms: ["RS256"],
-});
 
 app.use(
   cors({
@@ -56,21 +40,7 @@ app.get("/", (request, response) => {
   response.json({ info: "Pathfinder API" });
 });
 
-app.get("/private", checkJwt, function (req, res) {
-  res.json({
-    message: "Private endpoint test.",
-  });
-});
-
-app.get("/building/:buildingId", (request, response) => {
-  response.json({ info: "Get building id" });
-});
-
-app.get("/buildings/me", (request, response) => {
-  response.json({ info: "Get my buildings" });
-});
-
-app.get("/buildings", db.getBuildings);
+app.use('', apiRouter);
 
 app.listen(port, () => {
   console.log(`App running on port ${port}.`);
