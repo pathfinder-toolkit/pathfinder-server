@@ -6,10 +6,10 @@ const {
 } = require('../utils/auth');
 
 const {
-  postBuildingTest
+  getSampleBuilding
 } = require('../controllers/buildingController');
 
-buildingRouter.get("/building/test", postBuildingTest)
+buildingRouter.get("/building/test", getSampleBuilding)
 
 buildingRouter.get("/buildings/me", checkJwt, (request, response) => {
 

@@ -2,36 +2,6 @@ const { Building, Category, ComponentValue, Component, ComponentMeta } = require
 
 const buildingModel = require('../../json/buildingModel.json');
 
-const makeNameComponent = async (name) => {
-
-
-    const component = {};
-
-    return component;
-
-    /*const component = Component.build({
-        componentName: 'Name',
-        hasSuggestions: false,
-        isCurrent: true,
-        componentValueType: 'string'
-    });
-    
-    component.setSubject(subject, {save: false});
-    await component.save();
-
-    const value = ComponentValue.build({
-        valueString: name
-    });
-
-    value.setComponent(component, {save: false});
-    await value.save();
-    return component;*/
-}
-
-const makeAreaComponent = async (area) => {
-
-}
-
 const makeComponent = async ( componentName, value, isCurrent ) => {
     const meta = await ComponentMeta.findOne({
         where: {
@@ -92,15 +62,9 @@ const makeComponent = async ( componentName, value, isCurrent ) => {
 }
 
 const makeMetaComponents = async () => {
-    /*const meta = await ComponentMeta.create({
-        componentDescription: "Name",
-        componentName: "name",
-        componentValueType: "string",
-        hasSuggestions: true,
-        subject: "No subject"
-    });*/
 
     console.log(buildingModel);
+
     for (category in buildingModel) {
 
         for (property in buildingModel[category]) {
@@ -129,6 +93,12 @@ const makeMetaComponents = async () => {
 
 const postTestBuilding = async () => {
     console.log(buildingModel);
+
+    const building = await Building.create({
+        buildingAuthorSub: 'noauthor',
+        slug: 'exampleslug'
+    })
+
     for (category in buildingModel) {
         const currentCategory = await Category.create({
             categoryName: category
@@ -148,6 +118,7 @@ const postTestBuilding = async () => {
 
             await currentCategory.addComponent(component);
         }
+        await building.addCategory(currentCategory);
     }
 }
 
