@@ -11,9 +11,9 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false
         },
         usageStartYear: {
-            type: DataTypes.DATEONLY,
+            type: DataTypes.INTEGER,
             allowNull: false,
-            defaultValue: DataTypes.NOW
+            defaultValue: new Date().getFullYear()
         }
     },  {
         tableName: 'Components'

@@ -1,9 +1,8 @@
 const db = require('../models');
-const { Building, Category, ComponentValue, ComponentMeta} = require('../models');
+const { Component, Building, Category, ComponentValue, ComponentMeta} = require('../models');
 const { makeComponent, makeMetaComponents, postTestBuilding } = require('./buildingUtils/buildingCreation');
 
-const sequelize = db.sequelize;
-const Component = db.Component;
+const { BuildingJSONtoResponse } = require('../utils/JSONformatter');
 
 
 const getSampleBuilding = async (request, response) => {
@@ -11,8 +10,6 @@ const getSampleBuilding = async (request, response) => {
     //await makeMetaComponents();
 
     //await postTestBuilding();
-
-    console.log("Test")
 
     try {
         const buildingInDatabase = await Building.findOne({
@@ -44,32 +41,13 @@ const getSampleBuilding = async (request, response) => {
             }
         });
 
+        console.log(JSON.stringify(buildingInDatabase, null, 4));
+
         const buildingJSON = buildingInDatabase.toJSON();
 
-        const buildingObject = {};
-        buildingObject.author = buildingJSON.author;
-        buildingObject.slug = buildingJSON.slug;
+        const responseObject = BuildingJSONtoResponse(buildingJSON);
 
-        buildingJSON['categories'].map((category, index) => {
-            const currentCategory = {};
-            
-            category.components.map((component, index) => {
-                console.log(component);
-                const currentComponent = {};
-                currentComponent.componentDescription = component.meta.componentDescription;
-                let value;
-                currentComponent.hasSuggestions = component.meta.hasSuggestions;
-                currentComponent.isCurrent = component.isCurrent;
-                currentComponent.usageStartYear = component.usageStartYear;
-                currentCategory[component.meta.componentName] = currentComponent.hasSuggestions ? [(currentComponent)] : (currentComponent);
-            });
-            buildingObject[category.categoryName] = currentCategory;
-        });
-
-
-        console.log(JSON.stringify(buildingObject, null, 4));
-
-        response.status(200).json(buildingObject);
+        response.status(200).json(responseObject);
 
     } catch (error) {
         console.error('Unable to connect to the database:', error);
