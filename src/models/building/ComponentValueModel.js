@@ -24,6 +24,11 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.BOOLEAN,
             allowNull: true,
             defaultValue: null
+        },
+        valueText: {
+            type: DataTypes.TEXT,
+            allowNull: true,
+            defaultValue: null
         }
     },  {
         tableName: 'ComponentValues'

@@ -15,7 +15,7 @@ const postBuildingTest = async (request, response) => {
         subject: "No subject"
     });*/
 
-    makeMetaComponents();
+    //makeMetaComponents();
 
     
 

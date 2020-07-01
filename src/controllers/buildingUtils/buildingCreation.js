@@ -87,13 +87,21 @@ const makeMetaComponents = async () => {
             metaObject.componentName = property;
             if (Array.isArray(buildingModel[category][property])) {
                 metaObject.componentDescription = buildingModel[category][property][0].propertyName;
+                metaObject.componentValueType = buildingModel[category][property][0].valueType;
+                metaObject.hasSuggestions = buildingModel[category][property][0].hasSuggestions;
+                metaObject.subject = buildingModel[category][property][0].subject;
             } else {
                 metaObject.componentDescription = buildingModel[category][property].propertyName;
+                metaObject.componentValueType = buildingModel[category][property].valueType;
+                metaObject.hasSuggestions = buildingModel[category][property].hasSuggestions;
+                metaObject.subject = buildingModel[category][property].subject;
             }
+
+            const meta = await ComponentMeta.create(metaObject);
 
                 
             console.log(metaObject);
-            console.log(buildingModel[category][property]);
+            console.log(JSON.stringify(meta, null, 4));
         }
     }
 }
