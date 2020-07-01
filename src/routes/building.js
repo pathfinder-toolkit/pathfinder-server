@@ -69,74 +69,74 @@ buildingRouter.get("/building/:buildingId", checkJwt, (request, response) => {
         "slug": "talonnimi",
         "details": {
           "name": {
-            "propertyName": "Name",
+            "componentDescription": "Name",
             "value": "Talon nimi",
             "hasSuggestions": false
           },
           "area": {
-            "propertyName": "Area",
+            "componentDescription": "Area",
             "value": "Northern Finland",
             "hasSuggestions": false
           },
           "year": {
-            "propertyName": "Construction year",
+            "componentDescription": "Construction year",
             "value": 1900,
             "hasSuggestions": false
           },
           "description": {
-            "propertyName": "Description of building",
+            "componentDescription": "Description of building",
             "value": "Quisque vulputate enim ligula, sed lobortis metus commodo efficitur. Suspendisse ante lectus, sagittis eu diam a, convallis aliquam eros. Vivamus consequat sagittis nunc in euismod. Vivamus laoreet erat elit. Praesent erat diam, dapibus a purus ac, scelerisque consequat tortor. Aliquam nunc metus, ultricies et lacus a, rutrum feugiat ligula. Proin a enim tortor.",
             "hasSuggestions": false
           },
           "buildingType": {
-            "propertyName": "Building type",
+            "componentDescription": "Building type",
             "value": "Building type 2",
             "hasSuggestions": false
           },
           "image": {
-            "propertyName": "Image",
+            "componentDescription": "Image",
             "value": "/static/media/frontpage_house.294aaf25.jpg",
             "hasSuggestions": false
           },
           "floorsAmount": {
-            "propertyName": "Number of floors",
+            "componentDescription": "Number of floors",
             "value": 2,
             "hasSuggestions": false
           },
           "floorArea": {
-            "propertyName": "Floor area(in square meters)",
+            "componentDescription": "Floor area(in square meters)",
             "value": 62,
             "hasSuggestions": false
           },
           "heatedFloorArea": {
-            "propertyName": "Heated floor area(in square meters)",
+            "componentDescription": "Heated floor area(in square meters)",
             "value": 50,
             "hasSuggestions": false
           },
           "annualConsumption": {
-            "propertyName": "Annual consumption",
+            "componentDescription": "Annual consumption",
             "value": 800,
             "hasSuggestions": false
           },
           "annualCost": {
-            "propertyName": "Annual cost",
+            "componentDescription": "Annual cost",
             "value": 400,
             "hasSuggestions": false
           },
           "annualHeatingConsumption": {
-            "propertyName": "Annual heating consumption",
+            "componentDescription": "Annual heating consumption",
             "value": 300,
             "hasSuggestions": false
           },
           "annualHeatingCost": {
-            "propertyName": "Annual heating cost",
+            "componentDescription": "Annual heating cost",
             "value": 150,
             "hasSuggestions": false
           }
         },
         "structure": {
           "wallMaterial": {
-            "propertyName": "Wall material",
+            "componentDescription": "Wall material",
             "value": "Wood",
             "hasSuggestions": true,
             "suggestions": [
@@ -156,52 +156,52 @@ buildingRouter.get("/building/:buildingId", checkJwt, (request, response) => {
             ]
           },
           "wallThickness": {
-            "propertyName": "Wall Thickness",
+            "componentDescription": "Wall Thickness",
             "value": 16,
             "hasSuggestions": true
           },
           "windowType": {
-            "propertyName": "Window type",
+            "componentDescription": "Window type",
             "value": "Window 1",
             "hasSuggestions": true
           },
           "windowAmount": {
-            "propertyName": "Number of windows",
+            "componentDescription": "Number of windows",
             "value": 12,
             "hasSuggestions": true
           },
           "heatedWindowType": {
-            "propertyName": "Heated area window type",
+            "componentDescription": "Heated area window type",
             "value": "Window 2",
             "hasSuggestions": true
           },
           "heatedWindowAmount": {
-            "propertyName": "Number of windows in heated area",
+            "componentDescription": "Number of windows in heated area",
             "value": 8,
             "hasSuggestions": true
           },
           "doorMaterial": {
-            "propertyName": "Door material",
+            "componentDescription": "Door material",
             "value": "Wood",
             "hasSuggestions": true
           },
           "doorAmount": {
-            "propertyName": "Amount of doors",
+            "componentDescription": "Amount of doors",
             "value": 4,
             "hasSuggestions": true
           },
           "roofMaterial": {
-            "propertyName": "Roof material",
+            "componentDescription": "Roof material",
             "value": "Roof material 1",
             "hasSuggestions": true
           },
           "roofInsulation": {
-            "propertyName": "Roof insulation",
+            "componentDescription": "Roof insulation",
             "value": true,
             "hasSuggestions": true
           },
           "roofInsulationThickness": {
-            "propertyName": "Roof insulation thickness",
+            "componentDescription": "Roof insulation thickness",
             "value": 3.5,
             "hasSuggestions": true
           }
@@ -209,7 +209,7 @@ buildingRouter.get("/building/:buildingId", checkJwt, (request, response) => {
         "heating": {
           "heatingSystem": [
             {
-              "propertyName": "Heating System",
+              "componentDescription": "Heating System",
               "value": "Oil",
               "hasSuggestions": true,
               "isCurrent": true,
@@ -233,7 +233,7 @@ buildingRouter.get("/building/:buildingId", checkJwt, (request, response) => {
           ],
           "heatingSource": [
             {
-              "propertyName": "Heating Source",
+              "componentDescription": "Heating Source",
               "value": "Source 1",
               "hasSuggestions": true,
               "isCurrent": true
@@ -242,12 +242,12 @@ buildingRouter.get("/building/:buildingId", checkJwt, (request, response) => {
         },
         "electric": {
           "annualUse": {
-            "propertyName": "Annual use",
+            "componentDescription": "Annual use",
             "value": 500,
             "hasSuggestions": true
           },
           "annualCost": {
-            "propertyName": "Annual cost",
+            "componentDescription": "Annual cost",
             "value": 250,
             "hasSuggestions": true
           }
@@ -255,7 +255,7 @@ buildingRouter.get("/building/:buildingId", checkJwt, (request, response) => {
         "water": {
           "heatedWaterEnergySource": [
             {
-              "propertyName": "Heated water energy source",
+              "componentDescription": "Heated water energy source",
               "value": "Heat energy source 1",
               "hasSuggestions": true,
               "isCurrent": true
@@ -265,7 +265,7 @@ buildingRouter.get("/building/:buildingId", checkJwt, (request, response) => {
         "ventilation": {
           "ventilationSystem": [
             {
-              "propertyName": "Ventilation system",
+              "componentDescription": "Ventilation system",
               "value": "Ventilation system 1",
               "hasSuggestions": true,
               "isCurrent": true,
@@ -290,7 +290,7 @@ buildingRouter.get("/building/:buildingId", checkJwt, (request, response) => {
         "renewable": {
           "heatPump": [
             {
-              "propertyName": "Heat pump",
+              "componentDescription": "Heat pump",
               "value": "Heat pump type 1",
               "hasSuggestions": true,
               "isCurrent": true
@@ -298,7 +298,7 @@ buildingRouter.get("/building/:buildingId", checkJwt, (request, response) => {
           ],
           "solarHeat": [
             {
-              "propertyName": "Solar energy heat",
+              "componentDescription": "Solar energy heat",
               "value": "Vacuum pipes",
               "hasSuggestions": true,
               "isCurrent": true
@@ -306,7 +306,7 @@ buildingRouter.get("/building/:buildingId", checkJwt, (request, response) => {
           ],
           "solarElectric": [
             {
-              "propertyName": "Solar energy electricity",
+              "componentDescription": "Solar energy electricity",
               "value": "1-phase",
               "hasSuggestions": true,
               "isCurrent": true
@@ -314,7 +314,7 @@ buildingRouter.get("/building/:buildingId", checkJwt, (request, response) => {
           ],
           "bioMass": [
             {
-              "propertyName": "Biomass energy",
+              "componentDescription": "Biomass energy",
               "value": "Wooden pellets",
               "hasSuggestions": true,
               "isCurrent": true
@@ -322,7 +322,7 @@ buildingRouter.get("/building/:buildingId", checkJwt, (request, response) => {
           ],
           "chp": [
             {
-              "propertyName": "Combined heat and power",
+              "componentDescription": "Combined heat and power",
               "value": "Combined source 1",
               "hasSuggestions": true,
               "isCurrent": true
