@@ -64,28 +64,28 @@ const makeComponent = async ( componentName, value, isCurrent ) => {
         case 'int':
             valueObject = ComponentValue.build({
                 valueInt: value
-            })
+            });
             break;
         case 'double':
             valueObject = ComponentValue.build({
                 valueDouble: value
-            })
+            });
             break;
         case 'boolean':
-            valueObject = Component.build({
+            valueObject = ComponentValue.build({
                 valueBoolean: value
-            })
+            });
             break;
         case 'text':
-            valueObject = Component.build({
+            valueObject = ComponentValue.build({
                 valueText: value
-            })
+            });
             break;
         default:
             break;
     }
 
-    valueObject.setComponent(component, {save: false});
+    await valueObject.setComponent(component, {save: false});
     await valueObject.save();
 
     return component;
@@ -128,6 +128,19 @@ const makeMetaComponents = async () => {
 
 const postTestBuilding = async () => {
     console.log(buildingModel);
+    for (category in buildingModel) {
+        for (property in buildingModel[category]) {
+            const componentName = property;
+            const value = Array.isArray(buildingModel[category][property]) ? 
+            (buildingModel[category][property][0].value) : 
+            (buildingModel[category][property].value);
+            const isCurrent = true;
+
+            console.log(componentName, value, isCurrent);
+
+            const component = await makeComponent(componentName, value, isCurrent);
+        }
+    }
 }
 
 module.exports = {
