@@ -1,0 +1,288 @@
+{
+    "details": {
+        "name": {
+            "propertyName": "Name",
+            "value": "",
+            "valueType": "string",
+            "subject": "No subject",
+            "hasSuggestions": false
+        },
+        "area": {
+            "propertyName": "Area",
+            "value": "",
+            "valueType": "string",
+            "subject": "No subject",
+            "hasSuggestions": false
+        },
+        "year": {
+            "propertyName": "Construction year",
+            "value": 0,
+            "valueType": "int",
+            "subject": "No subject",
+            "hasSuggestions": false
+        },
+        "description": {
+            "propertyName": "Description",
+            "value": "",
+            "valueType": "text",
+            "subject": "No subject",
+            "hasSuggestions": false
+        },
+        "buildingType": {
+            "propertyName": "Building type",
+            "value": "",
+            "valueType": "string",
+            "subject": "No subject",
+            "hasSuggestions": false
+        },
+        "image": {
+            "propertyName": "Image",
+            "value": "",
+            "valueType": "string",
+            "subject": "No subject",
+            "hasSuggestions": false
+        },
+        "floorsAmount": {
+            "propertyName": "Number of floors",
+            "value": 0,
+            "valueType": "int",
+            "subject": "No subject",
+            "hasSuggestions": false
+        },
+        "floorArea": {
+            "propertyName": "Floor area",
+            "value": 0,
+            "valueType": "double",
+            "subject": "No subject",
+            "hasSuggestions": false
+        },
+        "heatedFloorArea": {
+            "propertyName": "Heated floor area",
+            "value": 0,
+            "valueType": "double",
+            "subject": "No subject",
+            "hasSuggestions": false
+        },
+        "annualConsumption": {
+            "propertyName": "Annual consumption",
+            "value": 0,
+            "valueType": "double",
+            "subject": "No subject",
+            "hasSuggestions": false
+        },
+        "annualCost": {
+            "propertyName": "Annual cost",
+            "value": 0,
+            "valueType": "double",
+            "subject": "No subject",
+            "hasSuggestions": false
+        },
+        "annualHeatingConsumption": {
+            "propertyName": "Annual heating consumption",
+            "value": 0,
+            "valueType": "double",
+            "subject": "No subject",
+            "hasSuggestions": false
+        },
+        "annualHeatingCost": {
+            "propertyName": "Annual heating cost",
+            "value": 0,
+            "valueType": "double",
+            "subject": "No subject",
+            "hasSuggestions": false
+        }
+    },
+    "structure": {
+        "wallMaterial": {
+            "propertyName": "Wall material",
+            "value": "",
+            "valueType": "string",
+            "subject": "Wall material",
+            "hasSuggestions": true
+        },
+        "wallThickness": {
+            "propertyName": "Wall thickness",
+            "value": 0,
+            "valueType": "double",
+            "subject": "Wall thickness",
+            "hasSuggestions": true
+        },
+        "windowType": {
+            "propertyName": "Window type",
+            "value": "",
+            "valueType": "string",
+            "subject": "Window type",
+            "hasSuggestions": true
+        },
+        "windowAmount": {
+            "propertyName": "Number of windows",
+            "value": 0,
+            "valueType": "int",
+            "subject": "Number of windows",
+            "hasSuggestions": true
+        },
+        "heatedWindowType": {
+            "propertyName": "Heated area window type",
+            "value": "",
+            "valueType": "string",
+            "subject": "Heated window type",
+            "hasSuggestions": true
+        },
+        "heatedWindowAmount": {
+            "propertyName": "Number of windows in heated area",
+            "value": 0,
+            "valueType": "int",
+            "subject": "Number of heated windows",
+            "hasSuggestions": true
+        },
+        "doorMaterial": {
+            "propertyName": "Door material",
+            "value": "",
+            "valueType": "string",
+            "subject": "Door material",
+            "hasSuggestions": true
+        },
+        "doorAmount": {
+            "propertyName": "Number of doors",
+            "value": 0,
+            "valueType": "int",
+            "subject": "Number of doors",
+            "hasSuggestions": true
+        },
+        "roofMaterial": {
+            "propertyName": "Roof material",
+            "value": "",
+            "valueType": "string",
+            "subject": "Roof material",
+            "hasSuggestions": true
+        },
+        "roofInsulation": {
+            "propertyName": "Roof insulation",
+            "value": false,
+            "valueType": "boolean",
+            "subject": "Roof insulation",
+            "hasSuggestions": true
+        },
+        "roofInsulationThickness": {
+            "propertyName": "Roof insulation thickness",
+            "value": 0,
+            "valueType": "double",
+            "subject": "Roof insulation thickness",
+            "hasSuggestions": true
+        }
+    },
+    "heating": {
+        "heatingSystem": [
+            {
+                "propertyName": "Heating system",
+                "value": "",
+                "valueType": "string",
+                "subject": "Heating system",
+                "hasSuggestions": true,
+                "isCurrent": true
+            }
+        ],
+        "heatingSource": [
+            {
+                "propertyName": "Heating source",
+                "value": "",
+                "valueType": "string",
+                "subject": "Heating source",
+                "hasSuggestions": true,
+                "isCurrent": true
+            }
+        ]
+    },
+    "electric": {
+        "annualElectricityUse": {
+            "propertyName": "Annual electricity use",
+            "value": 0,
+            "valueType": "double",
+            "subject": "Annual electricity use",
+            "hasSuggestions": true
+        },
+        "annualElectricityCost": {
+            "propertyName": "Annual electricity cost",
+            "value": 0,
+            "valueType": "double",
+            "subject": "Annual electricity cost",
+            "hasSuggestions": true
+        }
+    },
+    "water": {
+        "heatedWaterEnergySource": [
+            {
+                "propertyName": "Heated water energy source",
+                "value": "",
+                "valueType": "string",
+                "subject": "Heated water energy source",
+                "hasSuggestions": true,
+                "isCurrent": true
+            }
+        ]
+    },
+    "ventilation": {
+        "ventilationSystem": [
+            {
+                "propertyName": "Ventilation system",
+                "value": "",
+                "valueType": "string",
+                "subject": "Ventilation system",
+                "hasSuggestions": true,
+                "isCurrent": true
+            }
+        ]
+    },
+    "renewable": {
+        "heatPump": [
+            {
+                "propertyName": "Heat pump",
+                "value": "",
+                "valueType": "string",
+                "subject": "Heat pump",
+                "hasSuggestions": true,
+                "isCurrent": true
+            }
+        ],
+        "solarHeat": [
+            {
+                "propertyName": "Solar energy heat",
+                "value": "",
+                "valueType": "string",
+                "subject": "Solar energy heat",
+                "hasSuggestions": true,
+                "isCurrent": true
+            }
+        ],
+        "solarElectric": [
+            {
+                "propertyName": "Solar energy electricity",
+                "value": "",
+                "valueType": "string",
+                "subject": "Solar energy electricity",
+                "hasSuggestions": true,
+                "isCurrent": true
+            }
+        ],
+        "bioMass": [
+            {
+                "propertyName": "Biomass energy",
+                "value": "",
+                "valueType": "string",
+                "subject": "Biomass energy",
+                "hasSuggestions": true,
+                "isCurrent": true
+            }
+        ],
+        "chp": [
+            {
+                "propertyName": "Combined heat and power",
+                "value": "",
+                "valueType": "string",
+                "subject": "Combined heat and power",
+                "hasSuggestions": true,
+                "isCurrent": true
+            }
+        ]
+    }
+}
