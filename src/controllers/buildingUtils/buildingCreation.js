@@ -1,4 +1,4 @@
-const { Building, Category, ComponentValue, Subject, Component, ComponentMeta } = require('../../models');
+const { Building, Category, ComponentValue, Component, ComponentMeta } = require('../../models');
 
 const buildingModel = require('../../json/buildingModel.json');
 
@@ -85,7 +85,7 @@ const makeComponent = async ( componentName, value, isCurrent ) => {
             break;
     }
 
-    await valueObject.setComponent(component, {save: false});
+    valueObject.setComponent(component, {save: false});
     await valueObject.save();
 
     return component;
@@ -102,6 +102,7 @@ const makeMetaComponents = async () => {
 
     console.log(buildingModel);
     for (category in buildingModel) {
+
         for (property in buildingModel[category]) {
             let metaObject = {};
             metaObject.componentName = property;
@@ -129,6 +130,10 @@ const makeMetaComponents = async () => {
 const postTestBuilding = async () => {
     console.log(buildingModel);
     for (category in buildingModel) {
+        const currentCategory = await Category.create({
+            categoryName: category
+        })
+        console.log(currentCategory.toJSON());
         for (property in buildingModel[category]) {
             const componentName = property;
             const value = Array.isArray(buildingModel[category][property]) ? 
@@ -139,6 +144,9 @@ const postTestBuilding = async () => {
             console.log(componentName, value, isCurrent);
 
             const component = await makeComponent(componentName, value, isCurrent);
+
+
+            await currentCategory.addComponent(component);
         }
     }
 }
