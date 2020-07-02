@@ -61,6 +61,65 @@ const makeComponent = async ( componentName, value, isCurrent ) => {
     return component;
 }
 
+const makeComponentWithTransaction = async ( componentName, value, isCurrent, t) => {
+    const meta = await ComponentMeta.findOne({
+        where: {
+            componentName: componentName
+        }
+    });
+    
+    const component = Component.build({
+        isCurrent: isCurrent,
+    })
+
+    component.setMeta(meta, {save:false});
+    await component.save({ transaction: t });
+
+    let valueObject;
+
+    const valueType = meta.componentValueType;
+
+    switch (valueType) {
+        case 'string':
+            valueObject = ComponentValue.build({
+                valueString: value
+            });
+            break;
+        case 'date':
+            valueObject = ComponentValue.build({
+                valueDate: value
+            });
+            break;
+        case 'int':
+            valueObject = ComponentValue.build({
+                valueInt: value
+            });
+            break;
+        case 'double':
+            valueObject = ComponentValue.build({
+                valueDouble: value
+            });
+            break;
+        case 'boolean':
+            valueObject = ComponentValue.build({
+                valueBoolean: value
+            });
+            break;
+        case 'text':
+            valueObject = ComponentValue.build({
+                valueText: value
+            });
+            break;
+        default:
+            break;
+    }
+
+    valueObject.setComponent(component, {save: false});
+    await valueObject.save({ transaction: t });
+
+    return component;
+}
+
 const makeMetaComponents = async () => {
 
     console.log(buildingModel);
@@ -122,8 +181,15 @@ const postTestBuilding = async () => {
     }
 }
 
+const checkSlug = async (slug) => {
+    console.log("slug: " + slug);
+    return slug;
+}
+
 module.exports = {
     makeComponent,
+    makeComponentWithTransaction,
     makeMetaComponents,
-    postTestBuilding
+    postTestBuilding,
+    checkSlug
 }
