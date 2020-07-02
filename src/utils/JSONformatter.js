@@ -1,13 +1,11 @@
 const BuildingJSONtoResponse = (building) => {
     const responseObject = {};
-    responseObject.author = building.author;
     responseObject.slug = building.slug;
 
     building['categories'].map((category, index) => {
         const currentCategory = {};
         
         category.components.map((component, index) => {
-            console.log(component);
             const currentComponent = {};
             currentComponent.componentDescription = component.meta.componentDescription;
             let value;
