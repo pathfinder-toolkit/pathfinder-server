@@ -5,7 +5,7 @@ const slugify = require("slugify");
 
 const sequelize = db.sequelize;
 
-const requestBody = require('../json/postRequestExample.json');
+//const requestBody = require('../json/postRequestExample.json');
 
 const { BuildingJSONtoResponse } = require('../utils/JSONformatter');
 const { response } = require('express');
@@ -68,6 +68,8 @@ const postBuildingFromData = async (request, response) => {
 
         const author = request.user.sub;
         console.log(author);
+
+        const requestBody = request.body;
         const slug = slugify(requestBody.details.name.value, {lower: true});
 
         const verifiedSlug = await checkSlug(slug);
