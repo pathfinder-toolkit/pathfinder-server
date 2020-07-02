@@ -1,0 +1,311 @@
+{
+    "details": {
+        "name": {
+            "componentDescription": "Name",
+            "value": "New building name",
+            "hasSuggestions": false,
+            "isCurrent": true,
+            "usageStartYear": 2020
+        },
+        "area": {
+            "componentDescription": "Area",
+            "value": "Southern Finland",
+            "hasSuggestions": false,
+            "isCurrent": true,
+            "usageStartYear": 2020
+        },
+        "year": {
+            "componentDescription": "Construction year",
+            "value": "1890",
+            "hasSuggestions": false,
+            "isCurrent": true,
+            "usageStartYear": 2020
+        },
+        "description": {
+            "componentDescription": "Description",
+            "value": "Aliquam gravida urna sem, vitae porta velit dignissim vel. In sed vehicula odio. Nullam malesuada vehicula efficitur. Nullam ac sem eleifend, tempus enim a, vulputate turpis. Nulla ut odio blandit, convallis risus at, mattis nisi. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. In bibendum eu dui ac sodales. Morbi elit sapien, tincidunt ut lectus et, convallis iaculis nunc. Duis vehicula aliquet erat, sit amet tempor quam consectetur non. Sed consequat mattis velit, sit amet luctus nisi tempor eget. Maecenas congue magna et nisi suscipit, ut suscipit nibh porta. Etiam euismod est mi, in tincidunt lectus maximus eu. Praesent quis ipsum a tortor rutrum sodales et at neque. Donec tincidunt magna in orci vehicula rutrum. ",
+            "hasSuggestions": false,
+            "isCurrent": true,
+            "usageStartYear": 2020
+        },
+        "buildingType": {
+            "componentDescription": "Building type",
+            "value": "Building 3",
+            "hasSuggestions": false,
+            "isCurrent": true,
+            "usageStartYear": 2020
+        },
+        "image": {
+            "componentDescription": "Image",
+            "value": "",
+            "hasSuggestions": false,
+            "isCurrent": true,
+            "usageStartYear": 2020
+        },
+        "floorsAmount": {
+            "componentDescription": "Number of floors",
+            "value": "2",
+            "hasSuggestions": false,
+            "isCurrent": true,
+            "usageStartYear": 2020
+        },
+        "floorArea": {
+            "componentDescription": "Floor area",
+            "value": "80",
+            "hasSuggestions": false,
+            "isCurrent": true,
+            "usageStartYear": 2020
+        },
+        "heatedFloorArea": {
+            "componentDescription": "Heated floor area",
+            "value": "63",
+            "hasSuggestions": false,
+            "isCurrent": true,
+            "usageStartYear": 2020
+        },
+        "annualConsumption": {
+            "componentDescription": "Annual consumption",
+            "value": "890",
+            "hasSuggestions": false,
+            "isCurrent": true,
+            "usageStartYear": 2020
+        },
+        "annualCost": {
+            "componentDescription": "Annual cost",
+            "value": "330",
+            "hasSuggestions": false,
+            "isCurrent": true,
+            "usageStartYear": 2020
+        },
+        "annualHeatingConsumption": {
+            "componentDescription": "Annual heating consumption",
+            "value": "530",
+            "hasSuggestions": false,
+            "isCurrent": true,
+            "usageStartYear": 2020
+        },
+        "annualHeatingCost": {
+            "componentDescription": "Annual heating cost",
+            "value": "190",
+            "hasSuggestions": false,
+            "isCurrent": true,
+            "usageStartYear": 2020
+        }
+    },
+    "structure": {
+        "wallMaterial": [
+            {
+                "componentDescription": "Wall material",
+                "value": "Stone",
+                "hasSuggestions": true,
+                "isCurrent": true,
+                "usageStartYear": 2020
+            }
+        ],
+        "wallThickness": [
+            {
+                "componentDescription": "Wall thickness",
+                "value": "60",
+                "hasSuggestions": true,
+                "isCurrent": true,
+                "usageStartYear": 2020
+            }
+        ],
+        "windowType": [
+            {
+                "componentDescription": "Window type",
+                "value": "Concrete",
+                "hasSuggestions": true,
+                "isCurrent": true,
+                "usageStartYear": 2020
+            }
+        ],
+        "windowAmount": [
+            {
+                "componentDescription": "Number of windows",
+                "value": "9",
+                "hasSuggestions": true,
+                "isCurrent": true,
+                "usageStartYear": 2020
+            }
+        ],
+        "heatedWindowType": [
+            {
+                "componentDescription": "Heated area window type",
+                "value": "Stone",
+                "hasSuggestions": true,
+                "isCurrent": true,
+                "usageStartYear": 2020
+            }
+        ],
+        "heatedWindowAmount": [
+            {
+                "componentDescription": "Number of windows in heated area",
+                "value": "8",
+                "hasSuggestions": true,
+                "isCurrent": true,
+                "usageStartYear": 2020
+            }
+        ],
+        "doorMaterial": [
+            {
+                "componentDescription": "Door material",
+                "value": "Wood",
+                "hasSuggestions": true,
+                "isCurrent": true,
+                "usageStartYear": 2020
+            }
+        ],
+        "doorAmount": [
+            {
+                "componentDescription": "Number of doors",
+                "value": "3",
+                "hasSuggestions": true,
+                "isCurrent": true,
+                "usageStartYear": 2020
+            }
+        ],
+        "roofMaterial": [
+            {
+                "componentDescription": "Roof material",
+                "value": "Roof 2",
+                "hasSuggestions": true,
+                "isCurrent": true,
+                "usageStartYear": 2020
+            }
+        ],
+        "roofInsulation": [
+            {
+                "componentDescription": "Roof insulation",
+                "hasSuggestions": true,
+                "isCurrent": true,
+                "usageStartYear": 2020,
+                "value": true
+            }
+        ],
+        "roofInsulationThickness": [
+            {
+                "componentDescription": "Roof insulation thickness",
+                "value": 0,
+                "hasSuggestions": true,
+                "isCurrent": true,
+                "usageStartYear": 2020
+            }
+        ]
+    },
+    "heating": {
+        "heatingSystem": [
+            {
+                "componentDescription": "Heating system",
+                "value": "Heating 3",
+                "hasSuggestions": true,
+                "isCurrent": true,
+                "usageStartYear": 2020
+            }
+        ],
+        "heatingSource": [
+            {
+                "componentDescription": "Heating source",
+                "value": "Heating 2",
+                "hasSuggestions": true,
+                "isCurrent": true,
+                "usageStartYear": 2020
+            }
+        ]
+    },
+    "electric": {
+        "annualElectricityUse": [
+            {
+                "componentDescription": "Annual electricity use",
+                "value": 0,
+                "hasSuggestions": true,
+                "isCurrent": true,
+                "usageStartYear": 2020
+            }
+        ],
+        "annualElectricityCost": [
+            {
+                "componentDescription": "Annual electricity cost",
+                "value": 0,
+                "hasSuggestions": true,
+                "isCurrent": true,
+                "usageStartYear": 2020
+            }
+        ]
+    },
+    "water": {
+        "heatedWaterEnergySource": [
+            {
+                "componentDescription": "Heated water energy source",
+                "value": "",
+                "hasSuggestions": true,
+                "isCurrent": true,
+                "usageStartYear": 2020
+            }
+        ]
+    },
+    "ventilation": {
+        "ventilationSystem": [
+            {
+                "componentDescription": "Ventilation system",
+                "value": "Machine based",
+                "hasSuggestions": true,
+                "isCurrent": true,
+                "usageStartYear": 2020
+            },
+            {
+                "value": "Mixed type",
+                "usageStartYear": "1950",
+                "hasSuggestions": true,
+                "isCurrent": false
+            }
+        ]
+    },
+    "renewable": {
+        "heatPump": [
+            {
+                "componentDescription": "Heat pump",
+                "value": "Gravity based",
+                "hasSuggestions": true,
+                "isCurrent": true,
+                "usageStartYear": 2020
+            }
+        ],
+        "solarHeat": [
+            {
+                "componentDescription": "Solar energy heat",
+                "value": "Mixed type",
+                "hasSuggestions": true,
+                "isCurrent": true,
+                "usageStartYear": 2020
+            }
+        ],
+        "solarElectric": [
+            {
+                "componentDescription": "Solar energy electricity",
+                "value": "Mixed type",
+                "hasSuggestions": true,
+                "isCurrent": true,
+                "usageStartYear": 2020
+            }
+        ],
+        "bioMass": [
+            {
+                "componentDescription": "Biomass energy",
+                "value": "Machine based",
+                "hasSuggestions": true,
+                "isCurrent": true,
+                "usageStartYear": 2020
+            }
+        ],
+        "chp": [
+            {
+                "componentDescription": "Combined heat and power",
+                "value": "Gravity based",
+                "hasSuggestions": true,
+                "isCurrent": true,
+                "usageStartYear": 2020
+            }
+        ]
+    }
+}
