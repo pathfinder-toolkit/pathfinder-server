@@ -62,11 +62,13 @@ const getSampleBuilding = async (request, response) => {
 const postBuildingFromData = async (request, response) => {
     const t = await sequelize.transaction();
 
-    try {
-        console.log(JSON.stringify(requestBody, null, 4));
 
-        const author = "sampleauthor|1";
-        const slug = slugify(requestBody.details.name.value, {lower: true});
+    try {
+        //console.log(JSON.stringify(requestBody, null, 4));
+
+        const author = request.user.sub;
+        console.log(author);
+        /*const slug = slugify(requestBody.details.name.value, {lower: true});
 
         const verifiedSlug = await checkSlug(slug);
 
@@ -103,7 +105,7 @@ const postBuildingFromData = async (request, response) => {
         }
         await building.addCategories(categories, { transaction: t });
 
-        console.log(building.toJSON());
+        console.log(building.toJSON());*/
 
         console.log("success, but rollback anyway");
 

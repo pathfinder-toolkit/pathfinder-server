@@ -1,5 +1,7 @@
 const { Building, Category, ComponentValue, Component, ComponentMeta } = require('../../models');
 
+const { Op } = require("sequelize");
+
 const buildingModel = require('../../json/buildingModel.json');
 
 const makeComponent = async ( componentName, value, isCurrent ) => {
@@ -182,8 +184,27 @@ const postTestBuilding = async () => {
 }
 
 const checkSlug = async (slug) => {
+    let verifiedSlug = slug;
     console.log("slug: " + slug);
-    return slug;
+    const buildingWithSlug = await Building.findOne({
+        where: {
+            slug: slug
+        }
+    });
+    if (buildingWithSlug) {
+        let count = await Building.count({
+            where: {
+                slug: {
+                    [Op.startsWith]: slug + "-"
+                }
+            }
+        })
+        console.log(count);
+        count = count + 2;
+        verifiedSlug = slug + "-" + count;
+    }
+    console.log("verified slug: " + verifiedSlug);
+    return verifiedSlug;
 }
 
 module.exports = {

@@ -12,7 +12,7 @@ const {
 
 buildingRouter.get("/building", getSampleBuilding)
 
-buildingRouter.get("/test", postBuildingFromData)
+buildingRouter.get("/test", checkJwt, postBuildingFromData)
 
 buildingRouter.get("/buildings/me", checkJwt, (request, response) => {
 
