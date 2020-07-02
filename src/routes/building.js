@@ -61,7 +61,6 @@ buildingRouter.get("/buildings/me", checkJwt, (request, response) => {
           "creationDate": "2020-05-31 15:12:43",
           "slug": "tianjinctffinancecenter"
         }
-  
       ]
     );
 });

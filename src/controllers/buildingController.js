@@ -19,7 +19,7 @@ const getSampleBuilding = async (request, response) => {
 
     try {
         const buildingInDatabase = await Building.findOne({
-            attributes: ['slug'],
+            attributes: [],
             where: {
                 buildingAuthorSub: 'noauthor'
             },
@@ -61,11 +61,7 @@ const getSampleBuilding = async (request, response) => {
 
 const postBuildingFromData = async (request, response) => {
     const t = await sequelize.transaction();
-
-
     try {
-        
-
         const author = request.user.sub;
         console.log(author);
 
