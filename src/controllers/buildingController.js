@@ -64,11 +64,11 @@ const postBuildingFromData = async (request, response) => {
 
 
     try {
-        //console.log(JSON.stringify(requestBody, null, 4));
+        console.log(JSON.stringify(requestBody, null, 4));
 
         const author = request.user.sub;
         console.log(author);
-        /*const slug = slugify(requestBody.details.name.value, {lower: true});
+        const slug = slugify(requestBody.details.name.value, {lower: true});
 
         const verifiedSlug = await checkSlug(slug);
 
@@ -105,15 +105,16 @@ const postBuildingFromData = async (request, response) => {
         }
         await building.addCategories(categories, { transaction: t });
 
-        console.log(building.toJSON());*/
+        console.log(building.toJSON());
 
         console.log("success, but rollback anyway");
 
-        await t.rollback();
-        response.status(200).send("Success!");
+        await t.commit();
+        response.status(201).send("Created");
     } catch (error) {
         await t.rollback();
         console.log(error);
+        response.status(500).send("Internal server error");
     }
     
 }
