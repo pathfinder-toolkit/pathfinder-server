@@ -64,12 +64,14 @@ const postBuildingFromData = async (request, response) => {
 
 
     try {
-        console.log(JSON.stringify(requestBody, null, 4));
+        
 
         const author = request.user.sub;
         console.log(author);
 
         const requestBody = request.body;
+
+        console.log(JSON.stringify(requestBody, null, 4));
         const slug = slugify(requestBody.details.name.value, {lower: true});
 
         const verifiedSlug = await checkSlug(slug);
