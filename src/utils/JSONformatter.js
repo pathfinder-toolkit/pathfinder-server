@@ -6,7 +6,6 @@ const BuildingJSONtoResponse = (building) => {
         const currentCategory = {};
         
         category.components.map((component, index) => {
-            console.log(component);
             const currentComponent = {};
             currentComponent.componentDescription = component.meta.componentDescription;
             let value;

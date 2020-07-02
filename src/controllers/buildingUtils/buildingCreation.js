@@ -107,8 +107,8 @@ const postTestBuilding = async () => {
         for (property in buildingModel[category]) {
             const componentName = property;
             const value = Array.isArray(buildingModel[category][property]) ? 
-            (buildingModel[category][property][0].value) : 
-            (buildingModel[category][property].value);
+                (buildingModel[category][property][0].value) : 
+                (buildingModel[category][property].value);
             const isCurrent = true;
 
             console.log(componentName, value, isCurrent);

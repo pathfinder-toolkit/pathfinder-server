@@ -13,7 +13,7 @@ const getSampleBuilding = async (request, response) => {
 
     try {
         const buildingInDatabase = await Building.findOne({
-            attributes:  ['slug'],
+            attributes: ['slug'],
             where: {
                 buildingAuthorSub: 'noauthor'
             },
@@ -40,8 +40,6 @@ const getSampleBuilding = async (request, response) => {
                 }
             }
         });
-
-        console.log(JSON.stringify(buildingInDatabase, null, 4));
 
         const buildingJSON = buildingInDatabase.toJSON();
 
