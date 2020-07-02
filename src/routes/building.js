@@ -6,10 +6,13 @@ const {
 } = require('../utils/auth');
 
 const {
-  getSampleBuilding
+  getSampleBuilding,
+  postBuildingFromData
 } = require('../controllers/buildingController');
 
 buildingRouter.get("/building", getSampleBuilding)
+
+buildingRouter.post("/building", checkJwt, postBuildingFromData)
 
 buildingRouter.get("/buildings/me", checkJwt, (request, response) => {
 
