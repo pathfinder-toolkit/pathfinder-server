@@ -4,6 +4,7 @@ const { makeComponent, makeMetaComponents, postTestBuilding, makeComponentWithTr
 const slugify = require("slugify");
 
 const sequelize = db.sequelize;
+const { Op } = require("sequelize");
 
 //const requestBody = require('../json/postRequestExample.json');
 
@@ -119,7 +120,55 @@ const postBuildingFromData = async (request, response) => {
     
 }
 
+const getBuildingsForUser = async (request, response) => {
+
+    
+    try {
+        const author = 'github|32400848'
+        //const author = request.user.sub;
+
+        const buildings = await Building.findAll({
+            attributes: ["slug",["updatedAt","creationDate"]],
+            where: {
+                'buildingAuthorSub': author
+            },
+            include: {
+                model: Category,
+                as: 'categories',
+                attributes:['idCategory'],
+                where: {
+                    'categoryName': 'details'
+                },
+                include: {
+                    model: Component,
+                    through: {
+                        attributes: []
+                    },
+                    as: 'components',
+                    attributes:['idMeta'],
+                    where: {
+                        'idMeta': {
+                            [Op.or] : [1, 6]
+                        }
+                    },
+                    include: {
+                        model: ComponentValue,
+                        as: 'value',
+                        attributes:[['valueString','value']]
+                    }
+                }
+            }
+        });
+        //console.log(buildings);
+        response.status(200).json(buildings);
+    } catch (error) {
+        console.log(error);
+        response.status(500).send("Internal server error");
+    }
+}
+
 module.exports = {
     getSampleBuilding,
-    postBuildingFromData
+    postBuildingFromData,
+    getBuildingsForUser
 }
