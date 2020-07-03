@@ -125,8 +125,7 @@ const getBuildingsForUser = async (request, response) => {
 
     
     try {
-        const author = 'github|32400848'
-        //const author = request.user.sub;
+        const author = request.user.sub;
 
         const buildings = await Building.findAll({
             attributes: ["slug",["updatedAt","creationDate"]],

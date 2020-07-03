@@ -15,9 +15,9 @@ buildingRouter.get("/building", getSampleBuilding);
 
 buildingRouter.post("/building", checkJwt, postBuildingFromData);
 
-buildingRouter.get("/test", getBuildingsForUser);
+buildingRouter.get("/buildings/me", checkJwt,  getBuildingsForUser);
 
-buildingRouter.get("/buildings/me", checkJwt, (request, response) => {
+/*buildingRouter.get("/buildings/me", checkJwt, (request, response) => {
 
   console.log(request.user.sub);
     response.json(
@@ -66,7 +66,7 @@ buildingRouter.get("/buildings/me", checkJwt, (request, response) => {
         }
       ]
     );
-});
+});*/
 
 buildingRouter.get("/building/:buildingId", checkJwt, (request, response) => {
     response.json(
