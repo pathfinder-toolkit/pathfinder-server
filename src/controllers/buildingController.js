@@ -4,10 +4,14 @@ const { makeComponent, makeMetaComponents, postTestBuilding, makeComponentWithTr
 const slugify = require("slugify");
 
 const sequelize = db.sequelize;
+const { Op } = require("sequelize");
 
 //const requestBody = require('../json/postRequestExample.json');
 
-const { BuildingJSONtoResponse } = require('../utils/JSONformatter');
+const { 
+    BuildingJSONtoResponse,
+    userBuildingListToResponse
+} = require('../utils/JSONformatter');
 const { response } = require('express');
 
 
@@ -19,7 +23,7 @@ const getSampleBuilding = async (request, response) => {
 
     try {
         const buildingInDatabase = await Building.findOne({
-            attributes: ['slug'],
+            attributes: [],
             where: {
                 buildingAuthorSub: 'noauthor'
             },
@@ -61,11 +65,7 @@ const getSampleBuilding = async (request, response) => {
 
 const postBuildingFromData = async (request, response) => {
     const t = await sequelize.transaction();
-
-
     try {
-        
-
         const author = request.user.sub;
         console.log(author);
 
@@ -111,8 +111,6 @@ const postBuildingFromData = async (request, response) => {
 
         console.log(building.toJSON());
 
-        console.log("success, but rollback anyway");
-
         await t.commit();
         response.status(201).send("Created");
     } catch (error) {
@@ -123,7 +121,61 @@ const postBuildingFromData = async (request, response) => {
     
 }
 
+const getBuildingsForUser = async (request, response) => {
+
+    
+    try {
+        const author = request.user.sub;
+
+        const buildings = await Building.findAll({
+            attributes: ["slug",["updatedAt","creationDate"]],
+            where: {
+                'buildingAuthorSub': author
+            },
+            include: {
+                model: Category,
+                as: 'categories',
+                attributes:['idCategory'],
+                where: {
+                    'categoryName': 'details'
+                },
+                include: {
+                    model: Component,
+                    through: {
+                        attributes: []
+                    },
+                    as: 'components',
+                    attributes:['idMeta'],
+                    where: {
+                        'idMeta': {
+                            [Op.or] : [1, 6]
+                        }
+                    },
+                    include: [{
+                        model: ComponentValue,
+                        as: 'value',
+                        attributes:[['valueString','value']]
+                    },
+                    {
+                        model: ComponentMeta,
+                        as: 'meta',
+                        attributes: ['componentName']
+                    }]
+                }
+            }
+        });
+
+        const responseList = userBuildingListToResponse(buildings);
+
+        response.status(200).json(responseList);
+    } catch (error) {
+        console.log(error);
+        response.status(500).send("Internal server error");
+    }
+}
+
 module.exports = {
     getSampleBuilding,
-    postBuildingFromData
+    postBuildingFromData,
+    getBuildingsForUser
 }

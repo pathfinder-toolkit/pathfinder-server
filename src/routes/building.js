@@ -7,14 +7,17 @@ const {
 
 const {
   getSampleBuilding,
-  postBuildingFromData
+  postBuildingFromData,
+  getBuildingsForUser
 } = require('../controllers/buildingController');
 
-buildingRouter.get("/building", getSampleBuilding)
+buildingRouter.get("/building", getSampleBuilding);
 
-buildingRouter.post("/building", checkJwt, postBuildingFromData)
+buildingRouter.post("/building", checkJwt, postBuildingFromData);
 
-buildingRouter.get("/buildings/me", checkJwt, (request, response) => {
+buildingRouter.get("/buildings/me", checkJwt,  getBuildingsForUser);
+
+/*buildingRouter.get("/buildings/me", checkJwt, (request, response) => {
 
   console.log(request.user.sub);
     response.json(
@@ -61,10 +64,9 @@ buildingRouter.get("/buildings/me", checkJwt, (request, response) => {
           "creationDate": "2020-05-31 15:12:43",
           "slug": "tianjinctffinancecenter"
         }
-  
       ]
     );
-});
+});*/
 
 buildingRouter.get("/building/:buildingId", checkJwt, (request, response) => {
     response.json(

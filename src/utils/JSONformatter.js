@@ -26,6 +26,28 @@ const BuildingJSONtoResponse = (building) => {
     return responseObject;
 }
 
+const userBuildingListToResponse = (buildingList) => {
+    const responseList = [];
+    buildingList.map((building) => {
+        building = building.toJSON();
+        let currentBuilding = {};
+        currentBuilding.slug = building.slug;
+        currentBuilding.creationDate = building.creationDate;
+        building.categories[0].components.map((component) => {
+            if (component.meta.componentName == 'name') {
+                currentBuilding.name = component.value.value;
+            }
+            if (component.meta.componentName == 'image') {
+                currentBuilding.image = component.value.value;
+            }
+        })
+        responseList.push(currentBuilding);
+    })
+    console.log(responseList);
+    return responseList;
+}
+
 module.exports = {
-    BuildingJSONtoResponse
+    BuildingJSONtoResponse,
+    userBuildingListToResponse
 }
