@@ -8,7 +8,10 @@ const { Op } = require("sequelize");
 
 //const requestBody = require('../json/postRequestExample.json');
 
-const { BuildingJSONtoResponse } = require('../utils/JSONformatter');
+const { 
+    BuildingJSONtoResponse,
+    userBuildingListToResponse
+} = require('../utils/JSONformatter');
 const { response } = require('express');
 
 
@@ -108,8 +111,6 @@ const postBuildingFromData = async (request, response) => {
 
         console.log(building.toJSON());
 
-        console.log("success, but rollback anyway");
-
         await t.commit();
         response.status(201).send("Created");
     } catch (error) {
@@ -151,16 +152,23 @@ const getBuildingsForUser = async (request, response) => {
                             [Op.or] : [1, 6]
                         }
                     },
-                    include: {
+                    include: [{
                         model: ComponentValue,
                         as: 'value',
                         attributes:[['valueString','value']]
-                    }
+                    },
+                    {
+                        model: ComponentMeta,
+                        as: 'meta',
+                        attributes: ['componentName']
+                    }]
                 }
             }
         });
-        //console.log(buildings);
-        response.status(200).json(buildings);
+
+        const responseList = userBuildingListToResponse(buildings);
+
+        response.status(200).json(responseList);
     } catch (error) {
         console.log(error);
         response.status(500).send("Internal server error");
