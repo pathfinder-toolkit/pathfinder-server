@@ -8,7 +8,8 @@ const {
 const {
   getSampleBuilding,
   postBuildingFromData,
-  getBuildingsForUser
+  getBuildingsForUser,
+  getFullBuildingDetailsFromSlug
 } = require('../controllers/buildingController');
 
 buildingRouter.get("/building", getSampleBuilding);
@@ -16,6 +17,8 @@ buildingRouter.get("/building", getSampleBuilding);
 buildingRouter.post("/building", checkJwt, postBuildingFromData);
 
 buildingRouter.get("/buildings/me", checkJwt,  getBuildingsForUser);
+
+buildingRouter.get("/test/:slug", getFullBuildingDetailsFromSlug);
 
 /*buildingRouter.get("/buildings/me", checkJwt, (request, response) => {
 
