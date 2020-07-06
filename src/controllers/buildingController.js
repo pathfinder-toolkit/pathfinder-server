@@ -12,8 +12,6 @@ const {
     BuildingJSONtoResponse,
     userBuildingListToResponse
 } = require('../utils/JSONformatter');
-const { response } = require('express');
-const buildingRouter = require('../routes/building');
 
 
 const getSampleBuilding = async (request, response) => {
