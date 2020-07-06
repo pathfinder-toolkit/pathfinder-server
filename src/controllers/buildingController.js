@@ -209,9 +209,9 @@ const getFullBuildingDetailsFromSlug = async (request, response) => {
         if (building) {
             const buildingJSON = building.toJSON();
 
-            const user = "github|32400848";
+            const author = request.user.sub;
 
-            if (user == buildingJSON.author) {
+            if (author == buildingJSON.author) {
                 const responseObject = BuildingJSONtoResponse(buildingJSON);
                 response.status(200).json(responseObject);
             } 

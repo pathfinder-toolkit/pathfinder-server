@@ -18,7 +18,7 @@ buildingRouter.post("/building", checkJwt, postBuildingFromData);
 
 buildingRouter.get("/buildings/me", checkJwt,  getBuildingsForUser);
 
-buildingRouter.get("/test/:slug", getFullBuildingDetailsFromSlug);
+buildingRouter.get("/building/:slug", checkJwt, getFullBuildingDetailsFromSlug);
 
 /*buildingRouter.get("/buildings/me", checkJwt, (request, response) => {
 
@@ -69,7 +69,7 @@ buildingRouter.get("/test/:slug", getFullBuildingDetailsFromSlug);
         }
       ]
     );
-});*/
+});
 
 buildingRouter.get("/building/:buildingId", checkJwt, (request, response) => {
     response.json(
@@ -339,6 +339,6 @@ buildingRouter.get("/building/:buildingId", checkJwt, (request, response) => {
         }
       }
     );
-});
+});*/
 
 module.exports = buildingRouter;
