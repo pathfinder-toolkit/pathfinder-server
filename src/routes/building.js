@@ -8,7 +8,8 @@ const {
 const {
   getSampleBuilding,
   postBuildingFromData,
-  getBuildingsForUser
+  getBuildingsForUser,
+  getFullBuildingDetailsFromSlug
 } = require('../controllers/buildingController');
 
 buildingRouter.get("/building", getSampleBuilding);
@@ -16,6 +17,8 @@ buildingRouter.get("/building", getSampleBuilding);
 buildingRouter.post("/building", checkJwt, postBuildingFromData);
 
 buildingRouter.get("/buildings/me", checkJwt,  getBuildingsForUser);
+
+buildingRouter.get("/building/:slug", checkJwt, getFullBuildingDetailsFromSlug);
 
 /*buildingRouter.get("/buildings/me", checkJwt, (request, response) => {
 
@@ -66,7 +69,7 @@ buildingRouter.get("/buildings/me", checkJwt,  getBuildingsForUser);
         }
       ]
     );
-});*/
+});
 
 buildingRouter.get("/building/:buildingId", checkJwt, (request, response) => {
     response.json(
@@ -336,6 +339,6 @@ buildingRouter.get("/building/:buildingId", checkJwt, (request, response) => {
         }
       }
     );
-});
+});*/
 
 module.exports = buildingRouter;

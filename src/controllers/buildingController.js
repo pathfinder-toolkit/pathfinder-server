@@ -13,6 +13,7 @@ const {
     userBuildingListToResponse
 } = require('../utils/JSONformatter');
 const { response } = require('express');
+const buildingRouter = require('../routes/building');
 
 
 const getSampleBuilding = async (request, response) => {
@@ -45,7 +46,7 @@ const getSampleBuilding = async (request, response) => {
                     },{
                         model: ComponentValue,
                         as: 'value',
-                        attributes: ['valueString', 'valueDate', 'valueInt', 'valueDouble', 'valueText']
+                        attributes: ['valueString', 'valueDate', 'valueInt', 'valueDouble', 'valueText', 'valueBoolean']
                     }]
                 }
             }
@@ -122,8 +123,6 @@ const postBuildingFromData = async (request, response) => {
 }
 
 const getBuildingsForUser = async (request, response) => {
-
-    
     try {
         const author = request.user.sub;
 
@@ -174,8 +173,65 @@ const getBuildingsForUser = async (request, response) => {
     }
 }
 
+const getFullBuildingDetailsFromSlug = async (request, response) => {
+    
+    try {
+        const slug = request.params.slug;
+        const building = await Building.findOne({
+            attributes:['slug', ['buildingAuthorSub', 'author']],
+            where:{
+                'slug': slug
+            },
+            include: {
+                model: Category,
+                as: 'categories',
+                attributes: ['categoryName'],
+                include: {
+                    model: Component,
+                    through: {
+                        attributes: []
+                    },
+                    as: 'components',
+                    attributes: ['isCurrent', 'usageStartYear'],
+                    include: [{
+                        model: ComponentMeta,
+                        as: 'meta',
+                        attributes: ['componentDescription', 'componentName', 'hasSuggestions', 'subject']
+                    },{
+                        model: ComponentValue,
+                        as: 'value',
+                        attributes: ['valueString', 'valueDate', 'valueInt', 'valueDouble', 'valueText', 'valueBoolean']
+                    }]
+                }
+            }
+        });
+
+        if (building) {
+            const buildingJSON = building.toJSON();
+
+            const author = request.user.sub;
+
+            if (author == buildingJSON.author) {
+                const responseObject = BuildingJSONtoResponse(buildingJSON);
+                response.status(200).json(responseObject);
+            } 
+            else {
+                response.status(403).send("403 Forbidden");
+            }
+        } 
+        else {
+            response.status(404).send("404 No data found.");
+        }
+
+    } catch (error) {
+        console.log(error);
+        response.status(500).send("Internal server error");
+    }
+}
+
 module.exports = {
     getSampleBuilding,
     postBuildingFromData,
-    getBuildingsForUser
+    getBuildingsForUser,
+    getFullBuildingDetailsFromSlug
 }
