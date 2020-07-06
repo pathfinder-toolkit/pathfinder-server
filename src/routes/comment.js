@@ -1,6 +1,12 @@
 const express = require("express");
 const commentRouter = express.Router();
 
+const {
+  getCommentsFromParams
+} = require("../controllers/commentController");
+
+commentRouter.get("/test/:subject", getCommentsFromParams);
+
 commentRouter.get("/comments/:subject", (request, response) => {
     response.json(
       [
