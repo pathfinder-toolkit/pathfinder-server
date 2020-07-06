@@ -17,6 +17,10 @@ module.exports = (sequelize, DataTypes) => {
         suggestionSecondarySubject: {
             type: DataTypes.STRING,
             allowNull: true
+        },
+        priority: {
+            type: DataTypes.INTEGER,
+            allowNull: false
         }
     },  {
         tableName: 'Suggestions'
