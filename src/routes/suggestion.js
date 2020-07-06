@@ -1,7 +1,13 @@
 const express = require("express");
 const suggestionRouter = express.Router();
 
-suggestionRouter.get("/suggestions/:subject/:value", (request, response) => {
+const {
+  findSuggestionsFromParams
+} = require('../controllers/suggestionController');
+
+suggestionRouter.get("/suggestions/:subject/:value", findSuggestionsFromParams);
+
+/*suggestionRouter.get("/suggestions/:subject/:value", (request, response) => {
     response.json(
       [
         {
@@ -14,6 +20,6 @@ suggestionRouter.get("/suggestions/:subject/:value", (request, response) => {
         },
       ]
     );
-});
+});*/
 
 module.exports = suggestionRouter;

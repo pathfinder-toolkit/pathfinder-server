@@ -31,6 +31,7 @@ db.Category = require("./building/CategoryModel.js")(sequelize, Sequelize);
 db.Component = require("./building/ComponentModel.js")(sequelize, Sequelize);
 db.ComponentValue = require("./building/ComponentValueModel.js")(sequelize, Sequelize);
 db.ComponentMeta = require("./building/ComponentMetaModel.js")(sequelize, Sequelize);
+db.Suggestion = require("./suggestions/SuggestionModel.js")(sequelize, Sequelize);
 
 db.Area.hasMany(db.Material, { foreignKey: 'idArea', as: 'materials' });
 db.Material.belongsTo(db.Area, { foreignKey: 'idArea' });
@@ -51,6 +52,8 @@ db.Component.hasOne(db.ComponentValue, { foreignKey: {name: 'idComponent'}, as: 
 db.ComponentValue.belongsTo(db.Component, { foreignKey: 'idComponent'});
 db.ComponentMeta.hasMany(db.Component, {foreignKey: 'idMeta'});
 db.Component.belongsTo(db.ComponentMeta, {foreignKey: 'idMeta', as: 'meta'});
+db.ComponentMeta.hasMany(db.Suggestion, {foreignKey: 'idMeta'});
+db.Suggestion.belongsTo(db.ComponentMeta, {foreignKey: 'idMeta', as: 'subject'});
 
 /*(async () => {
     await db.sequelize.sync();
