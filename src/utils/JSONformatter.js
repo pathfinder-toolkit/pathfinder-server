@@ -47,7 +47,24 @@ const userBuildingListToResponse = (buildingList) => {
     return responseList;
 }
 
+const suggestionsToResponse = (suggestionList) => {
+    const responseList = [];
+
+    for (const suggestion of suggestionList) {
+        const formattedSuggestion = {
+            suggestionText: suggestion.suggestionText,
+            suggestionSubject: suggestion.subject.subject,
+            suggestionSecondarySubject: suggestion.suggestionSecondarySubject,
+            priority: suggestion.priority
+        }
+        responseList.push(formattedSuggestion);
+    }
+
+    return responseList;
+}
+
 module.exports = {
     BuildingJSONtoResponse,
-    userBuildingListToResponse
+    userBuildingListToResponse,
+    suggestionsToResponse
 }

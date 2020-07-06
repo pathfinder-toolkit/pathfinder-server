@@ -7,11 +7,17 @@ const {
 } = require('./suggestionUtils/suggestionCreation');
 const { Suggestion, ComponentMeta } = require('../models');
 
+const {
+    suggestionsToResponse
+} = require('../utils/JSONformatter');
+
 const findSuggestionsFromParams = async (request, response) => {
     const t = await sequelize.transaction();
     try {
         const subject = request.params.subject;
         const value = request.params.value;
+
+
         //await makeExampleSuggestions( t );
 
         
@@ -27,6 +33,9 @@ const findSuggestionsFromParams = async (request, response) => {
                 attributes:['subject']
             }
         });
+
+        // Instead of using value to determine which suggestions are shown, value is used to determine amount of suggestions given.
+        // To be changed later...
 
         const shuffleArray = (array) => {
             for (let i = array.length - 1; i > 0; i--) {
@@ -45,9 +54,10 @@ const findSuggestionsFromParams = async (request, response) => {
             console.log(suggestion.toJSON());
         }
 
-        console.log("rollback for safety");
-        await t.rollback();
-        response.status(200).send("Success: " + subject + " " + value);
+        const responseObject = suggestionsToResponse(selectedSuggestions);
+        
+        await t.commit();
+        response.status(200).json(responseObject);
     } catch (error) {
         console.log("rollback because of error");
         await t.rollback();

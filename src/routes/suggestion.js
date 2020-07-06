@@ -5,9 +5,9 @@ const {
   findSuggestionsFromParams
 } = require('../controllers/suggestionController');
 
-suggestionRouter.get("/test/:subject/:value", findSuggestionsFromParams);
+suggestionRouter.get("/suggestions/:subject/:value", findSuggestionsFromParams);
 
-suggestionRouter.get("/suggestions/:subject/:value", (request, response) => {
+/*suggestionRouter.get("/suggestions/:subject/:value", (request, response) => {
     response.json(
       [
         {
@@ -20,6 +20,6 @@ suggestionRouter.get("/suggestions/:subject/:value", (request, response) => {
         },
       ]
     );
-});
+});*/
 
 module.exports = suggestionRouter;
