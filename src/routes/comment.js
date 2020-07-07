@@ -5,9 +5,9 @@ const {
   getCommentsFromParams
 } = require("../controllers/commentController");
 
-commentRouter.get("/test/:subject", getCommentsFromParams);
+commentRouter.get("/comments/:subject/:value", getCommentsFromParams);
 
-commentRouter.get("/comments/:subject", (request, response) => {
+/*commentRouter.get("/comments/:subject", (request, response) => {
     response.json(
       [
         {
@@ -33,6 +33,6 @@ commentRouter.get("/comments/:subject", (request, response) => {
         }
       ]
     );
-});
+});*/
 
 module.exports = commentRouter;

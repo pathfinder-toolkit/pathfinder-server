@@ -1,11 +1,12 @@
 const db = require('../models');
+const { Suggestion, ComponentMeta } = require('../models');
 
 const sequelize = db.sequelize;
 
 const {
     makeExampleSuggestions
 } = require('./suggestionUtils/suggestionCreation');
-const { Suggestion, ComponentMeta } = require('../models');
+
 
 const {
     suggestionsToResponse
@@ -17,10 +18,7 @@ const findSuggestionsFromParams = async (request, response) => {
         const subject = request.params.subject;
         const value = request.params.value;
 
-
         //await makeExampleSuggestions( t );
-
-        
 
         const suggestions = await Suggestion.findAll({
             attributes: ['suggestionText', 'suggestionSecondarySubject', 'priority', 'idSuggestion'],
@@ -32,7 +30,8 @@ const findSuggestionsFromParams = async (request, response) => {
                 },
                 attributes:['subject']
             }
-        });
+        },
+        {transaction: t});
 
         // Instead of using value to determine which suggestions are shown, value is used to determine amount of suggestions given.
         // To be changed later...
@@ -46,12 +45,12 @@ const findSuggestionsFromParams = async (request, response) => {
 
         shuffleArray(suggestions);
 
-        let amount = Math.min( Math.abs(value), suggestions.length );
+        const amount = Math.min( Math.abs(value), suggestions.length );
         
         const selectedSuggestions = suggestions.slice(0, amount);
 
         for (const suggestion of selectedSuggestions) {
-            console.log(suggestion.toJSON());
+            //console.log(suggestion.toJSON());
         }
 
         const responseObject = suggestionsToResponse(selectedSuggestions);

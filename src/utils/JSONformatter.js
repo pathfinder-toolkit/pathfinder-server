@@ -63,8 +63,29 @@ const suggestionsToResponse = (suggestionList) => {
     return responseList;
 }
 
+const commentsToResponse = (commentList) => {
+    const responseList = [];
+
+    for (const comment of commentList) {
+        const formattedComment = {
+            commentText: comment.commentText,
+            commentSubject: comment.subject.subject,
+            commentSecondarySubject: comment.commentSecondarySubject,
+            date: comment.createdAt,
+            author: comment.commentAuthor,
+            sentiment: comment.commentSentiment
+        }
+        console.log("Formatted: ");
+        console.log(formattedComment);
+        responseList.push(formattedComment);
+    }
+
+    return responseList;
+}
+
 module.exports = {
     BuildingJSONtoResponse,
     userBuildingListToResponse,
-    suggestionsToResponse
+    suggestionsToResponse,
+    commentsToResponse
 }
