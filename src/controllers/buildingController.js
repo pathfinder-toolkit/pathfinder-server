@@ -10,6 +10,7 @@ const { Op } = require("sequelize");
 
 const { 
     BuildingJSONtoResponse,
+    FullBuildingJSONtoResponse,
     userBuildingListToResponse,
     suggestionsToResponse
 } = require('../utils/JSONformatter');
@@ -222,7 +223,7 @@ const getFullBuildingDetailsFromSlug = async (request, response) => {
             const author = request.user.sub;
 
             if (author == buildingJSON.author) {
-                const responseObject = BuildingJSONtoResponse(buildingJSON);
+                const responseObject = FullBuildingJSONtoResponse(buildingJSON);
                 response.status(200).json(responseObject);
             } 
             else {
