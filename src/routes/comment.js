@@ -1,7 +1,13 @@
 const express = require("express");
 const commentRouter = express.Router();
 
-commentRouter.get("/comments/:subject", (request, response) => {
+const {
+  getCommentsFromParams
+} = require("../controllers/commentController");
+
+commentRouter.get("/comments/:subject/:value", getCommentsFromParams);
+
+/*commentRouter.get("/comments/:subject", (request, response) => {
     response.json(
       [
         {
@@ -27,6 +33,6 @@ commentRouter.get("/comments/:subject", (request, response) => {
         }
       ]
     );
-});
+});*/
 
 module.exports = commentRouter;
