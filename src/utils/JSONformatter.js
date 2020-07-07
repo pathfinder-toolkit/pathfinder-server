@@ -19,6 +19,35 @@ const BuildingJSONtoResponse = (building) => {
             currentComponent.isCurrent = component.isCurrent;
             currentComponent.usageStartYear = component.usageStartYear;
 
+            currentCategory[component.meta.componentName] = currentComponent.hasSuggestions ? [(currentComponent)] : (currentComponent);
+        });
+        responseObject[category.categoryName] = currentCategory;
+    });
+
+    return responseObject;
+}
+
+const FullBuildingJSONtoResponse = (building) => {
+    const responseObject = {};
+    responseObject.slug = building.slug;
+
+    building['categories'].map((category, index) => {
+        const currentCategory = {};
+        
+        category.components.map((component, index) => {
+            const currentComponent = {};
+            currentComponent.componentDescription = component.meta.componentDescription;
+            let value;
+            Object.keys(component.value).map((valueType) => {
+                if (component.value[valueType] != null) {
+                    value = component.value[valueType];
+                }
+            })
+            currentComponent.value = value;
+            currentComponent.hasSuggestions = component.meta.hasSuggestions;
+            currentComponent.isCurrent = component.isCurrent;
+            currentComponent.usageStartYear = component.usageStartYear;
+
             // Gives 0-2 random suggestion, temporary construction
 
             const shuffleArray = (array) => {
@@ -111,6 +140,7 @@ const commentsToResponse = (commentList) => {
 
 module.exports = {
     BuildingJSONtoResponse,
+    FullBuildingJSONtoResponse,
     userBuildingListToResponse,
     suggestionsToResponse,
     commentsToResponse
