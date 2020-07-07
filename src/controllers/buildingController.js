@@ -1,5 +1,5 @@
 const db = require('../models');
-const { Component, Building, Category, ComponentValue, ComponentMeta} = require('../models');
+const { Component, Building, Category, ComponentValue, ComponentMeta, Suggestion } = require('../models');
 const { makeComponent, makeMetaComponents, postTestBuilding, makeComponentWithTransaction, checkSlug} = require('./buildingUtils/buildingCreation');
 const slugify = require("slugify");
 
@@ -10,7 +10,8 @@ const { Op } = require("sequelize");
 
 const { 
     BuildingJSONtoResponse,
-    userBuildingListToResponse
+    userBuildingListToResponse,
+    suggestionsToResponse
 } = require('../utils/JSONformatter');
 
 
@@ -194,7 +195,16 @@ const getFullBuildingDetailsFromSlug = async (request, response) => {
                     include: [{
                         model: ComponentMeta,
                         as: 'meta',
-                        attributes: ['componentDescription', 'componentName', 'hasSuggestions', 'subject']
+                        attributes: ['componentDescription', 'componentName', 'hasSuggestions', 'subject'],
+                        include: [{
+                            model: Suggestion,
+                            as: 'suggestions',
+                            include: {
+                                model: ComponentMeta,
+                                as: 'subject',
+                                attributes: ['subject']
+                            }
+                        }]
                     },{
                         model: ComponentValue,
                         as: 'value',
@@ -203,6 +213,8 @@ const getFullBuildingDetailsFromSlug = async (request, response) => {
                 }
             }
         });
+
+        //console.log(JSON.stringify(building, null, 4));
 
         if (building) {
             const buildingJSON = building.toJSON();
