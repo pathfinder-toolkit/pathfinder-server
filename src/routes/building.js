@@ -18,6 +18,8 @@ buildingRouter.post("/building", checkJwt, postBuildingFromData);
 
 buildingRouter.get("/buildings/me", checkJwt,  getBuildingsForUser);
 
+//buildingRouter.get("/building/:slug", getFullBuildingDetailsFromSlug);
+
 buildingRouter.get("/building/:slug", checkJwt, getFullBuildingDetailsFromSlug);
 
 /*buildingRouter.get("/buildings/me", checkJwt, (request, response) => {

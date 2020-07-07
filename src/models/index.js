@@ -53,7 +53,7 @@ db.Component.hasOne(db.ComponentValue, { foreignKey: {name: 'idComponent'}, as: 
 db.ComponentValue.belongsTo(db.Component, { foreignKey: 'idComponent'});
 db.ComponentMeta.hasMany(db.Component, {foreignKey: 'idMeta'});
 db.Component.belongsTo(db.ComponentMeta, {foreignKey: 'idMeta', as: 'meta'});
-db.ComponentMeta.hasMany(db.Suggestion, {foreignKey: 'idMeta'});
+db.ComponentMeta.hasMany(db.Suggestion, {foreignKey: 'idMeta', as: 'suggestions'});
 db.Suggestion.belongsTo(db.ComponentMeta, {foreignKey: 'idMeta', as: 'subject'});
 db.ComponentMeta.hasMany(db.Comment, {foreignKey: 'idMeta'});
 db.Comment.belongsTo(db.ComponentMeta, {foreignKey: 'idMeta', as: 'subject'});
