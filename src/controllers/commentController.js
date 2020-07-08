@@ -69,20 +69,32 @@ const createNewComment = async (request, response) => {
     try {
         const token = request.headers.authorization;
         const userInfo = await getUserInfo(token);
-        console.log(userInfo);
+
         const authorSub = userInfo.sub;
-        const author = userInfo.nickName;
+        const author = request.body.anonymity ? "" : userInfo.nickname;
 
         const requestBody = request.body;
-        console.log(requestBody);
-        /*const newComment = await Comment.create({
-            
-        })*/
 
-        
+        const newComment = await Comment.create({
+            commentText: requestBody.commentText,
+            commentAuthor: author,
+            commentAuthorSub: authorSub,
+            commentSentiment: requestBody.sentiment,
+            commentSecondarySubject: requestBody.commentSecondarySubject,
+            commentAnonymity: requestBody.anonymity
+        },
+        {transaction: t});
 
-        console.log("rollback for safety");
-        await t.rollback();
+        const subjectComponentMeta = await ComponentMeta.findOne({
+            where: {
+                componentName: requestBody.commentSubject
+            }
+        },
+        {transaction: t});
+
+        await newComment.setSubject(subjectComponentMeta, {transaction: t});
+
+        await t.commit();
         response.status(200).send("Success!");
     } catch (error) {
         await t.rollback();
