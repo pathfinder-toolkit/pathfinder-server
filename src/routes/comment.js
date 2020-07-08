@@ -2,10 +2,17 @@ const express = require("express");
 const commentRouter = express.Router();
 
 const {
-  getCommentsFromParams
+  checkJwt
+} = require('../utils/auth');
+
+const {
+  getCommentsFromParams,
+  createNewComment
 } = require("../controllers/commentController");
 
 commentRouter.get("/comments/:subject/:value", getCommentsFromParams);
+
+commentRouter.post("/comments", checkJwt, createNewComment);
 
 /*commentRouter.get("/comments/:subject", (request, response) => {
     response.json(

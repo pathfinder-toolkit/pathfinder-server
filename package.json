@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "main": "server.js",
   "dependencies": {
+    "axios": "^0.19.2",
     "cloudinary": "^1.22.0",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",

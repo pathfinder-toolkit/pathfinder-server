@@ -1,6 +1,8 @@
 const db = require('../models');
 const { Comment, ComponentMeta } = require('../models');
 
+const { getUserInfo } = require('../utils/auth');
+
 const sequelize = db.sequelize;
 
 const {
@@ -62,7 +64,47 @@ const getCommentsFromParams = async (request, response) => {
     }
 }
 
+const createNewComment = async (request, response) => {
+    const t = await sequelize.transaction();
+    try {
+        const token = request.headers.authorization;
+        const userInfo = await getUserInfo(token);
+
+        const authorSub = userInfo.sub;
+        const author = request.body.anonymity ? "" : userInfo.nickname;
+
+        const requestBody = request.body;
+
+        const newComment = await Comment.create({
+            commentText: requestBody.commentText,
+            commentAuthor: author,
+            commentAuthorSub: authorSub,
+            commentSentiment: requestBody.sentiment,
+            commentSecondarySubject: requestBody.commentSecondarySubject,
+            commentAnonymity: requestBody.anonymity
+        },
+        {transaction: t});
+
+        const subjectComponentMeta = await ComponentMeta.findOne({
+            where: {
+                componentName: requestBody.commentSubject
+            }
+        },
+        {transaction: t});
+
+        await newComment.setSubject(subjectComponentMeta, {transaction: t});
+
+        await t.commit();
+        response.status(201).send("Created");
+    } catch (error) {
+        await t.rollback();
+        console.log(error);
+        response.status(500).send("Internal server error");
+    }
+}
+
 
 module.exports = {
-    getCommentsFromParams
+    getCommentsFromParams,
+    createNewComment
 }
