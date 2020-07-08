@@ -1,6 +1,8 @@
 const db = require('../models');
 const { Comment, ComponentMeta } = require('../models');
 
+const { getUserInfo } = require('../utils/auth');
+
 const sequelize = db.sequelize;
 
 const {
@@ -62,7 +64,35 @@ const getCommentsFromParams = async (request, response) => {
     }
 }
 
+const createNewComment = async (request, response) => {
+    const t = await sequelize.transaction();
+    try {
+        const token = request.headers.authorization;
+        const userInfo = await getUserInfo(token);
+        console.log(userInfo);
+        const authorSub = userInfo.sub;
+        const author = userInfo.nickName;
+
+        const requestBody = request.body;
+        console.log(requestBody);
+        /*const newComment = await Comment.create({
+            
+        })*/
+
+        
+
+        console.log("rollback for safety");
+        await t.rollback();
+        response.status(200).send("Success!");
+    } catch (error) {
+        await t.rollback();
+        console.log(error);
+        response.status(500).send("Internal server error");
+    }
+}
+
 
 module.exports = {
-    getCommentsFromParams
+    getCommentsFromParams,
+    createNewComment
 }
