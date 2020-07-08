@@ -95,7 +95,7 @@ const createNewComment = async (request, response) => {
         await newComment.setSubject(subjectComponentMeta, {transaction: t});
 
         await t.commit();
-        response.status(200).send("Success!");
+        response.status(201).send("Created");
     } catch (error) {
         await t.rollback();
         console.log(error);
