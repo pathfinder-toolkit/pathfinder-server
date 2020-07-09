@@ -54,6 +54,36 @@ const uploadImageToCloudinary = async (request, response) => {
     }
 }
 
+const getUserImages = async (request, response) => {
+    const t = await sequelize.transaction();
+    try {
+        const author = request.user.sub;
+        
+        const images = await Image.findAll({
+            where: {
+                authorSub: author
+            },
+            attributes: [['image','publicId'], ['updatedAt','date']]
+        });
+
+        const imageList = [];
+
+        for (const image of images) {
+            imageList.push(image.toJSON());
+        }
+
+        console.log("rollback for safety");
+        await t.rollback();
+
+        response.status(200).json(imageList);
+    } catch (error) {
+        await t.rollback();
+        console.log(error);
+        response.status(500).send("Internal server error")
+    }
+}
+
 module.exports = {
-    uploadImageToCloudinary
+    uploadImageToCloudinary,
+    getUserImages
 };
