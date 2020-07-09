@@ -12,7 +12,8 @@ const { uploadImageToCloudinary } = require('../controllers/imageController');
 imageRouter.use(fileUpload({
     limits: { 
         fileSize: 10 * 1024 * 1024
-    }
+    },
+    useTempFiles: true
 }));
 
 imageRouter.post('/image', checkJwt, uploadImageToCloudinary);

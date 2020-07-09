@@ -16,11 +16,10 @@ const uploadImageToCloudinary = async (request, response) => {
             console.log(author);
             const image = request.files.image;
             console.log(image);
-            console.log(image.data);
-            /*const cloudinaryResponse = await cloudinary.uploader.upload(image.data, {upload_preset: 'pathfinder_userimages', resource_type: "raw"});
+            const cloudinaryResponse = await cloudinary.uploader.upload(image.tempFilePath, {upload_preset: 'pathfinder_userimages'});
             console.log(cloudinaryResponse);
 
-            const publicId = cloudinaryResponse.public_id;
+            /*const publicId = cloudinaryResponse.public_id;
 
             const image = await Image.create({
                 image: publicId,
