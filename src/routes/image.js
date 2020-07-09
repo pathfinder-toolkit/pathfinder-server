@@ -7,7 +7,10 @@ const {
     checkJwt
   } = require('../utils/auth');
 
-const { uploadImageToCloudinary } = require('../controllers/imageController');
+const { 
+    uploadImageToCloudinary,
+    getUserImages
+} = require('../controllers/imageController');
 
 imageRouter.use(fileUpload({
     limits: { 
@@ -17,5 +20,7 @@ imageRouter.use(fileUpload({
 }));
 
 imageRouter.post('/image', checkJwt, uploadImageToCloudinary);
+
+imageRouter.get('/images', checkJwt, getUserImages);
 
 module.exports = imageRouter;
