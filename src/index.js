@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
 const cors = require("cors");
+const cleanup = require("./utils/schedule");
 app.use(cors());
 
 const apiRouter = require('./routes');
@@ -39,6 +40,8 @@ app.use(
 app.get("/", (request, response) => {
   response.json({ info: "Pathfinder API" });
 });
+
+
 
 app.use('', apiRouter);
 
