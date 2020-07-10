@@ -10,7 +10,7 @@ const {
 const { 
     uploadImageToCloudinary,
     getUserImages,
-    deleteUserImage
+    handleDeletionRequest
 } = require('../controllers/imageController');
 
 imageRouter.use(fileUpload({
@@ -24,6 +24,6 @@ imageRouter.post('/image', checkJwt, uploadImageToCloudinary);
 
 imageRouter.get('/images', checkJwt, getUserImages);
 
-imageRouter.get('/test', deleteUserImage)
+imageRouter.delete('/image/:id', checkJwt, handleDeletionRequest);
 
 module.exports = imageRouter;
