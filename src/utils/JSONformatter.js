@@ -73,7 +73,13 @@ const FullBuildingJSONtoResponse = (building) => {
 
             currentComponent.suggestions = formattedSuggestions;
 
-            currentCategory[component.meta.componentName] = currentComponent.hasSuggestions ? [(currentComponent)] : (currentComponent);
+            // If the category already has this component, we want to push the new one to the end of the array
+            if (!currentCategory[component.meta.componentName]) {
+                currentCategory[component.meta.componentName] = currentComponent.hasSuggestions ? [(currentComponent)] : (currentComponent);
+            } else {
+                currentCategory[component.meta.componentName].push(currentComponent);
+            }
+            
         });
         responseObject[category.categoryName] = currentCategory;
     });
