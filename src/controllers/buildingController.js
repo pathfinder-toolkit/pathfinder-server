@@ -94,16 +94,29 @@ const postBuildingFromData = async (request, response) => {
             console.log(currentCategory.toJSON());
             const components = [];
             for (property in requestBody[category]) {
-                const componentName = property;
-                const value = Array.isArray(requestBody[category][property]) ? 
-                    (requestBody[category][property][0].value) : 
-                    (requestBody[category][property].value);
-                const isCurrent = true;
+                if (Array.isArray(requestBody[category][property])) {
+                    for (const componentInArray of requestBody[category][property]) {
+                        const componentName = property;
+                        const value = componentInArray.value;
+                        const isCurrent = componentInArray.isCurrent;
+
+                        console.log("Component in array:");
+                        console.log(componentName, value, isCurrent);
+                        const component = await makeComponentWithTransaction(componentName, value, isCurrent, t);
+                        components.push(component);
+                    }
+                } else {
+                    const componentName = property;
+                    const value = Array.isArray(requestBody[category][property]) ? 
+                        (requestBody[category][property][0].value) : 
+                        (requestBody[category][property].value);
+                    const isCurrent = requestBody[category][property].isCurrent
+                    console.log(componentName, value, isCurrent);
     
-                console.log(componentName, value, isCurrent);
-    
-                const component = await makeComponentWithTransaction(componentName, value, isCurrent, t);
-                components.push(component);
+                    const component = await makeComponentWithTransaction(componentName, value, isCurrent, t);
+                    components.push(component);
+                }
+                
             }
             await currentCategory.addComponents(components, {transaction: t});
             categories.push(currentCategory);
