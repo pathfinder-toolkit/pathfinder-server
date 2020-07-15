@@ -73,6 +73,9 @@ const postBuildingFromData = async (request, response) => {
         const requestBody = request.body;
 
         console.log(JSON.stringify(requestBody, null, 4));
+        if (!requestBody.details.name.value) {
+            throw new Error("Invalid building name");
+        }
         const slug = slugify(requestBody.details.name.value, {lower: true});
 
         const verifiedSlug = await checkSlug(slug);
