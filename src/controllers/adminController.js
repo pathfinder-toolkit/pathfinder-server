@@ -1,5 +1,3 @@
-const db = require('../models');
-
 const verifyAdminStatus = async (request, response) => {
     console.log(request.user);
     if (request.user["https://pathfinder-toolkit.herokuapp.com/roles"].includes("Admin")) {
