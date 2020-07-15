@@ -1,4 +1,5 @@
 const axios = require('axios');
+const nodemailer = require("nodemailer");
 
 const checkRecaptcha = async (request, response, next) => {
     try {
@@ -17,7 +18,8 @@ const checkRecaptcha = async (request, response, next) => {
         if (response.data.success) {
             console.log("recaptcha verified");
             next();
-        } else {
+        }
+        else {
             throw new Error("Your feedback failed to process due to incorrect recaptcha.");
         }
     } catch (error) {
@@ -28,7 +30,38 @@ const checkRecaptcha = async (request, response, next) => {
 }
 
 const sendFeedback = async (request, response) => {
-    response.status(201).send("Your feedback has been sent.")
+    try {
+        let testAccount = await nodemailer.createTestAccount();
+
+        let transporter = nodemailer.createTransport({
+            host: "smtp.ethereal.email",
+            port: 587,
+            secure: false,
+            auth: {
+                user: testAccount.user,
+                pass: testAccount.pass,
+            },
+        });
+
+        let info = await transporter.sendMail({
+            from: 'noreply@toolkit-pathfinder.com', 
+            to: "feedback-recipient@toolkit-pathfinder.com", 
+            subject: request.body.title, 
+            text: request.body.text, 
+            html: request.body.text,
+        });
+
+        console.log("Message sent: %s", info.messageId);
+
+        console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+        
+        response.status(201).send("Your feedback has been sent. Debug for testing only: " + nodemailer.getTestMessageUrl(info));
+
+    } catch (error) {
+        console.log(error);
+        response.status(500).send(error.message)
+    }
+    
 }
 
 module.exports = {
