@@ -1,3 +1,6 @@
+const db = require('../models');
+const FeedbackRecipient = db.FeedbackRecipient;
+
 const axios = require('axios');
 const nodemailer = require("nodemailer");
 
@@ -43,9 +46,15 @@ const sendFeedback = async (request, response) => {
             },
         });
 
+        const feedbackRecipient = await FeedbackRecipient.findOne({
+            attributes: ['eMail']
+        });
+        
+        console.log(feedbackRecipient.toJSON());
+
         let info = await transporter.sendMail({
             from: 'noreply@toolkit-pathfinder.com', 
-            to: "feedback-recipient@toolkit-pathfinder.com", 
+            to: feedbackRecipient.eMail, 
             subject: request.body.title, 
             text: request.body.text, 
             html: request.body.text,

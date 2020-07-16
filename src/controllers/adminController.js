@@ -1,12 +1,73 @@
-const verifyAdminStatus = async (request, response) => {
-    console.log(request.user);
-    if (request.user["https://pathfinder-toolkit.herokuapp.com/roles"].includes("Admin")) {
-        response.status(200).send("Verified");
-    } else {
-        response.status(401).send("Unauthorized");
+const db = require('../models');
+const FeedbackRecipient = db.FeedbackRecipient;
+
+const sequelize = db.sequelize;
+
+const checkAdminStatus = async (request, response, next) => {
+    try {
+        console.log(request.user);
+        if (request.user["https://pathfinder-toolkit.herokuapp.com/roles"].includes("Admin")) {
+            next();
+        } else {
+            response.status(401).send("Unauthorized");
+        }
+    } catch (error) {
+        console.log(error)
+        response.status(500).send("Internal server error");
     }
+}
+
+const confirmAdminStatus = async (request, response) => {
+    response.status(200).send("Verified");
 };
 
+const getFeedbackRecipients = async (request, response) => {
+    try {
+        const recipients = await FeedbackRecipient.findAll({
+            attributes: [['eMail','email']]
+        });
+        response.status(200).json(recipients);
+    } catch (error) {
+        console.log(error);
+        response.status(500).send(error.message);
+    }
+}
+
+const updateFeedbackRecipients = async (request, response) => {
+    const t = await sequelize.transaction();
+    try {
+        const recipients = await FeedbackRecipient.findAll({
+        });
+
+        for (const recipient of recipients) {
+            await recipient.destroy({transaction: t});
+        }
+
+        const author = request.user.sub;
+        const newRecipients = request.body;
+
+        for (const newRecipient of newRecipients) {
+            const newRecipientObject = await FeedbackRecipient.create({
+                eMail: newRecipient.email,
+                setBy: author
+            },
+            {transaction: t});
+            console.log(newRecipientObject.toJSON());
+        }
+        
+        t.commit();
+        
+        response.status(200).send("Updated!");
+    } catch (error) {
+        t.rollback();
+        console.log(error);
+        response.status(500).send(error.message);
+    }
+}
+
 module.exports = {
-    verifyAdminStatus
+    checkAdminStatus,
+    confirmAdminStatus,
+    getFeedbackRecipients,
+    updateFeedbackRecipients
 }

@@ -34,6 +34,7 @@ db.ComponentMeta = require("./building/ComponentMetaModel.js")(sequelize, Sequel
 db.Suggestion = require("./suggestions/SuggestionModel.js")(sequelize, Sequelize);
 db.Comment = require("./comment/CommentModel.js")(sequelize, Sequelize);
 db.Image = require("./image/ImageModel.js")(sequelize, Sequelize);
+db.FeedbackRecipient = require("./admin/FeedbackRecipientModel.js")(sequelize, Sequelize);
 
 db.Area.hasMany(db.Material, { foreignKey: 'idArea', as: 'materials' });
 db.Material.belongsTo(db.Area, { foreignKey: 'idArea' });
@@ -59,6 +60,7 @@ db.Suggestion.belongsTo(db.ComponentMeta, {foreignKey: 'idMeta', as: 'subject'})
 db.ComponentMeta.hasMany(db.Comment, {foreignKey: 'idMeta'});
 db.Comment.belongsTo(db.ComponentMeta, {foreignKey: 'idMeta', as: 'subject'});
 
+// Uncomment to sync models with database
 /*(async () => {
     await db.sequelize.sync();
 })();*/
