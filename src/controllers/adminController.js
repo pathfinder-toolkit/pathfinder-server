@@ -1,6 +1,8 @@
 const db = require('../models');
 const FeedbackRecipient = db.FeedbackRecipient;
 
+const sequelize = db.sequelize;
+
 const checkAdminStatus = async (request, response, next) => {
     try {
         console.log(request.user);
@@ -31,8 +33,41 @@ const getFeedbackRecipients = async (request, response) => {
     }
 }
 
+const updateFeedbackRecipients = async (request, response) => {
+    const t = await sequelize.transaction();
+    try {
+        const recipients = await FeedbackRecipient.findAll({
+        });
+
+        for (const recipient of recipients) {
+            await recipient.destroy({transaction: t});
+        }
+
+        const author = request.user.sub;
+        const newRecipients = request.body;
+
+        for (const newRecipient of newRecipients) {
+            const newRecipientObject = await FeedbackRecipient.create({
+                eMail: newRecipient.email,
+                setBy: author
+            },
+            {transaction: t});
+            console.log(newRecipientObject.toJSON());
+        }
+        
+        t.commit();
+        
+        response.status(200).send("Updated!");
+    } catch (error) {
+        t.rollback();
+        console.log(error);
+        response.status(500).send(error.message);
+    }
+}
+
 module.exports = {
     checkAdminStatus,
     confirmAdminStatus,
-    getFeedbackRecipients
+    getFeedbackRecipients,
+    updateFeedbackRecipients
 }
