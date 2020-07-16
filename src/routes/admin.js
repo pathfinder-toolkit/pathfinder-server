@@ -6,9 +6,13 @@ const {
 } = require('../utils/auth');
 
 const {
-    verifyAdminStatus
+    checkAdminStatus,
+    confirmAdminStatus,
+    getFeedbackRecipients
 } = require('../controllers/adminController');
 
-adminRouter.get("/admin", checkJwt, verifyAdminStatus);
+adminRouter.get("/admin", checkJwt, checkAdminStatus, confirmAdminStatus);
+
+adminRouter.get("/admin/feedback/recipients", checkJwt, checkAdminStatus, getFeedbackRecipients);
 
 module.exports = adminRouter;
