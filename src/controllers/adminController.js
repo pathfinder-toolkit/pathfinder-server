@@ -1,8 +1,12 @@
 const db = require('../models');
 const FeedbackRecipient = db.FeedbackRecipient;
 const ComponentMeta = db.ComponentMeta;
+const Area = db.Area;
+const AreaComponent = db.AreaComponent;
+const AreaOption = db.AreaOption;
 
 const sequelize = db.sequelize;
+const { Op } = require("sequelize");
 
 const checkAdminStatus = async (request, response, next) => {
     try {
@@ -82,10 +86,58 @@ const getAvailableSuggestionSubjects = async (request, response) => {
     }
 }
 
+const getSelectableOptionsFromParams = async (request, response) => {
+    try {
+        const identifier = request.params.identifier;
+        const areaIds = request.query.areas.split(',').map(Number);
+
+        const areas = await Area.findAll({
+            attributes: ['idArea'],
+            where: {
+                idArea: {
+                    [Op.or]: areaIds
+                }
+            },
+            include: {
+                model: AreaComponent,
+                as: "identifiers",
+                where: {
+                    identifier: identifier
+                },
+                attributes:['identifier'],
+                include: {
+                    model: AreaOption,
+                    as: "options",
+                    attributes:['option']
+                }
+            }
+        });
+
+        const allOptions = [];
+
+        for (const area of areas) {
+            const formattedArea = area.toJSON();
+            for (const identifier of formattedArea.identifiers) {
+                for (const option of identifier.options) {
+                    allOptions.push(option.option);
+                }
+            }
+        }
+        
+        const uniqueOptions = [...new Set(allOptions)].sort();
+
+        response.status(200).json(uniqueOptions);
+    } catch (error) {
+        console.log(error);
+        response.status(500).send(error.message);
+    }
+}
+
 module.exports = {
     checkAdminStatus,
     confirmAdminStatus,
     getFeedbackRecipients,
     updateFeedbackRecipients,
-    getAvailableSuggestionSubjects
+    getAvailableSuggestionSubjects,
+    getSelectableOptionsFromParams
 }
