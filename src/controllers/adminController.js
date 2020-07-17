@@ -1,5 +1,6 @@
 const db = require('../models');
 const FeedbackRecipient = db.FeedbackRecipient;
+const ComponentMeta = db.ComponentMeta;
 
 const sequelize = db.sequelize;
 
@@ -65,9 +66,26 @@ const updateFeedbackRecipients = async (request, response) => {
     }
 }
 
+const getAvailableSuggestionSubjects = async (request, response) => {
+    try {
+        const subjects = await ComponentMeta.findAll({
+            attributes: [["idMeta","id"],["componentValueType","valueType"],"subject"],
+            where: {
+                hasSuggestions: true
+            }
+        });
+
+        response.status(200).send(subjects);
+    } catch(error) {
+        console.log(error);
+        response.status(500).send(error.message);
+    }
+}
+
 module.exports = {
     checkAdminStatus,
     confirmAdminStatus,
     getFeedbackRecipients,
-    updateFeedbackRecipients
+    updateFeedbackRecipients,
+    getAvailableSuggestionSubjects
 }
