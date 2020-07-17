@@ -21,12 +21,16 @@ db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
 db.Area = require("./editor/AreaModel.js")(sequelize, Sequelize);
+db.AreaComponent = require("./editor/AreaComponentModel.js")(sequelize, Sequelize);
+db.AreaOption = require("./editor/AreaOptionModel.js")(sequelize, Sequelize);
+// Old format, 5 models below are to be replaced with the 2 models above 
 db.Material = require("./editor/MaterialModel.js")(sequelize, Sequelize);
 db.RoofType = require("./editor/RoofTypeModel.js")(sequelize, Sequelize);
 db.VentilationType = require("./editor/VentilationTypeModel.js")(sequelize, Sequelize);
 db.HeatingType = require("./editor/HeatingTypeModel.js")(sequelize, Sequelize);
 db.BuildingType = require("./editor/BuildingTypeModel.js")(sequelize,Sequelize);
 db.Building = require("./building/BuildingModel.js")(sequelize, Sequelize);
+
 db.Category = require("./building/CategoryModel.js")(sequelize, Sequelize);
 db.Component = require("./building/ComponentModel.js")(sequelize, Sequelize);
 db.ComponentValue = require("./building/ComponentValueModel.js")(sequelize, Sequelize);
@@ -35,6 +39,11 @@ db.Suggestion = require("./suggestions/SuggestionModel.js")(sequelize, Sequelize
 db.Comment = require("./comment/CommentModel.js")(sequelize, Sequelize);
 db.Image = require("./image/ImageModel.js")(sequelize, Sequelize);
 db.FeedbackRecipient = require("./admin/FeedbackRecipientModel.js")(sequelize, Sequelize);
+
+db.Area.hasMany(db.AreaComponent, { foreignKey: 'idArea', as: 'identifiers'});
+db.AreaComponent.belongsTo(db.Area, { foreignKey: 'idArea'});
+db.AreaComponent.hasMany(db.AreaOption, { foreignKey: 'idAreaComponent', as: 'options'});
+db.AreaOption.belongsTo(db.AreaComponent, { foreignKey: 'idAreaComponent'});
 
 db.Area.hasMany(db.Material, { foreignKey: 'idArea', as: 'materials' });
 db.Material.belongsTo(db.Area, { foreignKey: 'idArea' });
