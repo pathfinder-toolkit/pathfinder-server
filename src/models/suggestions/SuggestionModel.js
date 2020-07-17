@@ -10,10 +10,6 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.TEXT,
             allowNull: false
         },
-        suggestionCondition: {
-            type: DataTypes.STRING,
-            allowNull: true
-        },
         suggestionSecondarySubject: {
             type: DataTypes.STRING,
             allowNull: true

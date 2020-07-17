@@ -7,7 +7,7 @@ const Area = db.Area;
 const getAreas = async (request, response) => {
     try {
         const areas = await Area.findAll({
-            attributes:  ['areaName']
+            attributes:  ['areaName', 'idArea']
         });
 
         response.status(200).json(areas);
