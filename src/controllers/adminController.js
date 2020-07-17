@@ -69,7 +69,7 @@ const updateFeedbackRecipients = async (request, response) => {
 const getAvailableSuggestionSubjects = async (request, response) => {
     try {
         const subjects = await ComponentMeta.findAll({
-            attributes: [["idMeta","id"],["componentValueType","valueType"],"subject"],
+            attributes: [["componentName","identifier"],["componentValueType","valueType"],"subject"],
             where: {
                 hasSuggestions: true
             }
