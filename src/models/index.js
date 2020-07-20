@@ -73,14 +73,14 @@ db.Suggestion.hasMany(db.SuggestionCondition, {foreignKey: 'idSuggestion', as: '
 db.SuggestionCondition.belongsTo(db.Suggestion, {foreignKey: 'idSuggestion'});
 db.ComponentMeta.hasMany(db.SuggestionCondition, {foreignKey: 'idMeta'});
 db.SuggestionCondition.belongsTo(db.ComponentMeta, {foreignKey: 'idMeta', as: 'conditionedBy'});
-db.SuggestionCondition.belongsToMany(db.Area, { through: 'AreaConditions', as: 'areas'});
-db.Area.belongsToMany(db.SuggestionCondition, {through: 'AreaConditions'});
+db.Suggestion.belongsToMany(db.Area, { through: 'AreaSuggestions', as: 'areas'});
+db.Area.belongsToMany(db.Suggestion, {through: 'AreaSuggestions'});
 
 // Uncomment below to sync models with database
 
-/*(async () => {
+(async () => {
     await db.sequelize.sync();
-})();*/
+})();
 
 
 
