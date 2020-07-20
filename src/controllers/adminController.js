@@ -145,7 +145,7 @@ const postNewSuggestion = async (request, response) => {
             suggestionText: suggestionData.suggestion,
             priority: suggestionData.priority
         });
-        const conditions = [];
+        
         const suggestionMeta = await ComponentMeta.findOne({
             where: {
                 componentName: suggestionData.identifier
@@ -158,6 +158,8 @@ const postNewSuggestion = async (request, response) => {
 
         await newSuggestion.save({transaction: t});
         await newSuggestion.setSubject(suggestionMeta, {transaction: t});
+
+        const conditions = [];
         for (const condition of suggestionData.conditions) {
             const newCondition = await SuggestionCondition.create({
                 condition: condition.condition
@@ -177,6 +179,165 @@ const postNewSuggestion = async (request, response) => {
                     await newSuggestion.save({ transaction: t});
                 }
             }
+            await newCondition.setConditionedBy(conditionMeta, {transaction: t});
+
+            console.log(newCondition.toJSON());
+
+            conditions.push(newCondition);
+        }
+        await newSuggestion.addConditions(conditions, {transaction: t});
+
+        const areas = [];
+        for (const area of suggestionData.areas) {
+            const areaObject = await Area.findOne({
+                where: {
+                    idArea: area.id
+                },
+                attributes: ['idArea']
+            },
+            {transaction: t})
+            console.log(areaObject.toJSON());
+            areas.push(areaObject);
+        }
+        await newSuggestion.addAreas(areas, {transaction: t});
+
+        console.log(newSuggestion.toJSON());
+
+        await t.commit();
+        response.status(201).send("Created");
+    } catch(error) {
+        await t.rollback();
+        console.log(error);
+        response.status(500).send(error.message);
+    }
+}
+
+const getAllSuggestionsFromIdentifier = async (request, response) => {
+    try {
+        const identifier = request.params.identifier;
+        const meta = await ComponentMeta.findOne({
+            where: {
+                componentName: identifier
+            },
+            attributes: ['idMeta','componentName','subject','componentValueType']
+        });
+        const suggestions = await Suggestion.findAll({
+            where: {
+                idMeta: meta.idMeta
+            },
+            attributes: ['idSuggestion', ['suggestionText','suggestion'],'priority'],
+            include: {
+                model: SuggestionCondition,
+                as: 'conditions',
+                attributes: ['condition','idMeta'],
+                include: {
+                    model: Area,
+                    through: {
+                        attributes: []
+                    },
+                    as: 'areas',
+                    attributes: [['idArea','id'],'areaName']
+                }
+            }
+        })
+        for (const suggestion of suggestions) {
+            console.log(JSON.stringify(suggestion, false, 4))
+        }
+        let formattedSuggestions = [];
+        for (const suggestion of suggestions) {
+            const formattedSuggestion = {
+                ...suggestion.toJSON(),
+                identifier: meta.componentName,
+                subject: meta.subject,
+                valueType: meta.componentValueType
+            }
+            let formattedConditions = [];
+            for (const condition of formattedSuggestion.conditions) {
+                const conditionMeta = await ComponentMeta.findOne({
+                    where: {
+                        idMeta: condition.idMeta
+                    },
+                    attributes: ['componentName', 'componentValueType','subject']
+                });
+                let formattedCondition = {
+                    ...condition,
+                    conditionedBy: conditionMeta.componentName,
+                    valueType: conditionMeta.componentValueType,
+                    subject: conditionMeta.subject
+                };
+                delete formattedCondition.idMeta;
+                formattedConditions = [...formattedConditions, formattedCondition]
+            }
+            formattedSuggestion.conditions = formattedConditions;
+            formattedSuggestions = [...formattedSuggestions, formattedSuggestion]
+        }
+        response.status(200).json(formattedSuggestions);
+    } catch (error) {
+        console.log(error);
+        response.status(500).send(error.message);
+    }
+}
+
+const updateExistingSuggestion = async (request, response) => {
+    const t = await sequelize.transaction();
+    try {
+        const id = request.params.id;
+        const suggestionData = request.body;
+
+        const suggestion = await Suggestion.findOne({
+            where: {
+                idSuggestion: id
+            },
+            include: {
+                model: SuggestionCondition,
+                as: 'conditions'
+            }
+        },
+        {transaction: t})
+
+        const suggestionMeta = await ComponentMeta.findOne({
+            where: {
+                componentName: suggestionData.identifier
+            },
+            attributes: ['idMeta', 'componentName','componentValueType']
+        },
+        {transaction: t});
+
+        if (!suggestion) {
+            throw new Error("Invalid id in query");
+        }
+
+        suggestion.suggestionText = suggestionData.suggestion;
+        suggestion.priority = suggestionData.priority;
+
+        await suggestion.save({transaction: t});
+        await suggestion.setSubject(suggestionMeta, {transaction: t});
+
+        for (const condition of suggestion.conditions) {
+            await condition.destroy({transaction: t});
+        }
+
+        const conditions = [];
+        for (const condition of suggestionData.conditions) {
+            const newCondition = await SuggestionCondition.create({
+                condition: condition.condition
+            },
+            {transaction: t});
+            const conditionMeta = await ComponentMeta.findOne({
+                where: {
+                    componentName: condition.conditionedBy
+                },
+                attributes: ['idMeta', 'componentName']
+            }, {transaction: t});
+
+            // Set secondary subject only for values with predefined string options, if there is only one option in the condition
+            suggestion.suggestionSecondarySubject = null;
+            if (suggestionMeta.componentValueType === 'string' && suggestionMeta.componentName === conditionMeta.componentName) {
+                if (condition.condition.split(',').length === 1) {
+                    suggestion.suggestionSecondarySubject = condition.condition;
+                }
+            }
+            await suggestion.save({ transaction: t});
 
             await newCondition.setConditionedBy(conditionMeta, {transaction: t});
             const areas = [];
@@ -193,17 +354,48 @@ const postNewSuggestion = async (request, response) => {
             }
             await newCondition.addAreas(areas, {transaction: t});
 
-            console.log(newCondition.toJSON());
-
             conditions.push(newCondition);
         }
-        await newSuggestion.addConditions(conditions, {transaction: t});
-
-        console.log(newSuggestion.toJSON());
+        await suggestion.addConditions(conditions, {transaction: t});
 
         await t.commit();
-        response.status(201).send("Created");
-    } catch(error) {
+        response.status(200).send("OK!");
+    } catch (error) {
+        await t.rollback();
+        console.log(error);
+        response.status(500).send(error.message);
+    }
+}
+
+const deleteExistingSuggestion = async (request, response) => {
+    const t = await sequelize.transaction();
+    try {
+        const id = request.params.id;
+
+        const suggestion = await Suggestion.findOne({
+            where: {
+                idSuggestion: id
+            },
+            include: {
+                model: SuggestionCondition,
+                as: 'conditions'
+            }
+        },
+        {transaction: t})
+
+        if (!suggestion) {
+            throw new Error("Invalid id in query");
+        }
+
+        for (const condition of suggestion.conditions) {
+            await condition.destroy({transaction: t});
+        }
+
+        await suggestion.destroy({transaction: t});
+
+        await t.commit();
+        response.status(200).send("Deleted");
+    } catch (error) {
         await t.rollback();
         console.log(error);
         response.status(500).send(error.message);
@@ -217,5 +409,8 @@ module.exports = {
     updateFeedbackRecipients,
     getAvailableSuggestionSubjects,
     getSelectableOptionsFromParams,
-    postNewSuggestion
+    postNewSuggestion,
+    getAllSuggestionsFromIdentifier,
+    updateExistingSuggestion,
+    deleteExistingSuggestion
 }
