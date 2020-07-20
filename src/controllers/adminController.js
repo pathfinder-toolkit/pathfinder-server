@@ -4,6 +4,8 @@ const ComponentMeta = db.ComponentMeta;
 const Area = db.Area;
 const AreaComponent = db.AreaComponent;
 const AreaOption = db.AreaOption;
+const Suggestion = db.Suggestion;
+const SuggestionCondition = db.SuggestionCondition;
 
 const sequelize = db.sequelize;
 const { Op } = require("sequelize");
@@ -60,11 +62,11 @@ const updateFeedbackRecipients = async (request, response) => {
             console.log(newRecipientObject.toJSON());
         }
         
-        t.commit();
+        await t.commit();
         
         response.status(200).send("Updated!");
     } catch (error) {
-        t.rollback();
+        await t.rollback();
         console.log(error);
         response.status(500).send(error.message);
     }
@@ -123,11 +125,86 @@ const getSelectableOptionsFromParams = async (request, response) => {
                 }
             }
         }
-        
+
         const uniqueOptions = [...new Set(allOptions)].sort();
 
         response.status(200).json(uniqueOptions);
     } catch (error) {
+        console.log(error);
+        response.status(500).send(error.message);
+    }
+}
+
+const postNewSuggestion = async (request, response) => {
+    const t = await sequelize.transaction();
+    try {
+        console.log(JSON.stringify(request.body, false, 4));
+        const suggestionData = request.body;
+
+        const newSuggestion = Suggestion.build({
+            suggestionText: suggestionData.suggestion,
+            priority: suggestionData.priority
+        });
+        const conditions = [];
+        const suggestionMeta = await ComponentMeta.findOne({
+            where: {
+                componentName: suggestionData.identifier
+            },
+            attributes: ['idMeta', 'componentName','componentValueType']
+        },
+        {transaction: t});
+
+        console.log(suggestionMeta.toJSON());
+
+        await newSuggestion.save({transaction: t});
+        await newSuggestion.setSubject(suggestionMeta, {transaction: t});
+        for (const condition of suggestionData.conditions) {
+            const newCondition = await SuggestionCondition.create({
+                condition: condition.condition
+            },
+            {transaction: t});
+            const conditionMeta = await ComponentMeta.findOne({
+                where: {
+                    componentName: condition.conditionedBy
+                },
+                attributes: ['idMeta', 'componentName']
+            }, {transaction: t});
+
+            // Set secondary subject only for values with predefined string options, if there is only one option in the condition
+            if (suggestionMeta.componentValueType === 'string' && suggestionMeta.componentName === conditionMeta.componentName) {
+                if (condition.condition.split(',').length === 1) {
+                    newSuggestion.suggestionSecondarySubject = condition.condition;
+                    await newSuggestion.save({ transaction: t});
+                }
+            }
+
+            await newCondition.setConditionedBy(conditionMeta, {transaction: t});
+            const areas = [];
+            for (const area of condition.areas) {
+                const areaObject = await Area.findOne({
+                    where: {
+                        idArea: area.id
+                    },
+                    attributes: ['idArea']
+                },
+                {transaction: t})
+                console.log(areaObject.toJSON());
+                areas.push(areaObject);
+            }
+            await newCondition.addAreas(areas, {transaction: t});
+
+            console.log(newCondition.toJSON());
+
+            conditions.push(newCondition);
+        }
+        await newSuggestion.addConditions(conditions, {transaction: t});
+
+        console.log(newSuggestion.toJSON());
+
+        await t.commit();
+        response.status(201).send("Created");
+    } catch(error) {
+        await t.rollback();
         console.log(error);
         response.status(500).send(error.message);
     }
@@ -139,5 +216,6 @@ module.exports = {
     getFeedbackRecipients,
     updateFeedbackRecipients,
     getAvailableSuggestionSubjects,
-    getSelectableOptionsFromParams
+    getSelectableOptionsFromParams,
+    postNewSuggestion
 }

@@ -39,6 +39,7 @@ db.Suggestion = require("./suggestions/SuggestionModel.js")(sequelize, Sequelize
 db.Comment = require("./comment/CommentModel.js")(sequelize, Sequelize);
 db.Image = require("./image/ImageModel.js")(sequelize, Sequelize);
 db.FeedbackRecipient = require("./admin/FeedbackRecipientModel.js")(sequelize, Sequelize);
+db.SuggestionCondition = require("./suggestions/SuggestionConditionModel.js")(sequelize, Sequelize);
 
 db.Area.hasMany(db.AreaComponent, { foreignKey: 'idArea', as: 'identifiers'});
 db.AreaComponent.belongsTo(db.Area, { foreignKey: 'idArea'});
@@ -68,8 +69,15 @@ db.ComponentMeta.hasMany(db.Suggestion, {foreignKey: 'idMeta', as: 'suggestions'
 db.Suggestion.belongsTo(db.ComponentMeta, {foreignKey: 'idMeta', as: 'subject'});
 db.ComponentMeta.hasMany(db.Comment, {foreignKey: 'idMeta'});
 db.Comment.belongsTo(db.ComponentMeta, {foreignKey: 'idMeta', as: 'subject'});
+db.Suggestion.hasMany(db.SuggestionCondition, {foreignKey: 'idSuggestion', as: 'conditions'});
+db.SuggestionCondition.belongsTo(db.Suggestion, {foreignKey: 'idSuggestion'});
+db.ComponentMeta.hasMany(db.SuggestionCondition, {foreignKey: 'idMeta'});
+db.SuggestionCondition.belongsTo(db.ComponentMeta, {foreignKey: 'idMeta', as: 'conditionedBy'});
+db.SuggestionCondition.belongsToMany(db.Area, { through: 'AreaConditions', as: 'areas'});
+db.Area.belongsToMany(db.SuggestionCondition, {through: 'AreaConditions'});
 
-// Uncomment to sync models with database
+// Uncomment below to sync models with database
+
 /*(async () => {
     await db.sequelize.sync();
 })();*/
