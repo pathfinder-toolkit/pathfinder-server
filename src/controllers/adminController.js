@@ -145,7 +145,7 @@ const postNewSuggestion = async (request, response) => {
             suggestionText: suggestionData.suggestion,
             priority: suggestionData.priority
         });
-        const conditions = [];
+        
         const suggestionMeta = await ComponentMeta.findOne({
             where: {
                 componentName: suggestionData.identifier
@@ -158,6 +158,8 @@ const postNewSuggestion = async (request, response) => {
 
         await newSuggestion.save({transaction: t});
         await newSuggestion.setSubject(suggestionMeta, {transaction: t});
+
+        const conditions = [];
         for (const condition of suggestionData.conditions) {
             const newCondition = await SuggestionCondition.create({
                 condition: condition.condition
@@ -276,6 +278,95 @@ const getAllSuggestionsFromIdentifier = async (request, response) => {
     }
 }
 
+const updateExistingSuggestion = async (request, response) => {
+    const t = await sequelize.transaction();
+    try {
+        const id = request.params.id;
+        const suggestionData = request.body;
+
+        let suggestion = await Suggestion.findOne({
+            where: {
+                idSuggestion: id
+            },
+            include: {
+                model: SuggestionCondition,
+                as: 'conditions'
+            }
+        },
+        {transaction: t})
+
+        const suggestionMeta = await ComponentMeta.findOne({
+            where: {
+                componentName: suggestionData.identifier
+            },
+            attributes: ['idMeta', 'componentName','componentValueType']
+        },
+        {transaction: t});
+
+        if (!suggestion) {
+            throw new Error("Invalid id in query");
+        }
+
+        suggestion.suggestionText = suggestionData.suggestion;
+        suggestion.priority = suggestionData.priority;
+
+        await suggestion.save({transaction: t});
+        await suggestion.setSubject(suggestionMeta, {transaction: t});
+
+        for (const condition of suggestion.conditions) {
+            await condition.destroy({transaction: t});
+        }
+
+        const conditions = [];
+        for (const condition of suggestionData.conditions) {
+            const newCondition = await SuggestionCondition.create({
+                condition: condition.condition
+            },
+            {transaction: t});
+            const conditionMeta = await ComponentMeta.findOne({
+                where: {
+                    componentName: condition.conditionedBy
+                },
+                attributes: ['idMeta', 'componentName']
+            }, {transaction: t});
+
+            // Set secondary subject only for values with predefined string options, if there is only one option in the condition
+            suggestion.suggestionSecondarySubject = null;
+            if (suggestionMeta.componentValueType === 'string' && suggestionMeta.componentName === conditionMeta.componentName) {
+                if (condition.condition.split(',').length === 1) {
+                    suggestion.suggestionSecondarySubject = condition.condition;
+                }
+            }
+            await suggestion.save({ transaction: t});
+
+            await newCondition.setConditionedBy(conditionMeta, {transaction: t});
+            const areas = [];
+            for (const area of condition.areas) {
+                const areaObject = await Area.findOne({
+                    where: {
+                        idArea: area.id
+                    },
+                    attributes: ['idArea']
+                },
+                {transaction: t})
+                console.log(areaObject.toJSON());
+                areas.push(areaObject);
+            }
+            await newCondition.addAreas(areas, {transaction: t});
+
+            conditions.push(newCondition);
+        }
+        await suggestion.addConditions(conditions, {transaction: t});
+
+        await t.commit();
+        response.status(200).send("OK!");
+    } catch (error) {
+        await t.rollback();
+        console.log(error);
+        response.status(500).send(error.message);
+    }
+}
+
 module.exports = {
     checkAdminStatus,
     confirmAdminStatus,
@@ -284,5 +375,6 @@ module.exports = {
     getAvailableSuggestionSubjects,
     getSelectableOptionsFromParams,
     postNewSuggestion,
-    getAllSuggestionsFromIdentifier
+    getAllSuggestionsFromIdentifier,
+    updateExistingSuggestion
 }
