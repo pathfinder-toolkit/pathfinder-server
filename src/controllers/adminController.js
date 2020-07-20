@@ -284,7 +284,7 @@ const updateExistingSuggestion = async (request, response) => {
         const id = request.params.id;
         const suggestionData = request.body;
 
-        let suggestion = await Suggestion.findOne({
+        const suggestion = await Suggestion.findOne({
             where: {
                 idSuggestion: id
             },
@@ -367,6 +367,41 @@ const updateExistingSuggestion = async (request, response) => {
     }
 }
 
+const deleteExistingSuggestion = async (request, response) => {
+    const t = await sequelize.transaction();
+    try {
+        const id = request.params.id;
+
+        const suggestion = await Suggestion.findOne({
+            where: {
+                idSuggestion: id
+            },
+            include: {
+                model: SuggestionCondition,
+                as: 'conditions'
+            }
+        },
+        {transaction: t})
+
+        if (!suggestion) {
+            throw new Error("Invalid id in query");
+        }
+
+        for (const condition of suggestion.conditions) {
+            await condition.destroy({transaction: t});
+        }
+
+        await suggestion.destroy({transaction: t});
+        
+        await t.commit();
+        response.status(200).send("Deleted");
+    } catch (error) {
+        await t.rollback();
+        console.log(error);
+        response.status(500).send(error.message);
+    }
+}
+
 module.exports = {
     checkAdminStatus,
     confirmAdminStatus,
@@ -376,5 +411,6 @@ module.exports = {
     getSelectableOptionsFromParams,
     postNewSuggestion,
     getAllSuggestionsFromIdentifier,
-    updateExistingSuggestion
+    updateExistingSuggestion,
+    deleteExistingSuggestion
 }
