@@ -29,6 +29,7 @@ adminRouter.get("/admin/suggestions/subjects", checkJwt, checkAdminStatus, getAv
 adminRouter.get("/admin/suggestions/subject/:identifier", checkJwt, checkAdminStatus, getSelectableOptionsFromParams)
 
 //adminRouter.post("/admin/suggestion", checkJwt, checkAdminStatus, postNewSuggestion);
+adminRouter.post("/admin/suggestion", postNewSuggestion);
 
 //adminRouter.get("/admin/suggestions/all/:identifier", checkJwt, checkAdminStatus, getAllSuggestionsFromIdentifier);
 

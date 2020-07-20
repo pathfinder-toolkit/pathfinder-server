@@ -179,27 +179,27 @@ const postNewSuggestion = async (request, response) => {
                     await newSuggestion.save({ transaction: t});
                 }
             }
-
             await newCondition.setConditionedBy(conditionMeta, {transaction: t});
-            const areas = [];
-            for (const area of condition.areas) {
-                const areaObject = await Area.findOne({
-                    where: {
-                        idArea: area.id
-                    },
-                    attributes: ['idArea']
-                },
-                {transaction: t})
-                console.log(areaObject.toJSON());
-                areas.push(areaObject);
-            }
-            await newCondition.addAreas(areas, {transaction: t});
 
             console.log(newCondition.toJSON());
 
             conditions.push(newCondition);
         }
         await newSuggestion.addConditions(conditions, {transaction: t});
+
+        const areas = [];
+        for (const area of suggestionData.areas) {
+            const areaObject = await Area.findOne({
+                where: {
+                    idArea: area.id
+                },
+                attributes: ['idArea']
+            },
+            {transaction: t})
+            console.log(areaObject.toJSON());
+            areas.push(areaObject);
+        }
+        await newSuggestion.addAreas(areas, {transaction: t});
 
         console.log(newSuggestion.toJSON());
 
@@ -392,7 +392,7 @@ const deleteExistingSuggestion = async (request, response) => {
         }
 
         await suggestion.destroy({transaction: t});
-        
+
         await t.commit();
         response.status(200).send("Deleted");
     } catch (error) {
