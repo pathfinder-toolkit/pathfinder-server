@@ -226,19 +226,18 @@ const getAllSuggestionsFromIdentifier = async (request, response) => {
                 idMeta: meta.idMeta
             },
             attributes: ['idSuggestion', ['suggestionText','suggestion'],'priority'],
-            include: {
+            include: [{
                 model: SuggestionCondition,
                 as: 'conditions',
                 attributes: ['condition','idMeta'],
-                include: {
-                    model: Area,
-                    through: {
-                        attributes: []
-                    },
-                    as: 'areas',
-                    attributes: [['idArea','id'],'areaName']
-                }
-            }
+            },{
+                model: Area,
+                through: {
+                    attributes: []
+                },
+                as: 'areas',
+                attributes: [['idArea','id'],'areaName']
+            }]
         })
         for (const suggestion of suggestions) {
             console.log(JSON.stringify(suggestion, false, 4))
@@ -284,14 +283,20 @@ const updateExistingSuggestion = async (request, response) => {
         const id = request.params.id;
         const suggestionData = request.body;
 
+        console.log(suggestionData);
+
         const suggestion = await Suggestion.findOne({
             where: {
                 idSuggestion: id
             },
-            include: {
+            include: [{
                 model: SuggestionCondition,
                 as: 'conditions'
+            },{
+                model: Area,
+                as: 'areas'
             }
+            ]
         },
         {transaction: t})
 
@@ -317,6 +322,8 @@ const updateExistingSuggestion = async (request, response) => {
             await condition.destroy({transaction: t});
         }
 
+        await suggestion.removeAreas(suggestion.areas, {transaction: t});
+
         const conditions = [];
         for (const condition of suggestionData.conditions) {
             const newCondition = await SuggestionCondition.create({
@@ -340,23 +347,24 @@ const updateExistingSuggestion = async (request, response) => {
             await suggestion.save({ transaction: t});
 
             await newCondition.setConditionedBy(conditionMeta, {transaction: t});
-            const areas = [];
-            for (const area of condition.areas) {
-                const areaObject = await Area.findOne({
-                    where: {
-                        idArea: area.id
-                    },
-                    attributes: ['idArea']
-                },
-                {transaction: t})
-                console.log(areaObject.toJSON());
-                areas.push(areaObject);
-            }
-            await newCondition.addAreas(areas, {transaction: t});
 
             conditions.push(newCondition);
         }
         await suggestion.addConditions(conditions, {transaction: t});
+
+        const areas = [];
+        for (const area of suggestionData.areas) {
+            const areaObject = await Area.findOne({
+                where: {
+                    idArea: area.id
+                },
+                attributes: ['idArea']
+            },
+            {transaction: t})
+            console.log(areaObject.toJSON());
+            areas.push(areaObject);
+        }
+        await suggestion.addAreas(areas, {transaction: t});
 
         await t.commit();
         response.status(200).send("OK!");
