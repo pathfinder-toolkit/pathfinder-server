@@ -210,6 +210,72 @@ const postNewSuggestion = async (request, response) => {
     }
 }
 
+const getAllSuggestionsFromIdentifier = async (request, response) => {
+    try {
+        const identifier = request.params.identifier;
+        const meta = await ComponentMeta.findOne({
+            where: {
+                componentName: identifier
+            },
+            attributes: ['idMeta','componentName','subject','componentValueType']
+        });
+        const suggestions = await Suggestion.findAll({
+            where: {
+                idMeta: meta.idMeta
+            },
+            attributes: ['idSuggestion', ['suggestionText','suggestion'],'priority'],
+            include: {
+                model: SuggestionCondition,
+                as: 'conditions',
+                attributes: ['condition','idMeta'],
+                include: {
+                    model: Area,
+                    through: {
+                        attributes: []
+                    },
+                    as: 'areas',
+                    attributes: [['idArea','id'],'areaName']
+                }
+            }
+        })
+        for (const suggestion of suggestions) {
+            console.log(JSON.stringify(suggestion, false, 4))
+        }
+        let formattedSuggestions = [];
+        for (const suggestion of suggestions) {
+            const formattedSuggestion = {
+                ...suggestion.toJSON(),
+                identifier: meta.componentName,
+                subject: meta.subject,
+                valueType: meta.componentValueType
+            }
+            let formattedConditions = [];
+            for (const condition of formattedSuggestion.conditions) {
+                const conditionMeta = await ComponentMeta.findOne({
+                    where: {
+                        idMeta: condition.idMeta
+                    },
+                    attributes: ['componentName', 'componentValueType','subject']
+                });
+                let formattedCondition = {
+                    ...condition,
+                    conditionedBy: conditionMeta.componentName,
+                    valueType: conditionMeta.componentValueType,
+                    subject: conditionMeta.subject
+                };
+                delete formattedCondition.idMeta;
+                formattedConditions = [...formattedConditions, formattedCondition]
+            }
+            formattedSuggestion.conditions = formattedConditions;
+            formattedSuggestions = [...formattedSuggestions, formattedSuggestion]
+        }
+        response.status(200).json(formattedSuggestions);
+    } catch (error) {
+        console.log(error);
+        response.status(500).send(error.message);
+    }
+}
+
 module.exports = {
     checkAdminStatus,
     confirmAdminStatus,
@@ -217,5 +283,6 @@ module.exports = {
     updateFeedbackRecipients,
     getAvailableSuggestionSubjects,
     getSelectableOptionsFromParams,
-    postNewSuggestion
+    postNewSuggestion,
+    getAllSuggestionsFromIdentifier
 }
