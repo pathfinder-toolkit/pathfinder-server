@@ -78,9 +78,9 @@ db.Area.belongsToMany(db.Suggestion, {through: 'AreaSuggestions'});
 
 // Uncomment below to sync models with database
 
-(async () => {
+/*(async () => {
     await db.sequelize.sync();
-})();
+})();*/
 
 
 
