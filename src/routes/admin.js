@@ -11,7 +11,8 @@ const {
     getFeedbackRecipients,
     updateFeedbackRecipients,
     getAvailableSuggestionSubjects,
-    getSelectableOptionsFromParams
+    getSelectableOptionsFromParams,
+    postNewSuggestion
 } = require('../controllers/adminController');
 
 adminRouter.get("/admin", checkJwt, checkAdminStatus, confirmAdminStatus);
@@ -23,5 +24,7 @@ adminRouter.put("/admin/feedback/recipients", checkJwt, checkAdminStatus, update
 adminRouter.get("/admin/suggestions/subjects", checkJwt, checkAdminStatus, getAvailableSuggestionSubjects);
 
 adminRouter.get("/admin/suggestions/subject/:identifier", checkJwt, checkAdminStatus, getSelectableOptionsFromParams)
+
+adminRouter.post("/admin/suggestion", checkJwt, checkAdminStatus, postNewSuggestion);
 
 module.exports = adminRouter;

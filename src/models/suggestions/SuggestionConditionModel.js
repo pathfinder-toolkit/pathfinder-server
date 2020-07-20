@@ -7,10 +7,6 @@ module.exports = (sequelize, DataTypes) => {
             unique: true
         },
         condition: {
-            type: DataTypes.TEXT,
-            allowNull: false
-        },
-        areas: {
             type: DataTypes.STRING,
             allowNull: false
         }
