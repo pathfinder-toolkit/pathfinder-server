@@ -69,42 +69,34 @@ const getAreas = async (request, response) => {
 const getOptionsForArea = async (request, response) => {
     try {
         const selectedArea = await Area.findOne({
-            attributes: [],
             where: {
-              areaName: request.params.area
+                idArea: request.params.area
             },
-            include: [{
-                model: Material,
-                as: 'materials',
-                attributes: ['value']
-            }, {
-                model: RoofType,
-                as: 'roofTypes',
-                attributes: ['value']
-            }, {
-                model: VentilationType,
-                as: 'ventilationTypes',
-                attributes: ['value']
-            }, {
-                model: HeatingType,
-                as: 'heatingTypes',
-                attributes: ['value']
-            }, {
-                model: BuildingType,
-                as: 'buildingTypes',
-                attributes: ['value']
-            }]
-        });
-        console.log(selectedArea.toJSON());
+            attributes: [],
+            include: {
+                model: AreaComponent,
+                as: 'components',
+                attributes: [['identifier','componentName']],
+                include: {
+                    model: AreaOption,
+                    as: 'options',
+                    attributes: ['option']
+                }
+            }
+        })
 
-        response.status(200).json(selectedArea.toJSON());
+        const areaJSON = selectedArea.toJSON();
+        for (const component of areaJSON.components) {
+            component.options = component.options.map(option => option.option)
+        }
+        response.status(200).json(areaJSON);
     } catch (error) {
-        console.error('Unable to connect to the database:', error);
-        response.status(500).send("Internal server error");
+        console.log(error);
+        response.status(500).send(error.message);
     }
 }
 
 module.exports = {
     getAreas,
-    getOptionsForArea,
+    getOptionsForArea
 }
