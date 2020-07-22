@@ -102,7 +102,7 @@ const getSelectableOptionsFromParams = async (request, response) => {
             },
             include: {
                 model: AreaComponent,
-                as: "identifiers",
+                as: "components",
                 where: {
                     identifier: identifier
                 },
@@ -119,7 +119,7 @@ const getSelectableOptionsFromParams = async (request, response) => {
 
         for (const area of areas) {
             const formattedArea = area.toJSON();
-            for (const identifier of formattedArea.identifiers) {
+            for (const identifier of formattedArea.components) {
                 for (const option of identifier.options) {
                     allOptions.push(option.option);
                 }
