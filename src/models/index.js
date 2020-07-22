@@ -41,7 +41,7 @@ db.Image = require("./image/ImageModel.js")(sequelize, Sequelize);
 db.FeedbackRecipient = require("./admin/FeedbackRecipientModel.js")(sequelize, Sequelize);
 db.SuggestionCondition = require("./suggestions/SuggestionConditionModel.js")(sequelize, Sequelize);
 
-db.Area.hasMany(db.AreaComponent, { foreignKey: 'idArea', as: 'identifiers'});
+db.Area.hasMany(db.AreaComponent, { foreignKey: 'idArea', as: 'components'});
 db.AreaComponent.belongsTo(db.Area, { foreignKey: 'idArea'});
 db.AreaComponent.hasMany(db.AreaOption, { foreignKey: 'idAreaComponent', as: 'options'});
 db.AreaOption.belongsTo(db.AreaComponent, { foreignKey: 'idAreaComponent'});
