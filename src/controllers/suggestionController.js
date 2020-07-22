@@ -1,11 +1,17 @@
 const db = require('../models');
-const { Suggestion, ComponentMeta } = require('../models');
+const { Suggestion, ComponentMeta, SuggestionCondition, Area } = require('../models');
 
 const sequelize = db.sequelize;
+
+const { Op } = require("sequelize");
 
 const {
     makeExampleSuggestions
 } = require('./suggestionUtils/suggestionCreation');
+
+const {
+    filterSuggestion
+} = require("./suggestionUtils/suggestionFilter");
 
 
 const {
@@ -17,43 +23,38 @@ const findSuggestionsFromParams = async (request, response) => {
     try {
         const subject = request.params.subject;
         const value = request.params.value;
+        const area = request.query.area;
+
+        console.log("area " + area);
 
         //await makeExampleSuggestions( t );
 
         const suggestions = await Suggestion.findAll({
             attributes: ['suggestionText', 'suggestionSecondarySubject', 'priority', 'idSuggestion'],
-            include: {
+            include: [{
                 model: ComponentMeta,
                 as : 'subject',
                 where: {
                     componentName : subject
                 },
-                attributes:['subject']
-            }
+                attributes:['subject','componentValueType']
+            },{
+                model: SuggestionCondition,
+                as: 'conditions'
+            },{
+                model: Area,
+                as: 'areas',
+                where: {
+                    idArea: area
+                },
+                attributes: []
+            }]
         },
         {transaction: t});
 
-        // Instead of using value to determine which suggestions are shown, value is used to determine amount of suggestions given.
-        // To be changed later...
+        const filteredSuggestions = suggestions.filter(suggestion => filterSuggestion(suggestion, value))
 
-        const shuffleArray = (array) => {
-            for (let i = array.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]];
-            }
-        };
-
-        shuffleArray(suggestions);
-
-        const amount = Math.min( Math.abs(value), suggestions.length );
-        
-        const selectedSuggestions = suggestions.slice(0, amount);
-
-        for (const suggestion of selectedSuggestions) {
-            //console.log(suggestion.toJSON());
-        }
-
-        const responseObject = suggestionsToResponse(selectedSuggestions);
+        const responseObject = suggestionsToResponse(filteredSuggestions);
         
         await t.commit();
         response.status(200).json(responseObject);

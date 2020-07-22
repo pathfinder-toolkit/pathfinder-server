@@ -63,6 +63,52 @@ const filterSuggestionFromBuilding = (suggestion, component, building) => {
     return true;
 }
 
+const filterSuggestion = (suggestion, value) => {
+    // Assumes all conditions are based on the same component
+    for (const currentCondition of suggestion.conditions) {
+        switch (suggestion.subject.componentValueType) {
+            case 'string':
+                const validOptions = currentCondition.condition.split(',');
+                if (!validOptions.some(option => option === value)) {
+                    return false;
+                }
+                break;
+            case 'int':
+            case 'double':
+                const operator = currentCondition.condition.charAt(0);
+                const validator = Number(currentCondition.condition.substr(1));
+                if (operator === '=') {
+                    if (Number(value) == validator ) {
+                        break;
+                    }
+                }
+                if (operator === '<') {
+                    if (Number(value) < validator ) {
+                        break;
+                    }
+                }
+                if (operator === '>') {
+                    if (Number(value) > validator ) {
+                        break;
+                    }
+                }
+                return false;
+            case 'boolean':
+                const booleanValidator = currentCondition.condition == "true";
+                const booleanValue = value == "true";
+                if (booleanValue == booleanValidator) {
+                    break;
+                }
+                return false;
+            default:
+                return false;
+        }
+    }
+    
+    return true;
+}
+
 module.exports = {
-    filterBuildingObject
+    filterBuildingObject,
+    filterSuggestion
 };
