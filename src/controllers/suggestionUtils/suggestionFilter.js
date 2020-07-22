@@ -20,7 +20,7 @@ const filterSuggestionFromBuilding = (suggestion, component, building) => {
     if (!suggestion.areas.some(area => area.areaName === buildingArea)) {
         return false;
     }
-    // Filter out suggestions based on condition
+    // Filter out suggestions based on condition - suggestion passes through if all conditions are met
     // Unfinished: Currently assumes the condition is based on same component
     for (const currentCondition of suggestion.conditions) {
         switch (component.meta.componentValueType) {
@@ -30,8 +30,34 @@ const filterSuggestionFromBuilding = (suggestion, component, building) => {
                     return false;
                 }
                 break;
+            case 'int':
+            case 'double':
+                const operator = currentCondition.condition.charAt(0);
+                const validator = Number(currentCondition.condition.substr(1));
+                if (operator === '=') {
+                    if ((component.value.valueInt || component.value.valueDouble) === validator ) {
+                        break;
+                    }
+                }
+                if (operator === '<') {
+                    if ((component.value.valueInt || component.value.valueDouble) < validator ) {
+                        break;
+                    }
+                }
+                if (operator === '>') {
+                    if ((component.value.valueInt || component.value.valueDouble) > validator ) {
+                        break;
+                    }
+                }
+                return false;
+            case 'boolean':
+                const booleanValidator = currentCondition.condition == "true";
+                if (component.value.valueBoolean === booleanValidator) {
+                    break;
+                }
+                return false;
             default:
-                break;
+                return false;
         }
     }
     return true;
