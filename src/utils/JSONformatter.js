@@ -47,29 +47,16 @@ const FullBuildingJSONtoResponse = (building) => {
             currentComponent.hasSuggestions = component.meta.hasSuggestions;
             currentComponent.isCurrent = component.isCurrent;
             currentComponent.usageStartYear = component.usageStartYear;
-
-            // Gives 0-2 random suggestion, temporary construction
-
-            const shuffleArray = (array) => {
-                for (let i = array.length - 1; i > 0; i--) {
-                    const j = Math.floor(Math.random() * (i + 1));
-                    [array[i], array[j]] = [array[j], array[i]];
-                }
-            };
             
             const suggestions = component.meta.suggestions;
 
-            shuffleArray(suggestions);
-
-            let selectedSuggestions = suggestions.slice(0, Math.floor(Math.random() * 3));
-            selectedSuggestions.sort((a,b) => {return b.priority - a.priority});
+            suggestions.sort((a,b) => {return b.priority - a.priority});
 
             // Postgres character limit fix on query;
-            for (const loopedSuggestion of selectedSuggestions) {
+            for (const loopedSuggestion of suggestions) {
                 loopedSuggestion.suggestionSecondarySubject = loopedSuggestion.suggestionSecondarySubje;
             }
-
-            const formattedSuggestions = suggestionsToResponse(selectedSuggestions);
+            const formattedSuggestions = suggestionsToResponse(suggestions);
 
             currentComponent.suggestions = formattedSuggestions;
 

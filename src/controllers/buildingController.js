@@ -1,12 +1,14 @@
 const db = require('../models');
-const { Component, Building, Category, ComponentValue, ComponentMeta, Suggestion } = require('../models');
+const { Component, Building, Category, ComponentValue, ComponentMeta, Suggestion, SuggestionCondition, Area } = require('../models');
 const { makeComponent, makeMetaComponents, postTestBuilding, makeComponentWithTransaction, checkSlug} = require('./buildingUtils/buildingCreation');
 const slugify = require("slugify");
 
 const sequelize = db.sequelize;
 const { Op } = require("sequelize");
 
-//const requestBody = require('../json/postRequestExample.json');
+const {
+    filterBuildingObject
+} = require("./suggestionUtils/suggestionFilter");
 
 const { 
     BuildingJSONtoResponse,
@@ -212,15 +214,24 @@ const getFullBuildingDetailsFromSlug = async (request, response) => {
                     include: [{
                         model: ComponentMeta,
                         as: 'meta',
-                        attributes: ['componentDescription', 'componentName', 'hasSuggestions', 'subject'],
+                        attributes: ['idMeta','componentDescription', 'componentName', 'hasSuggestions', 'subject', 'componentValueType'],
                         include: [{
                             model: Suggestion,
                             as: 'suggestions',
-                            include: {
+                            include: [{
                                 model: ComponentMeta,
                                 as: 'subject',
                                 attributes: ['subject']
-                            }
+                            },{
+                                model: SuggestionCondition,
+                                as: 'conditions'
+                            },{
+                                model: Area,
+                                through: {
+                                    attributes: []
+                                },
+                                as: 'areas'
+                            }]
                         }]
                     },{
                         model: ComponentValue,
@@ -235,6 +246,8 @@ const getFullBuildingDetailsFromSlug = async (request, response) => {
 
         if (building) {
             const buildingJSON = building.toJSON();
+
+            const filteredBuildingJSON = filterBuildingObject(buildingJSON);
 
             const author = request.user.sub;
 
