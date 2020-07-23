@@ -8,10 +8,11 @@ const createDummyDataForAreas = async (request, response) => {
     const t = await sequelize.transaction();
     try {
         const baseComponents = await ComponentMeta.findAll({
-            attributes: ["componentName"],
             where: {
-                hasSuggestions: true
-            }
+                hasSuggestions: true,
+                componentValueType: 'string'
+            },
+            attributes: ["componentName"]
         });
 
         const areas = await Area.findAll({
@@ -39,7 +40,7 @@ const createDummyDataForAreas = async (request, response) => {
                 console.log(component.toJSON());
                 components.push(component)
             }
-            await area.addIdentifiers(components, {transaction: t});
+            await area.addComponents(components, {transaction: t});
             
         }
 
