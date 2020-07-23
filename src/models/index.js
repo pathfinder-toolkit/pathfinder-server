@@ -42,9 +42,9 @@ db.FeedbackRecipient = require("./admin/FeedbackRecipientModel.js")(sequelize, S
 db.SuggestionCondition = require("./suggestions/SuggestionConditionModel.js")(sequelize, Sequelize);
 
 db.Area.hasMany(db.AreaComponent, { foreignKey: 'idArea', as: 'components'});
-db.AreaComponent.belongsTo(db.Area, { foreignKey: 'idArea'});
+db.AreaComponent.belongsTo(db.Area, { foreignKey: 'idArea', as: 'area'});
 db.AreaComponent.hasMany(db.AreaOption, { foreignKey: 'idAreaComponent', as: 'options'});
-db.AreaOption.belongsTo(db.AreaComponent, { foreignKey: 'idAreaComponent'});
+db.AreaOption.belongsTo(db.AreaComponent, { foreignKey: 'idAreaComponent', as: 'identifier'});
 
 db.Area.hasMany(db.Material, { foreignKey: 'idArea', as: 'materials' });
 db.Material.belongsTo(db.Area, { foreignKey: 'idArea' });

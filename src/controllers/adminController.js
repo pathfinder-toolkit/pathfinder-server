@@ -410,6 +410,91 @@ const deleteExistingSuggestion = async (request, response) => {
     }
 }
 
+const updateOptionsOnIdentifier = async (request, response) => {
+    const t = await sequelize.transaction();
+    try {
+        const identifier = request.params.identifier;
+        const areaIds = request.query.areas.split(',').map(Number);
+        const newOptionData = request.body;
+
+        const currentOptions = await AreaOption.findAll({
+            attributes: ['idOption'],
+            include: {
+                model: AreaComponent,
+                as: 'identifier',
+                where: {
+                    identifier: identifier
+                },
+                attributes: [],
+                include: {
+                    model: Area,
+                    as: 'area',
+                    where: {
+                        idArea: {
+                            [Op.or]: areaIds
+                        }
+                    },
+                    attributes: []
+                }
+            }
+        },
+        {transaction: t});
+
+        const currentOptionIds = currentOptions.map(option => option.idOption);
+        console.log(currentOptionIds);
+
+        await AreaOption.destroy(
+            {
+                where: 
+                {
+                    idOption: 
+                    {
+                        [Op.or]: currentOptionIds
+                    }
+                },
+                transaction: t
+            }
+        );
+
+        const components = await AreaComponent.findAll({
+            where: {
+                identifier: identifier
+            },
+            include: {
+                model: Area,
+                as: 'area',
+                where: {
+                    idArea: {
+                        [Op.or]: areaIds
+                    }
+                }
+            }
+        },
+        {transaction: t});
+
+        for (const component of components) {
+            let options = [];
+            for (const newOption of newOptionData) {
+                const option = await AreaOption.create({
+                    option: newOption.option
+                },
+                {transaction: t});
+                console.log(option.toJSON());
+                options.push(option);
+            }
+            await component.addOptions(options, {transaction: t});
+            console.log(component.toJSON());
+        }
+
+        await t.commit();
+        response.status(200).send("Updated");
+    } catch (error) {
+        await t.rollback();
+        console.log(error);
+        response.status(500).send(error.message);
+    }
+}
+
 module.exports = {
     checkAdminStatus,
     confirmAdminStatus,
@@ -420,5 +505,6 @@ module.exports = {
     postNewSuggestion,
     getAllSuggestionsFromIdentifier,
     updateExistingSuggestion,
-    deleteExistingSuggestion
+    deleteExistingSuggestion,
+    updateOptionsOnIdentifier
 }

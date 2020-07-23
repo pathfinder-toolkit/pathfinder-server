@@ -15,7 +15,8 @@ const {
     postNewSuggestion,
     getAllSuggestionsFromIdentifier,
     updateExistingSuggestion,
-    deleteExistingSuggestion
+    deleteExistingSuggestion,
+    updateOptionsOnIdentifier
 } = require('../controllers/adminController');
 
 adminRouter.get("/admin", checkJwt, checkAdminStatus, confirmAdminStatus);
@@ -35,5 +36,7 @@ adminRouter.get("/admin/suggestions/all/:identifier", checkJwt, checkAdminStatus
 adminRouter.put("/admin/suggestion/:id", checkJwt, checkAdminStatus, updateExistingSuggestion);
 
 adminRouter.delete("/admin/suggestion/:id", checkJwt, checkAdminStatus, deleteExistingSuggestion);
+
+adminRouter.put("/admin/options/:identifier", checkJwt, checkAdminStatus, updateOptionsOnIdentifier);
 
 module.exports = adminRouter;
