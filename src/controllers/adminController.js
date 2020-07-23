@@ -236,7 +236,7 @@ const getAllSuggestionsFromIdentifier = async (request, response) => {
                     attributes: []
                 },
                 as: 'areas',
-                attributes: [['idArea','id'],'areaName']
+                attributes: ['idArea','areaName']
             }]
         })
         for (const suggestion of suggestions) {
