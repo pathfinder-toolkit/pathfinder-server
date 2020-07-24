@@ -286,6 +286,28 @@ const checkOwnerStatus = async (request, response, next) => {
     }
 }
 
+const checkOwnerOrAdminStatus = async (request, response, next) => {
+    try {
+        console.log(request.user);
+        if (request.user["https://pathfinder-toolkit.herokuapp.com/roles"].includes("Admin")) {
+            next();
+        } else {
+            const slug = request.params.slug;
+            const author = request.user.sub;
+            const building = await Building.findOne({
+                where: {
+                    'slug': slug
+                },
+                attributes: ['buildingAuthorSub']
+            });
+            author === building.buildingAuthorSub ? next() : (() => {throw new Error("Insufficient permissions")})();
+        }
+    } catch(error) {
+        console.log(error);
+        response.status(403).send(error.message);
+    }
+}
+
 const updateBuildingData = async (request, response) => {
     const t = await sequelize.transaction();
     try {
@@ -393,11 +415,39 @@ const updateBuildingData = async (request, response) => {
     }
 }
 
+const deleteBuilding = async (request, response) => {
+    const t = await sequelize.transaction();
+    try {
+        const slug = request.params.slug;
+
+        const building = await Building.findOne({
+            where: {
+                slug: slug
+            }
+        });
+
+        if (!building) {
+            throw new Error("No building found");
+        }
+
+        await building.destroy({transaction: t});
+        
+        await t.commit();
+        response.status(200).send("Deleted");
+    } catch (error) {
+        await t.rollback();
+        console.log(error);
+        response.status(500).send(error.message);
+    }
+}
+
 module.exports = {
     getSampleBuilding,
     postBuildingFromData,
     getBuildingsForUser,
     getFullBuildingDetailsFromSlug,
     checkOwnerStatus,
-    updateBuildingData
+    checkOwnerOrAdminStatus,
+    updateBuildingData,
+    deleteBuilding
 }

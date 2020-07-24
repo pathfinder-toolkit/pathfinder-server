@@ -57,11 +57,11 @@ db.HeatingType.belongsTo(db.Area, { foreignKey: 'idArea' });
 db.Area.hasMany(db.BuildingType, { foreignKey: 'idArea' , as: 'buildingTypes'});
 db.BuildingType.belongsTo(db.Area, { foreignKey: 'idArea' });
 
-db.Building.hasMany(db.Category, { foreignKey: 'idBuilding', as: 'categories'});
+db.Building.hasMany(db.Category, { foreignKey: 'idBuilding', as: 'categories', hooks: true, onDelete: 'cascade'});
 db.Category.belongsTo(db.BuildingType, { foreignKey: 'idBuilding'});
-db.Category.belongsToMany(db.Component, { through: 'CategoryComponents', as: 'components'});
+db.Category.belongsToMany(db.Component, { through: 'CategoryComponents', as: 'components', hooks: true, onDelete: 'cascade'});
 db.Component.belongsToMany(db.Category, { through: 'CategoryComponents'});
-db.Component.hasOne(db.ComponentValue, { foreignKey: {name: 'idComponent'}, as: 'value'});
+db.Component.hasOne(db.ComponentValue, { foreignKey: {name: 'idComponent'}, as: 'value', hooks: true, onDelete: 'cascade'});
 db.ComponentValue.belongsTo(db.Component, { foreignKey: 'idComponent'});
 db.ComponentMeta.hasMany(db.Component, {foreignKey: 'idMeta'});
 db.Component.belongsTo(db.ComponentMeta, {foreignKey: 'idMeta', as: 'meta'});
