@@ -252,7 +252,7 @@ const getFullBuildingDetailsFromSlug = async (request, response) => {
             const author = request.user.sub;
 
             if (author == buildingJSON.author) {
-                const responseObject = FullBuildingJSONtoResponse(buildingJSON);
+                const responseObject = FullBuildingJSONtoResponse(filteredBuildingJSON);
                 response.status(200).json(responseObject);
             } 
             else {
@@ -269,9 +269,135 @@ const getFullBuildingDetailsFromSlug = async (request, response) => {
     }
 }
 
+const checkOwnerStatus = async (request, response, next) => {
+    try {
+        const slug = request.params.slug;
+        const author = request.user.sub;
+        const building = await Building.findOne({
+            where: {
+                'slug': slug
+            },
+            attributes: ['buildingAuthorSub']
+        });
+        author === building.buildingAuthorSub ? next() : (() => {throw new Error("Insufficient permissions")})();
+    } catch (error) {
+        console.log(error);
+        response.status(403).send(error.message);
+    }
+}
+
+const updateBuildingData = async (request, response) => {
+    const t = await sequelize.transaction();
+    try {
+        const slug = request.params.slug;
+        const updateData = request.body;
+        const building = await Building.findOne({
+            where:{
+                'slug': slug
+            },
+            attributes:['idBuilding'],
+            include: {
+                model: Category,
+                as: 'categories',
+                attributes: ['idCategory','categoryName'],
+                include: {
+                    model: Component,
+                    as: 'components',
+                    attributes: ['idComponent','isCurrent', 'usageStartYear'],
+                    include: [{
+                        model: ComponentMeta,
+                        as: 'meta',
+                        attributes: ['idMeta','componentName', 'hasSuggestions', 'componentValueType'],
+                    },{
+                        model: ComponentValue,
+                        as: 'value',
+                        attributes: ['id','valueString', 'valueDate', 'valueInt', 'valueDouble', 'valueText', 'valueBoolean']
+                    }]
+                }
+            }
+        },
+        { transaction: t });
+        const componentIdsToDestroy = [];
+        for (const category of building.categories) {
+            
+            for (const component of category.components) {
+                if (!component.meta.hasSuggestions) {
+                    switch (component.meta.componentValueType) {
+                        case 'string':
+                            component.value.valueString = updateData[category.categoryName][component.meta.componentName].value;
+                            break;
+                        case 'date':
+                            component.value.valueDate = updateData[category.categoryName][component.meta.componentName].value;
+                            break;
+                        case 'int':
+                            component.value.valueInt = updateData[category.categoryName][component.meta.componentName].value;
+                            break;
+                        case 'double':
+                            component.value.valueDouble = updateData[category.categoryName][component.meta.componentName].value;
+                            break;
+                        case 'boolean':
+                            component.value.valueBoolean = updateData[category.categoryName][component.meta.componentName].value;
+                            break;
+                        case 'text':
+                            component.value.valueText = updateData[category.categoryName][component.meta.componentName].value;
+                            break;
+                        default:
+                            break;
+                    }
+                    component.isCurrent = updateData[category.categoryName][component.meta.componentName].isCurrent;
+                    await component.save({transaction: t});
+                    await component.value.save({transaction: t});
+                } else {
+                    componentIdsToDestroy.push(component.idComponent);
+                }
+            }
+            // Create new components for ones where the components are stored in an array (hasSuggestions == true)
+            const createdComponents = [];
+            for (const newComponentData of Object.entries(updateData[category.categoryName])) {
+                if (newComponentData.some(entry => Array.isArray(entry))) {
+                    const componentName = newComponentData[0];
+                    for (const singleNewComponentData of newComponentData[1]) {
+                        const value = singleNewComponentData.value;
+                        const isCurrent = singleNewComponentData.isCurrent;
+                        const component = await makeComponentWithTransaction(componentName, value, isCurrent, t);
+                        createdComponents.push(component);
+                        console.log(component.toJSON());
+                    }
+                }
+            }
+            console.log(category.toJSON());
+            if (createdComponents.length > 0) {
+                await category.addComponents(createdComponents, {transaction: t});
+            }
+        }
+
+        await Component.destroy(
+            {
+                where: 
+                {
+                    idComponent: 
+                    {
+                        [Op.or]: componentIdsToDestroy
+                    }
+                },
+                transaction: t
+            }
+        );
+
+        await t.commit();
+        response.status(200).send("Updated");
+    } catch (error) {
+        await t.rollback();
+        console.log(error);
+        response.status(500).send("Internal server error");
+    }
+}
+
 module.exports = {
     getSampleBuilding,
     postBuildingFromData,
     getBuildingsForUser,
-    getFullBuildingDetailsFromSlug
+    getFullBuildingDetailsFromSlug,
+    checkOwnerStatus,
+    updateBuildingData
 }

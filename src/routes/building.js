@@ -9,7 +9,9 @@ const {
   getSampleBuilding,
   postBuildingFromData,
   getBuildingsForUser,
-  getFullBuildingDetailsFromSlug
+  getFullBuildingDetailsFromSlug,
+  checkOwnerStatus,
+  updateBuildingData
 } = require('../controllers/buildingController');
 
 buildingRouter.get("/building", getSampleBuilding);
@@ -19,5 +21,7 @@ buildingRouter.post("/building", checkJwt, postBuildingFromData);
 buildingRouter.get("/buildings/me", checkJwt,  getBuildingsForUser);
 
 buildingRouter.get("/building/:slug", checkJwt, getFullBuildingDetailsFromSlug);
+
+buildingRouter.put("/building/:slug", checkJwt, checkOwnerStatus, updateBuildingData);
 
 module.exports = buildingRouter;
