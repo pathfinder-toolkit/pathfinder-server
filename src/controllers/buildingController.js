@@ -271,11 +271,18 @@ const getFullBuildingDetailsFromSlug = async (request, response) => {
 
 const checkOwnerStatus = async (request, response, next) => {
     try {
-        // TODO : Check that user is the same as building creator
-        console.log(request.user);
+        const slug = request.params.slug;
+        const author = request.user.sub;
+        const building = await Building.findOne({
+            where: {
+                'slug': slug
+            },
+            attributes: ['buildingAuthorSub']
+        });
+        author === building.buildingAuthorSub ? next() : (() => {throw new Error("Insufficient permissions")})();
     } catch (error) {
         console.log(error);
-        response.status(403).send("Insufficient permissions");
+        response.status(403).send(error.message);
     }
 }
 
@@ -363,7 +370,6 @@ const updateBuildingData = async (request, response) => {
                 await category.addComponents(createdComponents, {transaction: t});
             }
         }
-        console.log(componentIdsToDestroy);
 
         await Component.destroy(
             {

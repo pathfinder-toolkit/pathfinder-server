@@ -22,6 +22,6 @@ buildingRouter.get("/buildings/me", checkJwt,  getBuildingsForUser);
 
 buildingRouter.get("/building/:slug", checkJwt, getFullBuildingDetailsFromSlug);
 
-buildingRouter.put("/building/:slug", updateBuildingData);
+buildingRouter.put("/building/:slug", checkJwt, checkOwnerStatus, updateBuildingData);
 
 module.exports = buildingRouter;
