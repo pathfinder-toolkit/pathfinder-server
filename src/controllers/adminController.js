@@ -443,18 +443,22 @@ const updateOptionsOnIdentifier = async (request, response) => {
         const currentOptionIds = currentOptions.map(option => option.idOption);
         console.log(currentOptionIds);
 
-        await AreaOption.destroy(
-            {
-                where: 
+        if (currentOptionIds.length > 0) {
+            await AreaOption.destroy(
                 {
-                    idOption: 
+                    where: 
                     {
-                        [Op.or]: currentOptionIds
-                    }
-                },
-                transaction: t
-            }
-        );
+                        idOption: 
+                        {
+                            [Op.or]: currentOptionIds
+                        }
+                    },
+                    transaction: t
+                }
+            );
+        }
+
+        
 
         const components = await AreaComponent.findAll({
             where: {
