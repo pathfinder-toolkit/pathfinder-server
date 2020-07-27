@@ -17,12 +17,13 @@ const getCommentsFromParams = async (request, response) => {
     const t = await sequelize.transaction();
     try {
         const subject = request.params.subject;
-        // Temporarily added to choose amount of comments to display
-        const value = request.params.value;
 
-        //await makeExampleComments(t);
+        const page = parseInt(request.query.page);
+        console.log(`page: ${page}`);
+        const perPage = parseInt(request.query.perPage);
+        console.log(`perPage: ${perPage}`);
 
-        const comments = await Comment.findAll({
+        const { count, rows } = await Comment.findAndCountAll({
             include: {
                 model: ComponentMeta,
                 as: 'subject',
@@ -30,30 +31,20 @@ const getCommentsFromParams = async (request, response) => {
                     componentName: subject
                 },
                 attributes: ['subject']
-            }
+            },
+            order:[
+                ['createdAt','DESC']
+            ],
+            limit: perPage,
+            offset: (page - 1) * perPage
         },
         {transaction: t});
 
-        // Temporary (for testing purposes) : value is used to determine amount of comments shown (between 0-4).
+        const pages = Math.ceil(count / perPage);
 
-        const shuffleArray = (array) => {
-            for (let i = array.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]];
-            }
-        };
+        console.log(`Pages: ${pages}`);
 
-        shuffleArray(comments);
-
-        const amount = Math.min( Math.abs(value), comments.length );
-
-        const selectedComments = comments.slice(0, amount);
-
-        for (const comment of selectedComments) {
-            //console.log(comment.toJSON());
-        }
-
-        const responseObject = commentsToResponse(selectedComments);
+        const responseObject = commentsToResponse(rows, page, pages);
 
         await t.commit();
         response.status(200).json(responseObject);
