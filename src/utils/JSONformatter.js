@@ -111,11 +111,16 @@ const suggestionsToResponse = (suggestionList) => {
     return responseList;
 }
 
-const commentsToResponse = (commentList) => {
-    const responseList = [];
+const commentsToResponse = (comments, page, pages) => {
+    const response = {
+        page: page,
+        maxPages: pages
+    }
+    const commentList = [];
 
-    for (const comment of commentList) {
+    for (const comment of comments) {
         const formattedComment = {
+            idComment: comment.idComment,
             commentText: comment.commentText,
             commentSubject: comment.subject.subject,
             commentSecondarySubject: comment.commentSecondarySubject,
@@ -125,10 +130,11 @@ const commentsToResponse = (commentList) => {
         }
         console.log("Formatted: ");
         console.log(formattedComment);
-        responseList.push(formattedComment);
+        commentList.push(formattedComment);
     }
+    response.comments = commentList;
 
-    return responseList;
+    return response;
 }
 
 module.exports = {
