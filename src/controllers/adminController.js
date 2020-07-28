@@ -6,6 +6,7 @@ const AreaComponent = db.AreaComponent;
 const AreaOption = db.AreaOption;
 const Suggestion = db.Suggestion;
 const SuggestionCondition = db.SuggestionCondition;
+const Comment = db.Comment;
 
 const sequelize = db.sequelize;
 const { Op } = require("sequelize");
@@ -499,6 +500,34 @@ const updateOptionsOnIdentifier = async (request, response) => {
     }
 }
 
+const deleteSelectedComment = async (request, response) => {
+    const t = await sequelize.transaction();
+    try {
+        const idComment = Number(request.params.id);
+
+        const comment = await Comment.findOne({
+            where: {
+                idComment: idComment
+            }
+        },
+        {transaction: t});
+
+        !comment && (() => {throw new Error("Comment not found")})();
+
+        console.log(comment.toJSON());
+
+        await comment.destroy({transaction: t});
+
+        await t.commit();
+
+        response.status(200).send("Deleted");
+    } catch (error) {
+        await t.rollback();
+        console.log(error);
+        response.status(500).send(error.message);
+    }
+}
+
 module.exports = {
     checkAdminStatus,
     confirmAdminStatus,
@@ -510,5 +539,6 @@ module.exports = {
     getAllSuggestionsFromIdentifier,
     updateExistingSuggestion,
     deleteExistingSuggestion,
-    updateOptionsOnIdentifier
+    updateOptionsOnIdentifier,
+    deleteSelectedComment
 }
