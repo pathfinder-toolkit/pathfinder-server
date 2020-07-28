@@ -1,5 +1,5 @@
 const db = require('../models');
-const { Comment, ComponentMeta } = require('../models');
+const { Comment, ComponentMeta, CommentReport } = require('../models');
 
 const { getUserInfo } = require('../utils/auth');
 
@@ -94,8 +94,43 @@ const createNewComment = async (request, response) => {
     }
 }
 
+const submitReportOnComment = async (request, response) => {
+    const t = await sequelize.transaction();
+    try {
+        const idComment = Number(request.params.id);
+        const reason = request.body.reason;
+        const reporter = request.user.sub;
+
+        const comment = await Comment.findOne({
+            where: {
+                idComment: idComment
+            }
+        },
+        {transaction: t});
+
+        !comment && (() => {throw new Error("Comment not found")})();
+
+        const report = await CommentReport.create({
+            reportedBy: reporter,
+            reason: reason
+        },
+        {transaction: t});
+        
+        await report.setComment(comment, {transaction: t});
+
+        console.log(report.toJSON());
+
+        await t.commit();
+        response.status(201).send("Reported!");
+    } catch (error) {
+        await t.rollback();
+        console.log(error);
+        response.status(500).send(error.message);
+    }
+}
 
 module.exports = {
     getCommentsFromParams,
-    createNewComment
+    createNewComment,
+    submitReportOnComment
 }

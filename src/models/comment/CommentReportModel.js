@@ -7,8 +7,12 @@ module.exports = (sequelize, DataTypes) => {
             unique: true
         },
         reportedBy: {
-            type: DataTypes.TEXT,
+            type: DataTypes.STRING,
             allowNull: false
+        },
+        reason: {
+            type: DataTypes.TEXT,
+            allowNull: true
         }
     },  {
         tableName: 'CommentReports'
