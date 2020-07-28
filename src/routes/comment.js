@@ -7,11 +7,14 @@ const {
 
 const {
   getCommentsFromParams,
-  createNewComment
+  createNewComment,
+  submitReportOnComment
 } = require("../controllers/commentController");
 
 commentRouter.get("/comments/:subject", getCommentsFromParams);
 
 commentRouter.post("/comments", checkJwt, createNewComment);
+
+commentRouter.post("/comment/report/:id", checkJwt, submitReportOnComment);
 
 module.exports = commentRouter;
