@@ -564,6 +564,9 @@ const getCurrentReports = async (request, response) => {
                     attributes: ['subject']
                 },
             },
+            order:[
+                ['createdAt','ASC']
+            ],
             limit: perPage,
             offset: (page - 1) * perPage
         });
