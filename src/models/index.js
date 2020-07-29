@@ -23,12 +23,6 @@ db.sequelize = sequelize;
 db.Area = require("./editor/AreaModel.js")(sequelize, Sequelize);
 db.AreaComponent = require("./editor/AreaComponentModel.js")(sequelize, Sequelize);
 db.AreaOption = require("./editor/AreaOptionModel.js")(sequelize, Sequelize);
-// Old format, 5 models below are to be replaced with the 2 models above 
-db.Material = require("./editor/MaterialModel.js")(sequelize, Sequelize);
-db.RoofType = require("./editor/RoofTypeModel.js")(sequelize, Sequelize);
-db.VentilationType = require("./editor/VentilationTypeModel.js")(sequelize, Sequelize);
-db.HeatingType = require("./editor/HeatingTypeModel.js")(sequelize, Sequelize);
-db.BuildingType = require("./editor/BuildingTypeModel.js")(sequelize,Sequelize);
 db.Building = require("./building/BuildingModel.js")(sequelize, Sequelize);
 
 db.Category = require("./building/CategoryModel.js")(sequelize, Sequelize);
@@ -47,19 +41,8 @@ db.AreaComponent.belongsTo(db.Area, { foreignKey: 'idArea', as: 'area'});
 db.AreaComponent.hasMany(db.AreaOption, { foreignKey: 'idAreaComponent', as: 'options'});
 db.AreaOption.belongsTo(db.AreaComponent, { foreignKey: 'idAreaComponent', as: 'identifier'});
 
-db.Area.hasMany(db.Material, { foreignKey: 'idArea', as: 'materials' });
-db.Material.belongsTo(db.Area, { foreignKey: 'idArea' });
-db.Area.hasMany(db.RoofType, { foreignKey: 'idArea' , as: 'roofTypes'});
-db.RoofType.belongsTo(db.Area, { foreignKey: 'idArea' });
-db.Area.hasMany(db.VentilationType, { foreignKey: 'idArea' , as: 'ventilationTypes'});
-db.VentilationType.belongsTo(db.Area, { foreignKey: 'idArea' });
-db.Area.hasMany(db.HeatingType, { foreignKey: 'idArea' , as: 'heatingTypes'});
-db.HeatingType.belongsTo(db.Area, { foreignKey: 'idArea' });
-db.Area.hasMany(db.BuildingType, { foreignKey: 'idArea' , as: 'buildingTypes'});
-db.BuildingType.belongsTo(db.Area, { foreignKey: 'idArea' });
-
 db.Building.hasMany(db.Category, { foreignKey: 'idBuilding', as: 'categories', hooks: true, onDelete: 'cascade'});
-db.Category.belongsTo(db.BuildingType, { foreignKey: 'idBuilding'});
+db.Category.belongsTo(db.Building, { foreignKey: 'idBuilding'});
 db.Category.belongsToMany(db.Component, { through: 'CategoryComponents', as: 'components', hooks: true, onDelete: 'cascade'});
 db.Component.belongsToMany(db.Category, { through: 'CategoryComponents'});
 db.Component.hasOne(db.ComponentValue, { foreignKey: {name: 'idComponent'}, as: 'value', hooks: true, onDelete: 'cascade'});
