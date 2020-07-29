@@ -19,7 +19,8 @@ const {
     updateOptionsOnIdentifier,
     deleteSelectedComment,
     getCurrentAmountOfReports,
-    getCurrentReports
+    getCurrentReports,
+    rejectSelectedCommentReport
 } = require('../controllers/adminController');
 
 adminRouter.get("/admin", checkJwt, checkAdminStatus, confirmAdminStatus);
@@ -47,5 +48,7 @@ adminRouter.delete("/admin/comment/:id", checkJwt, checkAdminStatus, deleteSelec
 adminRouter.get("/admin/comments/reports/amount", checkJwt, checkAdminStatus, getCurrentAmountOfReports);
 
 adminRouter.get("/admin/comments/reports", checkJwt, checkAdminStatus, getCurrentReports);
+
+adminRouter.patch("/admin/comments/report/reject/:id", checkJwt, checkAdminStatus, rejectSelectedCommentReport);
 
 module.exports = adminRouter;
