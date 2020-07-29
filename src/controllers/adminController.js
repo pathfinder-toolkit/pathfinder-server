@@ -619,6 +619,36 @@ const rejectSelectedCommentReport = async (request, response) => {
     }
 }
 
+const approveSelectedCommentReport = async (request, response) => {
+    const t = await sequelize.transaction();
+    try {
+        const idReport = request.params.id;
+
+        const report = await CommentReport.findOne({
+            where: {
+                idReport: idReport
+            },
+            include: {
+                model: Comment,
+                as: 'comment'
+            }
+        },
+        {transaction: t});
+
+        !report && (() => {throw new Error("No report found")})();
+        
+        await report.comment.destroy({transaction: t});
+
+        await t.commit();
+
+        response.status(200).send("Report approved and cleared, comment deleted");
+    } catch (error) {
+        await t.rollback();
+        console.log(error);
+        response.status(500).send(error.message);
+    }
+}
+
 module.exports = {
     checkAdminStatus,
     confirmAdminStatus,
@@ -634,5 +664,6 @@ module.exports = {
     deleteSelectedComment,
     getCurrentAmountOfReports,
     getCurrentReports,
-    rejectSelectedCommentReport
+    rejectSelectedCommentReport,
+    approveSelectedCommentReport
 }
