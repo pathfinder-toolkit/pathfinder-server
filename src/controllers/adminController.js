@@ -542,6 +542,57 @@ const getCurrentAmountOfReports = async (request, response) => {
     }
 }
 
+const getCurrentReports = async (request, response) => {
+    try {
+        const page = parseInt(request.query.page);
+        console.log(`page: ${page}`);
+        const perPage = parseInt(request.query.perPage);
+        console.log(`perPage: ${perPage}`);
+
+        const { count, rows } = await CommentReport.findAndCountAll({
+            attributes: ['idReport', 'reason', 'reportedBy'],
+            include: {
+                model: Comment,
+                as: 'comment',
+                attributes: [
+                    'idComment', 'commentText', 'commentSecondarySubject',
+                    ['createdAt', 'date'],['commentAuthor','author'],['commentSentiment', 'sentiment']
+                ],
+                include: {
+                    model: ComponentMeta,
+                    as: 'subject',
+                    attributes: ['subject']
+                },
+            },
+            limit: perPage,
+            offset: (page - 1) * perPage
+        });
+
+        let formattedReports = [];
+
+        for (const row of rows) {
+            const jsonRow = row.toJSON();
+            jsonRow.comment.subject = jsonRow.comment.subject.subject;
+            formattedReports = [...formattedReports, jsonRow];
+        }
+
+        const pages = Math.ceil(count / perPage);
+
+        console.log(`Pages: ${pages}`);
+
+        const responseObject = {
+            page: page,
+            maxPages: pages,
+            reports: formattedReports
+        };
+
+        response.status(200).json(responseObject);
+    } catch (error) {
+        console.log(error);
+        response.status(500).send(error.message);
+    }
+}
+
 module.exports = {
     checkAdminStatus,
     confirmAdminStatus,
@@ -555,5 +606,6 @@ module.exports = {
     deleteExistingSuggestion,
     updateOptionsOnIdentifier,
     deleteSelectedComment,
-    getCurrentAmountOfReports
+    getCurrentAmountOfReports,
+    getCurrentReports
 }
