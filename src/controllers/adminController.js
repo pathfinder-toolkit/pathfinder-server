@@ -10,6 +10,7 @@ const Comment = db.Comment;
 
 const sequelize = db.sequelize;
 const { Op } = require("sequelize");
+const { CommentReport } = require('../models');
 
 const checkAdminStatus = async (request, response, next) => {
     try {
@@ -528,6 +529,19 @@ const deleteSelectedComment = async (request, response) => {
     }
 }
 
+const getCurrentAmountOfReports = async (request, response) => {
+    try {
+        const amount = {
+            amount: await CommentReport.count()
+        };
+
+        response.status(200).json(amount);
+    } catch (error) {
+        console.log(error);
+        response.status(500).send(error.message);
+    }
+}
+
 module.exports = {
     checkAdminStatus,
     confirmAdminStatus,
@@ -540,5 +554,6 @@ module.exports = {
     updateExistingSuggestion,
     deleteExistingSuggestion,
     updateOptionsOnIdentifier,
-    deleteSelectedComment
+    deleteSelectedComment,
+    getCurrentAmountOfReports
 }
