@@ -30,6 +30,7 @@ const BuildingJSONtoResponse = (building) => {
 const FullBuildingJSONtoResponse = (building) => {
     const responseObject = {};
     responseObject.slug = building.slug;
+    responseObject.publicStatus = building.publicStatus
 
     building['categories'].map((category, index) => {
         const currentCategory = {};
