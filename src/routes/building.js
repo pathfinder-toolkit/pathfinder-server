@@ -14,7 +14,9 @@ const {
   checkOwnerOrAdminStatus,
   updateBuildingData,
   deleteBuilding,
-  updateBuildingPublicityStatus
+  updateBuildingPublicityStatus,
+  checkPublicStatus,
+  getPublicBuilding
 } = require('../controllers/buildingController');
 
 buildingRouter.get("/building", getSampleBuilding);
@@ -30,5 +32,7 @@ buildingRouter.put("/building/:slug", checkJwt, checkOwnerStatus, updateBuilding
 buildingRouter.patch("/building/:slug", checkJwt, checkOwnerStatus, updateBuildingPublicityStatus);
 
 buildingRouter.delete("/building/:slug", checkJwt, checkOwnerOrAdminStatus, deleteBuilding);
+
+buildingRouter.get("/building/public/:slug", checkPublicStatus, getPublicBuilding);
 
 module.exports = buildingRouter;

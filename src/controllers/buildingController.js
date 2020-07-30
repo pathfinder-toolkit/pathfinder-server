@@ -16,6 +16,7 @@ const {
     userBuildingListToResponse,
     suggestionsToResponse
 } = require('../utils/JSONformatter');
+const { response } = require('express');
 
 
 const getSampleBuilding = async (request, response) => {
@@ -469,6 +470,90 @@ const updateBuildingPublicityStatus = async (request, response) => {
     }
 }
 
+const checkPublicStatus = async (request, response, next) => {
+    try {
+        const slug = request.params.slug;
+        const building = await Building.findOne({
+            where: {
+                slug: slug
+            },
+            attributes: ['publicStatus']
+        });
+
+        !building && (() => {throw new Error("No building exists in database")})();
+
+        !building.publicStatus && (() => {throw new Error("Building is private")})();
+
+        next();
+    } catch (error) {
+        console.log(error);
+        response.status(404).send("Cannot find building");
+    }
+}
+
+const getPublicBuilding = async (request, response) => {
+    try {
+        const slug = request.params.slug;
+        const building = await Building.findOne({
+            attributes:['slug', 'publicStatus'],
+            where:{
+                'slug': slug
+            },
+            include: {
+                model: Category,
+                as: 'categories',
+                attributes: ['categoryName'],
+                include: {
+                    model: Component,
+                    through: {
+                        attributes: []
+                    },
+                    as: 'components',
+                    attributes: ['isCurrent', 'usageStartYear'],
+                    include: [{
+                        model: ComponentMeta,
+                        as: 'meta',
+                        attributes: ['idMeta','componentDescription', 'componentName', 'hasSuggestions', 'subject', 'componentValueType'],
+                        include: [{
+                            model: Suggestion,
+                            as: 'suggestions',
+                            include: [{
+                                model: ComponentMeta,
+                                as: 'subject',
+                                attributes: ['subject']
+                            },{
+                                model: SuggestionCondition,
+                                as: 'conditions'
+                            },{
+                                model: Area,
+                                through: {
+                                    attributes: []
+                                },
+                                as: 'areas'
+                            }]
+                        }]
+                    },{
+                        model: ComponentValue,
+                        as: 'value',
+                        attributes: ['valueString', 'valueDate', 'valueInt', 'valueDouble', 'valueText', 'valueBoolean']
+                    }]
+                }
+            },
+        });
+
+        const buildingJSON = building.toJSON();
+
+        const filteredBuildingJSON = filterBuildingObject(buildingJSON);
+
+        const responseObject = FullBuildingJSONtoResponse(filteredBuildingJSON);
+
+        response.status(200).json(responseObject);
+    } catch (error) {
+        console.log(error);
+        response.status(500).send(error.message);
+    }
+}
+
 module.exports = {
     getSampleBuilding,
     postBuildingFromData,
@@ -478,5 +563,7 @@ module.exports = {
     checkOwnerOrAdminStatus,
     updateBuildingData,
     deleteBuilding,
-    updateBuildingPublicityStatus
+    updateBuildingPublicityStatus,
+    checkPublicStatus,
+    getPublicBuilding
 }
