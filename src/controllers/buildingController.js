@@ -196,7 +196,7 @@ const getFullBuildingDetailsFromSlug = async (request, response) => {
     try {
         const slug = request.params.slug;
         const building = await Building.findOne({
-            attributes:['slug', ['buildingAuthorSub', 'author']],
+            attributes:['slug', ['buildingAuthorSub', 'author'], 'publicStatus'],
             where:{
                 'slug': slug
             },
