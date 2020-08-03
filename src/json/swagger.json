@@ -1,0 +1,2633 @@
+{
+  "openapi" : "3.0.0",
+  "info" : {
+    "version" : "v2.5",
+    "title" : "Pathfinder",
+    "description" : "Pathfinder REST API"
+  },
+  "paths" : {
+    "/building/{slug}" : {
+      "get" : {
+        "tags" : [ "Buildings" ],
+        "summary" : "Get full building information",
+        "description" : "Returns building object by id",
+        "parameters" : [ {
+          "name" : "slug",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successfully returned a building object",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/FullBuilding"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Insufficient permissions (not building owner)"
+          },
+          "404" : {
+            "description" : "Unable to find resource"
+          },
+          "500" : {
+            "description" : "Error 500"
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "Buildings" ],
+        "summary" : "Edit existing building",
+        "description" : "Updates building information in database",
+        "parameters" : [ {
+          "name" : "slug",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/PostBuildingRequest"
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Successfully updated building information in database"
+          },
+          "403" : {
+            "description" : "Insufficient permissions (not building owner)"
+          },
+          "500" : {
+            "description" : "Error 500"
+          }
+        }
+      },
+      "patch" : {
+        "tags" : [ "Buildings" ],
+        "summary" : "Change publicity status of building",
+        "description" : "Set the building viewable or unviewable from a separate public URL",
+        "parameters" : [ {
+          "name" : "slug",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "object",
+                "properties" : {
+                  "publicStatus" : {
+                    "type" : "boolean"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Successfully updated publicity status of building"
+          },
+          "403" : {
+            "description" : "Insufficient permissions (not building owner)"
+          },
+          "500" : {
+            "description" : "Error 500"
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "Buildings" ],
+        "summary" : "Delete existing building",
+        "description" : "Deletes building from database",
+        "parameters" : [ {
+          "name" : "slug",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successfully updated building information in database"
+          },
+          "403" : {
+            "description" : "Insufficient permissions (not building owner or site admin)"
+          },
+          "500" : {
+            "description" : "Error 500"
+          }
+        }
+      }
+    },
+    "/building" : {
+      "get" : {
+        "tags" : [ "Buildings" ],
+        "summary" : "Get a building object prototype",
+        "description" : "Returns a building object prototype with null values",
+        "responses" : {
+          "200" : {
+            "description" : "Successfully returned a building object prototype",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/FullBuilding"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Error 500"
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "Buildings" ],
+        "summary" : "Post a new building",
+        "description" : "Submits a new building",
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/PostBuildingRequest"
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Successfully posted a new building"
+          },
+          "403" : {
+            "description" : "Unauthorized (user is not logged in)"
+          },
+          "500" : {
+            "description" : "Error 500"
+          }
+        }
+      }
+    },
+    "/buildings/me" : {
+      "get" : {
+        "tags" : [ "Buildings" ],
+        "summary" : "Get list of logged in user's buildings",
+        "description" : "Returns list of user's saved buildings",
+        "responses" : {
+          "200" : {
+            "description" : "Successfully returned list of user's buildings",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/BuildingShort"
+                  }
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Unauthorized (user is not logged in)"
+          },
+          "500" : {
+            "description" : "Error 500"
+          }
+        }
+      }
+    },
+    "/building/public/{slug}" : {
+      "get" : {
+        "tags" : [ "Buildings" ],
+        "summary" : "Get publicly available building information",
+        "description" : "Returns information of a building with public status",
+        "parameters" : [ {
+          "name" : "slug",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successfully returned building information",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/FullBuilding"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Error 500"
+          }
+        }
+      }
+    },
+    "/suggestions/{subject}/{value}" : {
+      "get" : {
+        "tags" : [ "Suggestions" ],
+        "summary" : "Find suggestions about subject based on input value and queried area",
+        "description" : "Returns list of suggestions",
+        "parameters" : [ {
+          "name" : "subject",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "value",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "area",
+          "in" : "query",
+          "required" : true,
+          "schema" : {
+            "type" : "integer"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successfully returned list of suggestions",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/Suggestion"
+                  }
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Error 500"
+          }
+        }
+      }
+    },
+    "/comments/{subject}" : {
+      "get" : {
+        "tags" : [ "Comments" ],
+        "summary" : "Get comments about a subject",
+        "description" : "Returns list of comments",
+        "parameters" : [ {
+          "name" : "subject",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "page",
+          "in" : "query",
+          "required" : true,
+          "schema" : {
+            "type" : "integer"
+          }
+        }, {
+          "name" : "perPage",
+          "in" : "query",
+          "required" : true,
+          "schema" : {
+            "type" : "integer"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successfully returned list of comments",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "properties" : {
+                    "page" : {
+                      "type" : "integer"
+                    },
+                    "maxPages" : {
+                      "type" : "integer"
+                    },
+                    "comments" : {
+                      "type" : "array",
+                      "items" : {
+                        "$ref" : "#/components/schemas/Comment"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Error 500"
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "Comments" ],
+        "summary" : "Post a new comment",
+        "description" : "Submits a new comment",
+        "parameters" : [ {
+          "name" : "subject",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/PostCommentRequest"
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Successfully posted a new comment"
+          },
+          "500" : {
+            "description" : "Error 500"
+          }
+        }
+      }
+    },
+    "/comment/report/{id}" : {
+      "post" : {
+        "tags" : [ "Comments" ],
+        "summary" : "Report a comment for suspected violations",
+        "description" : "User submits a report on a comment to be reviewed by an admin",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer"
+          }
+        } ],
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/PostCommentReportRequest"
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Successfully submitted a report on a comment"
+          },
+          "500" : {
+            "description" : "Error 500"
+          }
+        }
+      }
+    },
+    "/editor/areas" : {
+      "get" : {
+        "tags" : [ "Editor" ],
+        "summary" : "Get area selection options for editor",
+        "description" : "Returns list of area selection options",
+        "responses" : {
+          "200" : {
+            "description" : "Successfully returned list of area selection options",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/Area"
+                  }
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Error 400"
+          }
+        }
+      }
+    },
+    "/editor/options/{areaid}" : {
+      "get" : {
+        "tags" : [ "Editor" ],
+        "summary" : "Get editor options based on selected area",
+        "description" : "Returns object with selection options for editor",
+        "parameters" : [ {
+          "name" : "areaid",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successfully returned an editor selection object",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/EditorOptions"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/image" : {
+      "post" : {
+        "tags" : [ "Image" ],
+        "summary" : "Upload an image for logged in user",
+        "description" : "Uploads submitted image",
+        "requestBody" : {
+          "required" : true,
+          "content" : {
+            "multipart/form-data" : {
+              "schema" : {
+                "type" : "object",
+                "properties" : {
+                  "image" : {
+                    "type" : "string",
+                    "format" : "binary"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Successfully submitted an image"
+          },
+          "403" : {
+            "description" : "Unauthorized (user not logged in)"
+          },
+          "413" : {
+            "description" : "Image upload terminated, file size too large"
+          },
+          "500" : {
+            "description" : "Error 500"
+          }
+        }
+      }
+    },
+    "/images" : {
+      "get" : {
+        "tags" : [ "Image" ],
+        "summary" : "Get list of images uploaded by user",
+        "description" : "Returns array of image urls",
+        "responses" : {
+          "200" : {
+            "description" : "Successfully returns array of image urls",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "type" : "object",
+                    "properties" : {
+                      "image" : {
+                        "type" : "string"
+                      },
+                      "date" : {
+                        "type" : "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Unauthorized (user not logged in)"
+          },
+          "500" : {
+            "description" : "Error 500"
+          }
+        }
+      }
+    },
+    "/image/{id}" : {
+      "delete" : {
+        "tags" : [ "Image" ],
+        "summary" : "Deletes user uploaded image",
+        "description" : "Deletes submitted image",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successfully deleted user image"
+          },
+          "403" : {
+            "description" : "Unauthorized (user not logged in)"
+          },
+          "500" : {
+            "description" : "Error 500"
+          }
+        }
+      }
+    },
+    "/admin" : {
+      "get" : {
+        "tags" : [ "Admin" ],
+        "summary" : "Verify admin status",
+        "description" : "Verifies admin status in backend",
+        "responses" : {
+          "200" : {
+            "description" : "Successfully verified as admin"
+          },
+          "401" : {
+            "description" : "Insufficient permission (user is not admin)"
+          },
+          "500" : {
+            "description" : "Error 500"
+          }
+        }
+      }
+    },
+    "/admin/comment/{id}" : {
+      "delete" : {
+        "tags" : [ "Admin / Comments" ],
+        "summary" : "Delete selected comment",
+        "description" : "Deletes comment from database",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successfully deleted comment"
+          },
+          "401" : {
+            "description" : "Insufficient permission (user is not admin)"
+          },
+          "500" : {
+            "description" : "Error 500"
+          }
+        }
+      }
+    },
+    "/admin/comments/reports/amount" : {
+      "get" : {
+        "tags" : [ "Admin / Comments" ],
+        "summary" : "Get number of open comment reports",
+        "description" : "Returns number of open comment reports",
+        "responses" : {
+          "200" : {
+            "description" : "Successfully returned number of open comment reports",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "properties" : {
+                    "amount" : {
+                      "type" : "integer"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Insufficient permission (user is not admin)"
+          },
+          "500" : {
+            "description" : "Error 500"
+          }
+        }
+      }
+    },
+    "/admin/comments/reports" : {
+      "get" : {
+        "tags" : [ "Admin / Comments" ],
+        "summary" : "Get list of open reports",
+        "description" : "Returns list of open reports",
+        "parameters" : [ {
+          "name" : "page",
+          "in" : "query",
+          "required" : true,
+          "schema" : {
+            "type" : "integer"
+          }
+        }, {
+          "name" : "perPage",
+          "in" : "query",
+          "required" : true,
+          "schema" : {
+            "type" : "integer"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successfully returned list of open reports",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "properties" : {
+                    "page" : {
+                      "type" : "integer"
+                    },
+                    "maxPages" : {
+                      "type" : "integer"
+                    },
+                    "reports" : {
+                      "type" : "array",
+                      "items" : {
+                        "$ref" : "#/components/schemas/CommentReport"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Insufficient permission (user is not admin)"
+          },
+          "500" : {
+            "description" : "Error 500"
+          }
+        }
+      }
+    },
+    "/admin/comments/report/reject/{id}" : {
+      "patch" : {
+        "tags" : [ "Admin / Comments" ],
+        "summary" : "Reject selected report",
+        "description" : "Clears report without removing reported comment",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successfully cleared report without removing reported comment"
+          },
+          "401" : {
+            "description" : "Insufficient permission (user is not admin)"
+          },
+          "500" : {
+            "description" : "Error 500"
+          }
+        }
+      }
+    },
+    "/admin/comments/report/approve/{id}" : {
+      "patch" : {
+        "tags" : [ "Admin / Comments" ],
+        "summary" : "Approve selected report",
+        "description" : "Clears report while deleting reported comment",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successfully cleared report and deleted reported comment"
+          },
+          "401" : {
+            "description" : "Insufficient permission (user is not admin)"
+          },
+          "500" : {
+            "description" : "Error 500"
+          }
+        }
+      }
+    },
+    "/admin/feedback/recipients" : {
+      "get" : {
+        "tags" : [ "Admin / Feedback" ],
+        "summary" : "Get feedback recipient e-mail addresses",
+        "description" : "Returns list of current feedback recipient e-mail addresses",
+        "responses" : {
+          "200" : {
+            "description" : "Successfully returns array of recipient email addresses",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "type" : "object",
+                    "properties" : {
+                      "email" : {
+                        "type" : "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Insufficient permission (user is not admin)"
+          },
+          "500" : {
+            "description" : "Error 500"
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "Admin / Feedback" ],
+        "summary" : "Update feedback recipient e-mail addresses",
+        "description" : "Updates current e-mail recipient of user feedback",
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/UpdateFeedbackRecipients"
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Recipient addresses updated"
+          },
+          "401" : {
+            "description" : "Insufficient permission (user is not admin)"
+          },
+          "500" : {
+            "description" : "Failed to update recipient addresses"
+          }
+        }
+      }
+    },
+    "/admin/options/{identifier}" : {
+      "put" : {
+        "tags" : [ "Admin / Options" ],
+        "summary" : "Update selectable options for queried areas on selected identifier",
+        "description" : "Replaces selectable options with the requested ones",
+        "parameters" : [ {
+          "in" : "path",
+          "required" : true,
+          "name" : "identifier",
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "in" : "query",
+          "name" : "areas",
+          "required" : true,
+          "style" : "form",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer"
+          }
+        } ],
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/UpdateSelectableOptions"
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Options for identifier in queried area successfully updated"
+          },
+          "401" : {
+            "description" : "Insufficient permission (user is not admin)"
+          },
+          "500" : {
+            "description" : "Failed to update requested options"
+          }
+        }
+      }
+    },
+    "/admin/suggestions/subjects" : {
+      "get" : {
+        "tags" : [ "Admin / Suggestions" ],
+        "summary" : "Get available suggestion subjects",
+        "description" : "Get list of suggestion subjects where adding new suggestions is possible",
+        "responses" : {
+          "200" : {
+            "description" : "Successully returned list of suggestion subjects",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/SuggestionSubject"
+                  }
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Insufficient permission (user is not admin)"
+          },
+          "500" : {
+            "description" : "Error 500"
+          }
+        }
+      }
+    },
+    "/admin/suggestions/subject/{identifier}" : {
+      "get" : {
+        "tags" : [ "Admin / Suggestions" ],
+        "summary" : "Get selection options for selected subject identifier and queried areas",
+        "description" : "Returns list of available options",
+        "parameters" : [ {
+          "in" : "path",
+          "required" : true,
+          "name" : "identifier",
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "in" : "query",
+          "name" : "areas",
+          "required" : true,
+          "style" : "form",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successfully returns of selection options",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "type" : "string"
+                  }
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Insufficient permission (user is not admin)"
+          },
+          "500" : {
+            "description" : "Error 500"
+          }
+        }
+      }
+    },
+    "/admin/suggestions/all/{identifier}" : {
+      "get" : {
+        "tags" : [ "Admin / Suggestions" ],
+        "summary" : "Get all suggestion from given subject identifier",
+        "description" : "Returns list of all suggestions for given identifier",
+        "parameters" : [ {
+          "in" : "path",
+          "required" : true,
+          "name" : "identifier",
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successfully returns list of suggestions",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/FullSuggestion"
+                  }
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Insufficient permission (user is not admin)"
+          },
+          "500" : {
+            "description" : "Error 500"
+          }
+        }
+      }
+    },
+    "/admin/suggestion" : {
+      "post" : {
+        "tags" : [ "Admin / Suggestions" ],
+        "summary" : "Create a new suggestion",
+        "description" : "Posts new suggestion with conditions",
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/PostNewSuggestion"
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Successfully created a new suggestion"
+          },
+          "401" : {
+            "description" : "Insufficient permission (user is not admin)"
+          },
+          "500" : {
+            "description" : "Error 500"
+          }
+        }
+      }
+    },
+    "/admin/suggestion/{id}" : {
+      "put" : {
+        "tags" : [ "Admin / Suggestions" ],
+        "summary" : "Update existing suggestion",
+        "description" : "Modifies existing suggestion data with new submitted",
+        "parameters" : [ {
+          "in" : "path",
+          "required" : true,
+          "name" : "id",
+          "schema" : {
+            "type" : "number"
+          }
+        } ],
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/UpdateExistingSuggestion"
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Successfully modified existing data"
+          },
+          "401" : {
+            "description" : "Insufficient permission (user is not admin)"
+          },
+          "500" : {
+            "description" : "Error 500"
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "Admin / Suggestions" ],
+        "summary" : "Deletes existing suggestion",
+        "description" : "Deletes existing suggestion from database",
+        "parameters" : [ {
+          "in" : "path",
+          "required" : true,
+          "name" : "id",
+          "schema" : {
+            "type" : "number"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successfully deleted suggestion data"
+          },
+          "401" : {
+            "description" : "Insufficient permission (user is not admin)"
+          },
+          "500" : {
+            "description" : "Error 500"
+          }
+        }
+      }
+    },
+    "/feedback/recaptcha" : {
+      "post" : {
+        "tags" : [ "Feedback" ],
+        "summary" : "Send feedback with captcha verification",
+        "description" : "Endpoint for receiving feedback message and recaptcha verification code",
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/PostFeedbackWithRecaptcha"
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Feedback received and accepted"
+          },
+          "400" : {
+            "description" : "Feedback rejected (incorrect recaptcha)"
+          },
+          "500" : {
+            "description" : "Error 500"
+          }
+        }
+      }
+    }
+  },
+  "servers" : [ {
+    "description" : "SwaggerHub API Auto Mocking",
+    "url" : "https://virtserver.swaggerhub.com/p7871/EnergyPathfinder/v0.0.1"
+  } ],
+  "components" : {
+    "schemas" : {
+      "FullBuilding" : {
+        "type" : "object",
+        "properties" : {
+          "slug" : {
+            "type" : "string"
+          },
+          "publicStatus" : {
+            "type" : "boolean"
+          },
+          "details" : {
+            "$ref" : "#/components/schemas/BuildingDetails"
+          },
+          "structure" : {
+            "$ref" : "#/components/schemas/BuildingStructure"
+          },
+          "heating" : {
+            "$ref" : "#/components/schemas/BuildingHeating"
+          },
+          "electric" : {
+            "$ref" : "#/components/schemas/BuildingElectric"
+          },
+          "water" : {
+            "$ref" : "#/components/schemas/BuildingWater"
+          },
+          "ventilation" : {
+            "$ref" : "#/components/schemas/BuildingVentilation"
+          },
+          "renewable" : {
+            "$ref" : "#/components/schemas/BuildingRenewable"
+          }
+        }
+      },
+      "BuildingDetails" : {
+        "type" : "object",
+        "properties" : {
+          "name" : {
+            "type" : "object",
+            "properties" : {
+              "componentDescription" : {
+                "type" : "string"
+              },
+              "value" : {
+                "type" : "string"
+              },
+              "hasSuggestions" : {
+                "type" : "boolean"
+              },
+              "isCurrent" : {
+                "type" : "boolean"
+              }
+            }
+          },
+          "area" : {
+            "type" : "object",
+            "properties" : {
+              "componentDescription" : {
+                "type" : "string"
+              },
+              "value" : {
+                "type" : "string"
+              },
+              "hasSuggestions" : {
+                "type" : "boolean"
+              },
+              "isCurrent" : {
+                "type" : "boolean"
+              }
+            }
+          },
+          "year" : {
+            "type" : "object",
+            "properties" : {
+              "componentDescription" : {
+                "type" : "string"
+              },
+              "value" : {
+                "type" : "integer"
+              },
+              "hasSuggestions" : {
+                "type" : "boolean"
+              },
+              "isCurrent" : {
+                "type" : "boolean"
+              }
+            }
+          },
+          "description" : {
+            "type" : "object",
+            "properties" : {
+              "componentDescription" : {
+                "type" : "string"
+              },
+              "value" : {
+                "type" : "string"
+              },
+              "hasSuggestions" : {
+                "type" : "boolean"
+              },
+              "isCurrent" : {
+                "type" : "boolean"
+              }
+            }
+          },
+          "buildingType" : {
+            "type" : "object",
+            "properties" : {
+              "componentDescription" : {
+                "type" : "string"
+              },
+              "value" : {
+                "type" : "string"
+              },
+              "hasSuggestions" : {
+                "type" : "boolean"
+              },
+              "isCurrent" : {
+                "type" : "boolean"
+              }
+            }
+          },
+          "image" : {
+            "type" : "object",
+            "properties" : {
+              "componentDescription" : {
+                "type" : "string"
+              },
+              "value" : {
+                "type" : "string"
+              },
+              "hasSuggestions" : {
+                "type" : "boolean"
+              },
+              "isCurrent" : {
+                "type" : "boolean"
+              }
+            }
+          },
+          "floorsAmount" : {
+            "type" : "object",
+            "properties" : {
+              "componentDescription" : {
+                "type" : "string"
+              },
+              "value" : {
+                "type" : "integer"
+              },
+              "hasSuggestions" : {
+                "type" : "boolean"
+              },
+              "isCurrent" : {
+                "type" : "boolean"
+              }
+            }
+          },
+          "floorArea" : {
+            "type" : "object",
+            "properties" : {
+              "componentDescription" : {
+                "type" : "string"
+              },
+              "value" : {
+                "type" : "number"
+              },
+              "hasSuggestions" : {
+                "type" : "boolean"
+              },
+              "isCurrent" : {
+                "type" : "boolean"
+              }
+            }
+          },
+          "heatedFloorArea" : {
+            "type" : "object",
+            "properties" : {
+              "componentDescription" : {
+                "type" : "string"
+              },
+              "value" : {
+                "type" : "number"
+              },
+              "hasSuggestions" : {
+                "type" : "boolean"
+              },
+              "isCurrent" : {
+                "type" : "boolean"
+              }
+            }
+          },
+          "annualConsumption" : {
+            "type" : "object",
+            "properties" : {
+              "componentDescription" : {
+                "type" : "string"
+              },
+              "value" : {
+                "type" : "number"
+              },
+              "hasSuggestions" : {
+                "type" : "boolean"
+              },
+              "isCurrent" : {
+                "type" : "boolean"
+              }
+            }
+          },
+          "annualCost" : {
+            "type" : "object",
+            "properties" : {
+              "componentDescription" : {
+                "type" : "string"
+              },
+              "value" : {
+                "type" : "number"
+              },
+              "hasSuggestions" : {
+                "type" : "boolean"
+              },
+              "isCurrent" : {
+                "type" : "boolean"
+              }
+            }
+          },
+          "annualHeatingConsumption" : {
+            "type" : "object",
+            "properties" : {
+              "componentDescription" : {
+                "type" : "string"
+              },
+              "value" : {
+                "type" : "number"
+              },
+              "hasSuggestions" : {
+                "type" : "boolean"
+              },
+              "isCurrent" : {
+                "type" : "boolean"
+              }
+            }
+          },
+          "annualHeatingCost" : {
+            "type" : "object",
+            "properties" : {
+              "componentDescription" : {
+                "type" : "string"
+              },
+              "value" : {
+                "type" : "number"
+              },
+              "hasSuggestions" : {
+                "type" : "boolean"
+              },
+              "isCurrent" : {
+                "type" : "boolean"
+              }
+            }
+          }
+        }
+      },
+      "BuildingHeating" : {
+        "type" : "object",
+        "properties" : {
+          "heatingSystem" : {
+            "type" : "array",
+            "items" : {
+              "type" : "object",
+              "properties" : {
+                "componentDescription" : {
+                  "type" : "string"
+                },
+                "value" : {
+                  "type" : "string"
+                },
+                "hasSuggestions" : {
+                  "type" : "boolean"
+                },
+                "isCurrent" : {
+                  "type" : "boolean"
+                },
+                "usageStartYear" : {
+                  "type" : "string"
+                },
+                "suggestions" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/Suggestion"
+                  }
+                },
+                "comments" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/Comment"
+                  }
+                }
+              }
+            }
+          },
+          "heatingSource" : {
+            "type" : "array",
+            "items" : {
+              "type" : "object",
+              "properties" : {
+                "componentDescription" : {
+                  "type" : "string"
+                },
+                "value" : {
+                  "type" : "string"
+                },
+                "hasSuggestions" : {
+                  "type" : "boolean"
+                },
+                "isCurrent" : {
+                  "type" : "boolean"
+                },
+                "usageStartYear" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "BuildingElectric" : {
+        "type" : "object",
+        "properties" : {
+          "annualUse" : {
+            "type" : "object",
+            "properties" : {
+              "componentDescription" : {
+                "type" : "string"
+              },
+              "value" : {
+                "type" : "number"
+              },
+              "hasSuggestions" : {
+                "type" : "boolean"
+              },
+              "isCurrent" : {
+                "type" : "boolean"
+              }
+            }
+          },
+          "annualCost" : {
+            "type" : "object",
+            "properties" : {
+              "componentDescription" : {
+                "type" : "string"
+              },
+              "value" : {
+                "type" : "number"
+              },
+              "hasSuggestions" : {
+                "type" : "boolean"
+              },
+              "isCurrent" : {
+                "type" : "boolean"
+              }
+            }
+          }
+        }
+      },
+      "BuildingStructure" : {
+        "type" : "object",
+        "properties" : {
+          "wallMaterial" : {
+            "type" : "object",
+            "properties" : {
+              "componentDescription" : {
+                "type" : "string"
+              },
+              "value" : {
+                "type" : "string"
+              },
+              "hasSuggestions" : {
+                "type" : "boolean"
+              },
+              "isCurrent" : {
+                "type" : "boolean"
+              },
+              "suggestions" : {
+                "type" : "array",
+                "items" : {
+                  "$ref" : "#/components/schemas/Suggestion"
+                }
+              },
+              "comments" : {
+                "type" : "array",
+                "items" : {
+                  "$ref" : "#/components/schemas/Comment"
+                }
+              }
+            }
+          },
+          "wallThickness" : {
+            "type" : "object",
+            "properties" : {
+              "componentDescription" : {
+                "type" : "string"
+              },
+              "value" : {
+                "type" : "number"
+              },
+              "hasSuggestions" : {
+                "type" : "boolean"
+              },
+              "isCurrent" : {
+                "type" : "boolean"
+              }
+            }
+          },
+          "windowType" : {
+            "type" : "object",
+            "properties" : {
+              "componentDescription" : {
+                "type" : "string"
+              },
+              "value" : {
+                "type" : "string"
+              },
+              "hasSuggestions" : {
+                "type" : "boolean"
+              },
+              "isCurrent" : {
+                "type" : "boolean"
+              }
+            }
+          },
+          "windowAmount" : {
+            "type" : "object",
+            "properties" : {
+              "componentDescription" : {
+                "type" : "string"
+              },
+              "value" : {
+                "type" : "integer"
+              },
+              "hasSuggestions" : {
+                "type" : "boolean"
+              },
+              "isCurrent" : {
+                "type" : "boolean"
+              }
+            }
+          },
+          "heatedWindowType" : {
+            "type" : "object",
+            "properties" : {
+              "componentDescription" : {
+                "type" : "string"
+              },
+              "value" : {
+                "type" : "string"
+              },
+              "hasSuggestions" : {
+                "type" : "boolean"
+              },
+              "isCurrent" : {
+                "type" : "boolean"
+              }
+            }
+          },
+          "heatedWindowAmount" : {
+            "type" : "object",
+            "properties" : {
+              "componentDescription" : {
+                "type" : "string"
+              },
+              "value" : {
+                "type" : "string"
+              },
+              "hasSuggestions" : {
+                "type" : "boolean"
+              },
+              "isCurrent" : {
+                "type" : "boolean"
+              }
+            }
+          },
+          "doorMaterial" : {
+            "type" : "object",
+            "properties" : {
+              "componentDescription" : {
+                "type" : "string"
+              },
+              "value" : {
+                "type" : "string"
+              },
+              "hasSuggestions" : {
+                "type" : "boolean"
+              },
+              "isCurrent" : {
+                "type" : "boolean"
+              }
+            }
+          },
+          "doorAmount" : {
+            "type" : "object",
+            "properties" : {
+              "componentDescription" : {
+                "type" : "string"
+              },
+              "value" : {
+                "type" : "integer"
+              },
+              "hasSuggestions" : {
+                "type" : "boolean"
+              },
+              "isCurrent" : {
+                "type" : "boolean"
+              }
+            }
+          },
+          "roofMaterial" : {
+            "type" : "object",
+            "properties" : {
+              "componentDescription" : {
+                "type" : "string"
+              },
+              "value" : {
+                "type" : "string"
+              },
+              "hasSuggestions" : {
+                "type" : "boolean"
+              },
+              "isCurrent" : {
+                "type" : "boolean"
+              }
+            }
+          },
+          "roofInsulation" : {
+            "type" : "object",
+            "properties" : {
+              "componentDescription" : {
+                "type" : "string"
+              },
+              "value" : {
+                "type" : "boolean"
+              },
+              "hasSuggestions" : {
+                "type" : "boolean"
+              },
+              "isCurrent" : {
+                "type" : "boolean"
+              }
+            }
+          },
+          "roofInsulationThickness" : {
+            "type" : "object",
+            "properties" : {
+              "componentDescription" : {
+                "type" : "string"
+              },
+              "value" : {
+                "type" : "boolean"
+              },
+              "hasSuggestions" : {
+                "type" : "boolean"
+              },
+              "isCurrent" : {
+                "type" : "boolean"
+              }
+            }
+          },
+          "floorMaterial" : {
+            "type" : "object",
+            "properties" : {
+              "componentDescription" : {
+                "type" : "string"
+              },
+              "value" : {
+                "type" : "boolean"
+              },
+              "hasSuggestions" : {
+                "type" : "boolean"
+              },
+              "isCurrent" : {
+                "type" : "boolean"
+              }
+            }
+          }
+        }
+      },
+      "BuildingVentilation" : {
+        "type" : "object",
+        "properties" : {
+          "ventilationSystem" : {
+            "type" : "array",
+            "items" : {
+              "type" : "object",
+              "properties" : {
+                "componentDescription" : {
+                  "type" : "string"
+                },
+                "value" : {
+                  "type" : "string"
+                },
+                "hasSuggestions" : {
+                  "type" : "boolean"
+                },
+                "isCurrent" : {
+                  "type" : "boolean"
+                },
+                "usageStartYear" : {
+                  "type" : "string"
+                },
+                "suggestions" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/Suggestion"
+                  }
+                },
+                "comments" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/Comment"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "BuildingWater" : {
+        "type" : "object",
+        "properties" : {
+          "heatedWaterEnergySource" : {
+            "type" : "array",
+            "items" : {
+              "type" : "object",
+              "properties" : {
+                "componentDescription" : {
+                  "type" : "string"
+                },
+                "value" : {
+                  "type" : "string"
+                },
+                "hasSuggestions" : {
+                  "type" : "boolean"
+                },
+                "isCurrent" : {
+                  "type" : "boolean"
+                },
+                "usageStartYear" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "BuildingRenewable" : {
+        "type" : "object",
+        "properties" : {
+          "heatPump" : {
+            "type" : "array",
+            "items" : {
+              "type" : "object",
+              "properties" : {
+                "componentDescription" : {
+                  "type" : "string"
+                },
+                "value" : {
+                  "type" : "string"
+                },
+                "hasSuggestions" : {
+                  "type" : "boolean"
+                },
+                "isCurrent" : {
+                  "type" : "boolean"
+                },
+                "usageStartYear" : {
+                  "type" : "string"
+                }
+              }
+            }
+          },
+          "solarHeat" : {
+            "type" : "array",
+            "items" : {
+              "type" : "object",
+              "properties" : {
+                "componentDescription" : {
+                  "type" : "string"
+                },
+                "value" : {
+                  "type" : "string"
+                },
+                "hasSuggestions" : {
+                  "type" : "boolean"
+                },
+                "isCurrent" : {
+                  "type" : "boolean"
+                },
+                "usageStartYear" : {
+                  "type" : "string"
+                }
+              }
+            }
+          },
+          "solarElectric" : {
+            "type" : "array",
+            "items" : {
+              "type" : "object",
+              "properties" : {
+                "componentDescription" : {
+                  "type" : "string"
+                },
+                "value" : {
+                  "type" : "string"
+                },
+                "hasSuggestions" : {
+                  "type" : "boolean"
+                },
+                "isCurrent" : {
+                  "type" : "boolean"
+                },
+                "usageStartYear" : {
+                  "type" : "string"
+                }
+              }
+            }
+          },
+          "bioMass" : {
+            "type" : "array",
+            "items" : {
+              "type" : "object",
+              "properties" : {
+                "componentDescription" : {
+                  "type" : "string"
+                },
+                "value" : {
+                  "type" : "string"
+                },
+                "hasSuggestions" : {
+                  "type" : "boolean"
+                },
+                "isCurrent" : {
+                  "type" : "boolean"
+                },
+                "usageStartYear" : {
+                  "type" : "string"
+                }
+              }
+            }
+          },
+          "chp" : {
+            "type" : "array",
+            "items" : {
+              "type" : "object",
+              "properties" : {
+                "componentDescription" : {
+                  "type" : "string"
+                },
+                "value" : {
+                  "type" : "string"
+                },
+                "hasSuggestions" : {
+                  "type" : "boolean"
+                },
+                "isCurrent" : {
+                  "type" : "boolean"
+                },
+                "usageStartYear" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "BuildingShort" : {
+        "type" : "object",
+        "properties" : {
+          "name" : {
+            "type" : "string"
+          },
+          "image" : {
+            "type" : "string"
+          },
+          "creationDate" : {
+            "type" : "string"
+          },
+          "slug" : {
+            "type" : "string"
+          }
+        }
+      },
+      "Suggestion" : {
+        "type" : "object",
+        "properties" : {
+          "suggestionText" : {
+            "type" : "string"
+          },
+          "priority" : {
+            "type" : "integer"
+          },
+          "suggestionSubject" : {
+            "type" : "string"
+          },
+          "suggestionSecondarySubject" : {
+            "type" : "string"
+          }
+        }
+      },
+      "Comment" : {
+        "type" : "object",
+        "properties" : {
+          "idComment" : {
+            "type" : "integer"
+          },
+          "commentText" : {
+            "type" : "string"
+          },
+          "commentSubject" : {
+            "type" : "string"
+          },
+          "commentSecondarySubject" : {
+            "type" : "string"
+          },
+          "date" : {
+            "type" : "string"
+          },
+          "author" : {
+            "type" : "string"
+          },
+          "sentiment" : {
+            "type" : "string"
+          }
+        }
+      },
+      "CommentReport" : {
+        "type" : "object",
+        "properties" : {
+          "idReport" : {
+            "type" : "integer"
+          },
+          "reason" : {
+            "type" : "string"
+          },
+          "reportedBy" : {
+            "type" : "string"
+          },
+          "comment" : {
+            "$ref" : "#/components/schemas/Comment"
+          }
+        }
+      },
+      "Area" : {
+        "type" : "object",
+        "properties" : {
+          "idArea" : {
+            "type" : "integer"
+          },
+          "areaName" : {
+            "type" : "string"
+          }
+        }
+      },
+      "EditorOptions" : {
+        "type" : "object",
+        "properties" : {
+          "components" : {
+            "type" : "array",
+            "items" : {
+              "type" : "object",
+              "properties" : {
+                "componentName" : {
+                  "type" : "string"
+                },
+                "options" : {
+                  "type" : "array",
+                  "items" : {
+                    "type" : "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "SuggestionSubject" : {
+        "type" : "object",
+        "properties" : {
+          "identifier" : {
+            "type" : "string"
+          },
+          "valueType" : {
+            "type" : "string"
+          },
+          "subject" : {
+            "type" : "string"
+          }
+        }
+      },
+      "FullSuggestion" : {
+        "type" : "object",
+        "properties" : {
+          "idSuggestion" : {
+            "type" : "integer"
+          },
+          "suggestion" : {
+            "type" : "string"
+          },
+          "priority" : {
+            "type" : "integer"
+          },
+          "identifier" : {
+            "type" : "string"
+          },
+          "subject" : {
+            "type" : "string"
+          },
+          "valueType" : {
+            "type" : "string"
+          },
+          "conditions" : {
+            "type" : "array",
+            "items" : {
+              "type" : "object",
+              "properties" : {
+                "condition" : {
+                  "type" : "string"
+                },
+                "conditionedBy" : {
+                  "type" : "string"
+                },
+                "valueType" : {
+                  "type" : "string"
+                },
+                "subject" : {
+                  "type" : "string"
+                },
+                "areas" : {
+                  "type" : "array",
+                  "items" : {
+                    "type" : "object",
+                    "properties" : {
+                      "idArea" : {
+                        "type" : "number"
+                      },
+                      "areaName" : {
+                        "type" : "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "requestBodies" : {
+      "PostBuildingRequest" : {
+        "description" : "JSON object format for posting a new building",
+        "required" : true,
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "type" : "object",
+              "properties" : {
+                "details" : {
+                  "type" : "object",
+                  "properties" : {
+                    "name" : {
+                      "type" : "object",
+                      "properties" : {
+                        "value" : {
+                          "type" : "string"
+                        },
+                        "isCurrent" : {
+                          "type" : "boolean"
+                        }
+                      }
+                    },
+                    "area" : {
+                      "type" : "object",
+                      "properties" : {
+                        "value" : {
+                          "type" : "string"
+                        },
+                        "isCurrent" : {
+                          "type" : "boolean"
+                        }
+                      }
+                    },
+                    "year" : {
+                      "type" : "object",
+                      "properties" : {
+                        "value" : {
+                          "type" : "integer"
+                        },
+                        "isCurrent" : {
+                          "type" : "boolean"
+                        }
+                      }
+                    },
+                    "description" : {
+                      "type" : "object",
+                      "properties" : {
+                        "value" : {
+                          "type" : "string"
+                        },
+                        "isCurrent" : {
+                          "type" : "boolean"
+                        }
+                      }
+                    },
+                    "buildingType" : {
+                      "type" : "object",
+                      "properties" : {
+                        "value" : {
+                          "type" : "string"
+                        },
+                        "isCurrent" : {
+                          "type" : "boolean"
+                        }
+                      }
+                    },
+                    "floorArea" : {
+                      "type" : "object",
+                      "properties" : {
+                        "value" : {
+                          "type" : "number"
+                        },
+                        "isCurrent" : {
+                          "type" : "boolean"
+                        }
+                      }
+                    },
+                    "heatedFloorArea" : {
+                      "type" : "object",
+                      "properties" : {
+                        "value" : {
+                          "type" : "number"
+                        },
+                        "isCurrent" : {
+                          "type" : "boolean"
+                        }
+                      }
+                    },
+                    "floorsAmount" : {
+                      "type" : "object",
+                      "properties" : {
+                        "value" : {
+                          "type" : "integer"
+                        },
+                        "isCurrent" : {
+                          "type" : "boolean"
+                        }
+                      }
+                    },
+                    "image" : {
+                      "type" : "object",
+                      "properties" : {
+                        "value" : {
+                          "type" : "string"
+                        },
+                        "isCurrent" : {
+                          "type" : "boolean"
+                        }
+                      }
+                    }
+                  }
+                },
+                "structure" : {
+                  "type" : "object",
+                  "properties" : {
+                    "wallMaterial" : {
+                      "type" : "object",
+                      "properties" : {
+                        "value" : {
+                          "type" : "string"
+                        },
+                        "isCurrent" : {
+                          "type" : "boolean"
+                        }
+                      }
+                    },
+                    "wallThickness" : {
+                      "type" : "object",
+                      "properties" : {
+                        "value" : {
+                          "type" : "number"
+                        },
+                        "isCurrent" : {
+                          "type" : "boolean"
+                        }
+                      }
+                    },
+                    "windowType" : {
+                      "type" : "object",
+                      "properties" : {
+                        "value" : {
+                          "type" : "string"
+                        },
+                        "isCurrent" : {
+                          "type" : "boolean"
+                        }
+                      }
+                    },
+                    "windowAmount" : {
+                      "type" : "object",
+                      "properties" : {
+                        "value" : {
+                          "type" : "integer"
+                        },
+                        "isCurrent" : {
+                          "type" : "boolean"
+                        }
+                      }
+                    },
+                    "heatedWindowType" : {
+                      "type" : "object",
+                      "properties" : {
+                        "value" : {
+                          "type" : "string"
+                        },
+                        "isCurrent" : {
+                          "type" : "boolean"
+                        }
+                      }
+                    },
+                    "heatedWindowAmount" : {
+                      "type" : "object",
+                      "properties" : {
+                        "value" : {
+                          "type" : "string"
+                        },
+                        "isCurrent" : {
+                          "type" : "boolean"
+                        }
+                      }
+                    },
+                    "doorMaterial" : {
+                      "type" : "object",
+                      "properties" : {
+                        "value" : {
+                          "type" : "string"
+                        },
+                        "isCurrent" : {
+                          "type" : "boolean"
+                        }
+                      }
+                    },
+                    "doorAmount" : {
+                      "type" : "object",
+                      "properties" : {
+                        "value" : {
+                          "type" : "integer"
+                        },
+                        "isCurrent" : {
+                          "type" : "boolean"
+                        }
+                      }
+                    },
+                    "roofMaterial" : {
+                      "type" : "object",
+                      "properties" : {
+                        "value" : {
+                          "type" : "string"
+                        },
+                        "isCurrent" : {
+                          "type" : "boolean"
+                        }
+                      }
+                    },
+                    "roofInsulation" : {
+                      "type" : "object",
+                      "properties" : {
+                        "value" : {
+                          "type" : "boolean"
+                        },
+                        "isCurrent" : {
+                          "type" : "boolean"
+                        }
+                      }
+                    },
+                    "roofInsulationThickness" : {
+                      "type" : "object",
+                      "properties" : {
+                        "value" : {
+                          "type" : "boolean"
+                        },
+                        "isCurrent" : {
+                          "type" : "boolean"
+                        }
+                      }
+                    },
+                    "floorMaterial" : {
+                      "type" : "object",
+                      "properties" : {
+                        "value" : {
+                          "type" : "boolean"
+                        },
+                        "isCurrent" : {
+                          "type" : "boolean"
+                        }
+                      }
+                    }
+                  }
+                },
+                "heating" : {
+                  "type" : "object",
+                  "properties" : {
+                    "heatingSystem" : {
+                      "type" : "array",
+                      "items" : {
+                        "type" : "object",
+                        "properties" : {
+                          "value" : {
+                            "type" : "string"
+                          },
+                          "isCurrent" : {
+                            "type" : "boolean"
+                          },
+                          "usageStartYear" : {
+                            "type" : "string"
+                          }
+                        }
+                      }
+                    },
+                    "heatingSource" : {
+                      "type" : "array",
+                      "items" : {
+                        "type" : "object",
+                        "properties" : {
+                          "value" : {
+                            "type" : "string"
+                          },
+                          "isCurrent" : {
+                            "type" : "boolean"
+                          },
+                          "usageStartYear" : {
+                            "type" : "string"
+                          }
+                        }
+                      }
+                    },
+                    "annualCost" : {
+                      "type" : "object",
+                      "properties" : {
+                        "value" : {
+                          "type" : "number"
+                        },
+                        "isCurrent" : {
+                          "type" : "boolean"
+                        }
+                      }
+                    }
+                  }
+                },
+                "electric" : {
+                  "type" : "object",
+                  "properties" : {
+                    "annualUse" : {
+                      "type" : "object",
+                      "properties" : {
+                        "value" : {
+                          "type" : "number"
+                        }
+                      }
+                    },
+                    "annualCost" : {
+                      "type" : "object",
+                      "properties" : {
+                        "value" : {
+                          "type" : "number"
+                        },
+                        "isCurrent" : {
+                          "type" : "boolean"
+                        }
+                      }
+                    }
+                  }
+                },
+                "water" : {
+                  "type" : "object",
+                  "properties" : {
+                    "heatedWaterEnergySource" : {
+                      "type" : "array",
+                      "items" : {
+                        "type" : "object",
+                        "properties" : {
+                          "value" : {
+                            "type" : "string"
+                          },
+                          "isCurrent" : {
+                            "type" : "boolean"
+                          },
+                          "usageStartYear" : {
+                            "type" : "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "ventilation" : {
+                  "type" : "object",
+                  "properties" : {
+                    "ventilationSystem" : {
+                      "type" : "array",
+                      "items" : {
+                        "type" : "object",
+                        "properties" : {
+                          "value" : {
+                            "type" : "string"
+                          },
+                          "isCurrent" : {
+                            "type" : "boolean"
+                          },
+                          "usageStartYear" : {
+                            "type" : "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "renewable" : {
+                  "type" : "object",
+                  "properties" : {
+                    "heatPump" : {
+                      "type" : "array",
+                      "items" : {
+                        "type" : "object",
+                        "properties" : {
+                          "value" : {
+                            "type" : "string"
+                          },
+                          "isCurrent" : {
+                            "type" : "boolean"
+                          },
+                          "usageStartYear" : {
+                            "type" : "string"
+                          }
+                        }
+                      }
+                    },
+                    "solarHeat" : {
+                      "type" : "array",
+                      "items" : {
+                        "type" : "object",
+                        "properties" : {
+                          "value" : {
+                            "type" : "string"
+                          },
+                          "isCurrent" : {
+                            "type" : "boolean"
+                          },
+                          "usageStartYear" : {
+                            "type" : "string"
+                          }
+                        }
+                      }
+                    },
+                    "solarElectric" : {
+                      "type" : "array",
+                      "items" : {
+                        "type" : "object",
+                        "properties" : {
+                          "value" : {
+                            "type" : "string"
+                          },
+                          "isCurrent" : {
+                            "type" : "boolean"
+                          },
+                          "usageStartYear" : {
+                            "type" : "string"
+                          }
+                        }
+                      }
+                    },
+                    "bioMass" : {
+                      "type" : "array",
+                      "items" : {
+                        "type" : "object",
+                        "properties" : {
+                          "value" : {
+                            "type" : "string"
+                          },
+                          "isCurrent" : {
+                            "type" : "boolean"
+                          },
+                          "usageStartYear" : {
+                            "type" : "string"
+                          }
+                        }
+                      }
+                    },
+                    "chp" : {
+                      "type" : "array",
+                      "items" : {
+                        "type" : "object",
+                        "properties" : {
+                          "value" : {
+                            "type" : "string"
+                          },
+                          "isCurrent" : {
+                            "type" : "boolean"
+                          },
+                          "usageStartYear" : {
+                            "type" : "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "PostCommentRequest" : {
+        "description" : "JSON object format for posting a new comment",
+        "required" : true,
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "type" : "object",
+              "properties" : {
+                "commentText" : {
+                  "type" : "string"
+                },
+                "commentSubject" : {
+                  "type" : "string"
+                },
+                "commentSecondarySubject" : {
+                  "type" : "string"
+                },
+                "anonymity" : {
+                  "type" : "boolean"
+                },
+                "sentiment" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "PostCommentReportRequest" : {
+        "description" : "JSON object format for posting a report about a comment",
+        "required" : true,
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "type" : "object",
+              "properties" : {
+                "reason" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "PostFeedbackWithRecaptcha" : {
+        "description" : "JSON object format for submitting feedback with recaptcha",
+        "required" : true,
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "type" : "object",
+              "properties" : {
+                "title" : {
+                  "type" : "string"
+                },
+                "text" : {
+                  "type" : "string"
+                },
+                "recaptcha" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "UpdateFeedbackRecipients" : {
+        "description" : "JSON object array format for updating feedback recipient emails",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "type" : "object",
+                "properties" : {
+                  "email" : {
+                    "type" : "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "UpdateSelectableOptions" : {
+        "description" : "JSON object array format for updating selectable options on an identifier",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "type" : "object",
+                "properties" : {
+                  "option" : {
+                    "type" : "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "PostNewSuggestion" : {
+        "description" : "JSON object format for posting a new suggestion",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "type" : "object",
+              "properties" : {
+                "suggestion" : {
+                  "type" : "string"
+                },
+                "priority" : {
+                  "type" : "integer"
+                },
+                "identifier" : {
+                  "type" : "string"
+                },
+                "conditions" : {
+                  "type" : "array",
+                  "items" : {
+                    "type" : "object",
+                    "properties" : {
+                      "condition" : {
+                        "type" : "string"
+                      },
+                      "conditionedBy" : {
+                        "type" : "string"
+                      }
+                    }
+                  }
+                },
+                "areas" : {
+                  "type" : "array",
+                  "items" : {
+                    "type" : "object",
+                    "properties" : {
+                      "id" : {
+                        "type" : "integer"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "UpdateExistingSuggestion" : {
+        "description" : "JSON object format for updating existing suggestion data",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "type" : "object",
+              "properties" : {
+                "idSuggestion" : {
+                  "type" : "number"
+                },
+                "suggestion" : {
+                  "type" : "string"
+                },
+                "priority" : {
+                  "type" : "integer"
+                },
+                "identifier" : {
+                  "type" : "string"
+                },
+                "conditions" : {
+                  "type" : "array",
+                  "items" : {
+                    "type" : "object",
+                    "properties" : {
+                      "condition" : {
+                        "type" : "string"
+                      },
+                      "conditionedBy" : {
+                        "type" : "string"
+                      }
+                    }
+                  }
+                },
+                "areas" : {
+                  "type" : "array",
+                  "items" : {
+                    "type" : "object",
+                    "properties" : {
+                      "id" : {
+                        "type" : "integer"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
