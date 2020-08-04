@@ -101,6 +101,7 @@ const suggestionsToResponse = (suggestionList) => {
 
     for (const suggestion of suggestionList) {
         const formattedSuggestion = {
+            idSuggestion: suggestion.idSuggestion,
             suggestionText: suggestion.suggestionText,
             suggestionSubject: suggestion.subject.subject,
             suggestionSecondarySubject: suggestion.suggestionSecondarySubject,
