@@ -37,7 +37,7 @@ const findSuggestionsFromParams = async (request, response) => {
                 where: {
                     componentName : subject
                 },
-                attributes:['subject','componentValueType']
+                attributes:['subject','componentValueType','componentName']
             },{
                 model: SuggestionCondition,
                 as: 'conditions'

@@ -105,6 +105,7 @@ const suggestionsToResponse = (suggestionList) => {
             suggestionText: suggestion.suggestionText,
             suggestionSubject: suggestion.subject.subject,
             suggestionSecondarySubject: suggestion.suggestionSecondarySubject,
+            identifier: suggestion.subject.componentName,
             priority: suggestion.priority
         }
         responseList.push(formattedSuggestion);
