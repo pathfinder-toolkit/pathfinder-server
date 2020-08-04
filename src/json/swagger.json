@@ -1806,6 +1806,9 @@
       "Suggestion" : {
         "type" : "object",
         "properties" : {
+          "idSuggestion" : {
+            "type" : "integer"
+          },
           "suggestionText" : {
             "type" : "string"
           },
@@ -1816,6 +1819,9 @@
             "type" : "string"
           },
           "suggestionSecondarySubject" : {
+            "type" : "string"
+          },
+          "identifier" : {
             "type" : "string"
           }
         }
