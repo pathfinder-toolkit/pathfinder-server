@@ -161,7 +161,19 @@
         },
         "responses" : {
           "201" : {
-            "description" : "Successfully posted a new building"
+            "description" : "Successfully posted a new building",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "properties" : {
+                    "slug" : {
+                      "type" : "string"
+                    }
+                  }
+                }
+              }
+            }
           },
           "403" : {
             "description" : "Unauthorized (user is not logged in)"

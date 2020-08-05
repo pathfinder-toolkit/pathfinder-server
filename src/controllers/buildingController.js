@@ -132,7 +132,9 @@ const postBuildingFromData = async (request, response) => {
         console.log(building.toJSON());
 
         await t.commit();
-        response.status(201).send("Created");
+        response.status(201).json({
+            slug: verifiedSlug
+        });
     } catch (error) {
         await t.rollback();
         console.log(error);
