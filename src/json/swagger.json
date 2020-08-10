@@ -11,6 +11,9 @@
         "tags" : [ "Buildings" ],
         "summary" : "Get full building information",
         "description" : "Returns building object by id",
+        "security" : [ {
+          "Auth0" : [ "user" ]
+        } ],
         "parameters" : [ {
           "name" : "slug",
           "in" : "path",
@@ -45,6 +48,9 @@
         "tags" : [ "Buildings" ],
         "summary" : "Edit existing building",
         "description" : "Updates building information in database",
+        "security" : [ {
+          "Auth0" : [ "user" ]
+        } ],
         "parameters" : [ {
           "name" : "slug",
           "in" : "path",
@@ -72,6 +78,9 @@
         "tags" : [ "Buildings" ],
         "summary" : "Change publicity status of building",
         "description" : "Set the building viewable or unviewable from a separate public URL",
+        "security" : [ {
+          "Auth0" : [ "user" ]
+        } ],
         "parameters" : [ {
           "name" : "slug",
           "in" : "path",
@@ -110,6 +119,9 @@
         "tags" : [ "Buildings" ],
         "summary" : "Delete existing building",
         "description" : "Deletes building from database",
+        "security" : [ {
+          "Auth0" : [ "user" ]
+        } ],
         "parameters" : [ {
           "name" : "slug",
           "in" : "path",
@@ -156,6 +168,9 @@
         "tags" : [ "Buildings" ],
         "summary" : "Post a new building",
         "description" : "Submits a new building",
+        "security" : [ {
+          "Auth0" : [ "user" ]
+        } ],
         "requestBody" : {
           "$ref" : "#/components/requestBodies/PostBuildingRequest"
         },
@@ -189,6 +204,9 @@
         "tags" : [ "Buildings" ],
         "summary" : "Get list of logged in user's buildings",
         "description" : "Returns list of user's saved buildings",
+        "security" : [ {
+          "Auth0" : [ "user" ]
+        } ],
         "responses" : {
           "200" : {
             "description" : "Successfully returned list of user's buildings",
@@ -350,6 +368,9 @@
         "tags" : [ "Comments" ],
         "summary" : "Post a new comment",
         "description" : "Submits a new comment",
+        "security" : [ {
+          "Auth0" : [ "user" ]
+        } ],
         "parameters" : [ {
           "name" : "subject",
           "in" : "path",
@@ -376,6 +397,9 @@
         "tags" : [ "Comments" ],
         "summary" : "Report a comment for suspected violations",
         "description" : "User submits a report on a comment to be reviewed by an admin",
+        "security" : [ {
+          "Auth0" : [ "user" ]
+        } ],
         "parameters" : [ {
           "name" : "id",
           "in" : "path",
@@ -454,6 +478,9 @@
         "tags" : [ "Image" ],
         "summary" : "Upload an image for logged in user",
         "description" : "Uploads submitted image",
+        "security" : [ {
+          "Auth0" : [ "user" ]
+        } ],
         "requestBody" : {
           "required" : true,
           "content" : {
@@ -491,6 +518,9 @@
         "tags" : [ "Image" ],
         "summary" : "Get list of images uploaded by user",
         "description" : "Returns array of image urls",
+        "security" : [ {
+          "Auth0" : [ "user" ]
+        } ],
         "responses" : {
           "200" : {
             "description" : "Successfully returns array of image urls",
@@ -527,6 +557,9 @@
         "tags" : [ "Image" ],
         "summary" : "Deletes user uploaded image",
         "description" : "Deletes submitted image",
+        "security" : [ {
+          "Auth0" : [ "user" ]
+        } ],
         "parameters" : [ {
           "name" : "id",
           "in" : "path",
@@ -553,6 +586,9 @@
         "tags" : [ "Admin" ],
         "summary" : "Verify admin status",
         "description" : "Verifies admin status in backend",
+        "security" : [ {
+          "Auth0" : [ "admin" ]
+        } ],
         "responses" : {
           "200" : {
             "description" : "Successfully verified as admin"
@@ -571,6 +607,9 @@
         "tags" : [ "Admin / Comments" ],
         "summary" : "Delete selected comment",
         "description" : "Deletes comment from database",
+        "security" : [ {
+          "Auth0" : [ "admin" ]
+        } ],
         "parameters" : [ {
           "name" : "id",
           "in" : "path",
@@ -597,6 +636,9 @@
         "tags" : [ "Admin / Comments" ],
         "summary" : "Get number of open comment reports",
         "description" : "Returns number of open comment reports",
+        "security" : [ {
+          "Auth0" : [ "admin" ]
+        } ],
         "responses" : {
           "200" : {
             "description" : "Successfully returned number of open comment reports",
@@ -627,6 +669,9 @@
         "tags" : [ "Admin / Comments" ],
         "summary" : "Get list of open reports",
         "description" : "Returns list of open reports",
+        "security" : [ {
+          "Auth0" : [ "admin" ]
+        } ],
         "parameters" : [ {
           "name" : "page",
           "in" : "query",
@@ -681,6 +726,9 @@
         "tags" : [ "Admin / Comments" ],
         "summary" : "Reject selected report",
         "description" : "Clears report without removing reported comment",
+        "security" : [ {
+          "Auth0" : [ "admin" ]
+        } ],
         "parameters" : [ {
           "name" : "id",
           "in" : "path",
@@ -707,6 +755,9 @@
         "tags" : [ "Admin / Comments" ],
         "summary" : "Approve selected report",
         "description" : "Clears report while deleting reported comment",
+        "security" : [ {
+          "Auth0" : [ "admin" ]
+        } ],
         "parameters" : [ {
           "name" : "id",
           "in" : "path",
@@ -733,6 +784,9 @@
         "tags" : [ "Admin / Feedback" ],
         "summary" : "Get feedback recipient e-mail addresses",
         "description" : "Returns list of current feedback recipient e-mail addresses",
+        "security" : [ {
+          "Auth0" : [ "admin" ]
+        } ],
         "responses" : {
           "200" : {
             "description" : "Successfully returns array of recipient email addresses",
@@ -764,6 +818,9 @@
         "tags" : [ "Admin / Feedback" ],
         "summary" : "Update feedback recipient e-mail addresses",
         "description" : "Updates current e-mail recipient of user feedback",
+        "security" : [ {
+          "Auth0" : [ "admin" ]
+        } ],
         "requestBody" : {
           "$ref" : "#/components/requestBodies/UpdateFeedbackRecipients"
         },
@@ -785,6 +842,9 @@
         "tags" : [ "Admin / Options" ],
         "summary" : "Update selectable options for queried areas on selected identifier",
         "description" : "Replaces selectable options with the requested ones",
+        "security" : [ {
+          "Auth0" : [ "admin" ]
+        } ],
         "parameters" : [ {
           "in" : "path",
           "required" : true,
@@ -823,6 +883,9 @@
         "tags" : [ "Admin / Suggestions" ],
         "summary" : "Get available suggestion subjects",
         "description" : "Get list of suggestion subjects where adding new suggestions is possible",
+        "security" : [ {
+          "Auth0" : [ "admin" ]
+        } ],
         "responses" : {
           "200" : {
             "description" : "Successully returned list of suggestion subjects",
@@ -851,6 +914,9 @@
         "tags" : [ "Admin / Suggestions" ],
         "summary" : "Get selection options for selected subject identifier and queried areas",
         "description" : "Returns list of available options",
+        "security" : [ {
+          "Auth0" : [ "admin" ]
+        } ],
         "parameters" : [ {
           "in" : "path",
           "required" : true,
@@ -896,6 +962,9 @@
         "tags" : [ "Admin / Suggestions" ],
         "summary" : "Get all suggestion from given subject identifier",
         "description" : "Returns list of all suggestions for given identifier",
+        "security" : [ {
+          "Auth0" : [ "admin" ]
+        } ],
         "parameters" : [ {
           "in" : "path",
           "required" : true,
@@ -932,6 +1001,9 @@
         "tags" : [ "Admin / Suggestions" ],
         "summary" : "Create a new suggestion",
         "description" : "Posts new suggestion with conditions",
+        "security" : [ {
+          "Auth0" : [ "admin" ]
+        } ],
         "requestBody" : {
           "$ref" : "#/components/requestBodies/PostNewSuggestion"
         },
@@ -953,6 +1025,9 @@
         "tags" : [ "Admin / Suggestions" ],
         "summary" : "Update existing suggestion",
         "description" : "Modifies existing suggestion data with new submitted",
+        "security" : [ {
+          "Auth0" : [ "admin" ]
+        } ],
         "parameters" : [ {
           "in" : "path",
           "required" : true,
@@ -980,6 +1055,9 @@
         "tags" : [ "Admin / Suggestions" ],
         "summary" : "Deletes existing suggestion",
         "description" : "Deletes existing suggestion from database",
+        "security" : [ {
+          "Auth0" : [ "admin" ]
+        } ],
         "parameters" : [ {
           "in" : "path",
           "required" : true,
@@ -2642,6 +2720,20 @@
                   }
                 }
               }
+            }
+          }
+        }
+      }
+    },
+    "securitySchemes" : {
+      "Auth0" : {
+        "type" : "oauth2",
+        "flows" : {
+          "authorizationCode" : {
+            "authorizationUrl" : "https://dev-cwz8v54y.eu.auth0.com/api/v2/authorize",
+            "tokenUrl" : "https://dev-cwz8v54y.eu.auth0.com/api/v2/oauth/token",
+            "scopes" : {
+              "admin" : "Grants access to admin page"
             }
           }
         }
