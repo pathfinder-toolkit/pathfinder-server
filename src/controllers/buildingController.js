@@ -105,10 +105,11 @@ const postBuildingFromData = async (request, response) => {
                         const componentName = property;
                         const value = componentInArray.value;
                         const isCurrent = componentInArray.isCurrent;
+                        const usageStartYear = componentInArray.usageStartYear;
 
                         console.log("Component in array:");
                         console.log(componentName, value, isCurrent);
-                        const component = await makeComponentWithTransaction(componentName, value, isCurrent, t);
+                        const component = await makeComponentWithTransaction(componentName, value, isCurrent, t, usageStartYear);
                         components.push(component);
                     }
                 } else {
@@ -117,9 +118,10 @@ const postBuildingFromData = async (request, response) => {
                         (requestBody[category][property][0].value) : 
                         (requestBody[category][property].value);
                     const isCurrent = requestBody[category][property].isCurrent
+                    const usageStartYear = requestBody[category][property].usageStartYear;
                     console.log(componentName, value, isCurrent);
     
-                    const component = await makeComponentWithTransaction(componentName, value, isCurrent, t);
+                    const component = await makeComponentWithTransaction(componentName, value, isCurrent, t, usageStartYear);
                     components.push(component);
                 }
                 
@@ -384,7 +386,8 @@ const updateBuildingData = async (request, response) => {
                     for (const singleNewComponentData of newComponentData[1]) {
                         const value = singleNewComponentData.value;
                         const isCurrent = singleNewComponentData.isCurrent;
-                        const component = await makeComponentWithTransaction(componentName, value, isCurrent, t);
+                        const usageStartYear = singleNewComponentData.usageStartYear;
+                        const component = await makeComponentWithTransaction(componentName, value, isCurrent, t, usageStartYear);
                         createdComponents.push(component);
                         console.log(component.toJSON());
                     }

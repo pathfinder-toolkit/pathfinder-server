@@ -63,7 +63,7 @@ const makeComponent = async ( componentName, value, isCurrent ) => {
     return component;
 }
 
-const makeComponentWithTransaction = async ( componentName, value, isCurrent, t) => {
+const makeComponentWithTransaction = async ( componentName, value, isCurrent, t, usageStartYear = 2020) => {
     const meta = await ComponentMeta.findOne({
         where: {
             componentName: componentName
@@ -72,6 +72,7 @@ const makeComponentWithTransaction = async ( componentName, value, isCurrent, t)
     
     const component = Component.build({
         isCurrent: isCurrent,
+        usageStartYear: usageStartYear
     })
 
     component.setMeta(meta, {save:false});
